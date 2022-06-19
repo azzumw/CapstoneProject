@@ -20,20 +20,19 @@ class LaunchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentLaunchBinding.inflate(inflater)
-        binding.lifecycleOwner = this
 
-        binding.findRepresentativeButton.setOnClickListener { navToRepresentatives() }
-        binding.upComingElectionsButton.setOnClickListener { navToElections() }
+        binding.lifecycleOwner = this
+        binding.launchFragment = this
 
         return binding.root
     }
 
-    private fun navToElections() {
+    fun navToElections() {
         this.findNavController()
             .navigate(LaunchFragmentDirections.actionLaunchFragmentToElectionsFragment())
     }
 
-    private fun navToRepresentatives() {
+    fun navToRepresentatives() {
         this.findNavController()
             .navigate(LaunchFragmentDirections.actionLaunchFragmentToRepresentativeFragment())
     }
