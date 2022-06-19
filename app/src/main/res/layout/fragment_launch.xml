@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="launchFragment"
             type="com.example.android.politicalpreparedness.launch.LaunchFragment" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/padding_16dp"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
-
-        <!-- TODO: Add image for home screen logo. -->
 
         <ImageView
             android:id="@+id/logo"
@@ -30,30 +30,30 @@
 
         <Button
             android:id="@+id/upComingElectionsButton"
-            android:text="@string/upcoming_elections_btn_text"
             style="@style/buttonStyle"
-            android:background="@color/colorPrimaryDark"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:background="@color/colorPrimaryDark"
             android:onClick="@{()->launchFragment.navToElections()}"
-            app:layout_constraintTop_toBottomOf="@id/logo"
+            android:text="@string/upcoming_elections_btn_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo" />
 
 
         <Button
             android:id="@+id/findRepresentativeButton"
-            android:text="@string/find_my_representatives_btn_text"
+            style="@style/buttonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_16dp"
-            android:onClick="@{()->launchFragment.navToRepresentatives()}"
-            style="@style/buttonStyle"
             android:background="@color/colorPrimaryDark"
-            app:layout_constraintTop_toBottomOf="@id/upComingElectionsButton"
+            android:onClick="@{()->launchFragment.navToRepresentatives()}"
+            android:text="@string/find_my_representatives_btn_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/upComingElectionsButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
