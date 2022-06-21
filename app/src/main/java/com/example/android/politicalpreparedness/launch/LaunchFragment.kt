@@ -21,7 +21,6 @@ class LaunchFragment : Fragment() {
     ): View? {
         val binding = FragmentLaunchBinding.inflate(inflater)
 
-        binding.lifecycleOwner = this
         binding.launchFragment = this
 
         return binding.root

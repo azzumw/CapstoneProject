@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 
 class ElectionsFragment: Fragment() {
 
     //TODO: Declare ViewModel
+    private val electionsViewModel : ElectionsViewModel by viewModels()
+
      var _binding : FragmentElectionBinding? = null
     val binding get() = _binding!!
 
@@ -20,6 +23,9 @@ class ElectionsFragment: Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_election,container,false)
+
+        binding.electionsViewModel = electionsViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         //TODO: Add ViewModel values and create ViewModel
 
