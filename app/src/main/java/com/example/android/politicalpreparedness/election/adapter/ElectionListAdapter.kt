@@ -12,7 +12,8 @@ import com.example.android.politicalpreparedness.network.models.Election
 class ElectionListAdapter(): ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
 //private val clickListener: ElectionListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElectionViewHolder {
-        return ElectionViewHolder(ListItemViewBinding.inflate(LayoutInflater.from(parent.context)))
+    //to ensure card view width is match parent
+        return ElectionViewHolder(ListItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: ElectionViewHolder, position: Int) {
