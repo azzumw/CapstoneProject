@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,7 @@ class ElectionsViewModel: ViewModel() {
 
     init {
         getElectionsInfo()
+        Log.e("ElectionsViewModel",elections.value?.size.toString())
     }
     //TODO: Create live data val for saved elections
 
