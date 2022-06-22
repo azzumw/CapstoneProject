@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 
 class ElectionsFragment: Fragment() {
 
@@ -34,6 +35,7 @@ class ElectionsFragment: Fragment() {
         //TODO: Link elections to voter info
 
         //TODO: Initiate recycler adapters
+        binding.upComingElectionsRecyclerView.adapter = ElectionListAdapter()
 
         //TODO: Populate recycler adapters
         return binding.root

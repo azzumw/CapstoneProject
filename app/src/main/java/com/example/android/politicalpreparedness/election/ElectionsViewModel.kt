@@ -5,10 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.network.CivicsApi
+import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel: ViewModel() {
+
+    private val _elections = MutableLiveData<List<Election>>()
+    val elections : LiveData<List<Election>>
+    get() = _elections
 
     //TODO: Create live data val for upcoming elections
     private val _status = MutableLiveData<String>()
@@ -26,8 +31,8 @@ class ElectionsViewModel: ViewModel() {
     fun getElectionsInfo(){
         viewModelScope.launch {
             try {
-                val listResult = CivicsApi.retrofitService.getElections()
-                _status.value = "Success ${listResult.elections.size} elections available"
+                 _elections.value = CivicsApi.retrofitService.getElections().elections
+                _status.value = "Success ${elections.value?.size} elections available"
             }catch (e: Exception){
                 _status.value = "Failure: ${e.message}"
             }
