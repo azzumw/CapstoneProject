@@ -21,6 +21,7 @@
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:padding="6dp"
+            android:clipToPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -29,17 +30,15 @@
             app:electionListData="@{electionsViewModel.elections}"
             />
 
-        <TextView
-            android:id="@+id/responseText"
-            android:visibility="gone"
+        <ImageView
+            android:id="@+id/statusImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@{electionsViewModel.status}"
+            app:electionsApiStatus="@{electionsViewModel.status}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="Some API response"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- TODO: Add Saved Election Recycler and Header -->
 
