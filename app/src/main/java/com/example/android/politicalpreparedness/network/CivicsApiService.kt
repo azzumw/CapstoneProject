@@ -15,11 +15,14 @@ import java.util.*
 
 private const val BASE_URL = "https://www.googleapis.com/civicinfo/v2/"
 
+//we need moshi to parse json into kotlin objects
 private val moshi = Moshi.Builder()
         .add(ElectionAdapter())
         .add(Date::class.java, Rfc3339DateJsonAdapter())
         .add(KotlinJsonAdapterFactory())
         .build()
+
+//in order for Moshi's annotations to work with kotlin we need KotlinJsonAdapterFactory
 
 private val retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -28,6 +31,11 @@ private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .build()
 
+//to enable retrofit to produce coroutines based api: CoroutineCallAdapterFactory
+//version 2.6.0 + retrofit has built in suspend support.
+//so no need for addCallAdapter(CoroutineCallAdapterFactory())
+
+//we need scalar factory to parse json as a string
 private val retrofitScalar = Retrofit.Builder()
 .addConverterFactory(ScalarsConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
