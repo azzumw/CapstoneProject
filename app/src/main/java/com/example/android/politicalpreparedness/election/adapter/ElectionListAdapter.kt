@@ -9,8 +9,8 @@ import com.example.android.politicalpreparedness.databinding.ListItemViewBinding
 //import com.example.android.politicalpreparedness.databinding.ViewholderElectionBinding
 import com.example.android.politicalpreparedness.network.models.Election
 
-class ElectionListAdapter(): ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
-//private val clickListener: ElectionListener
+class ElectionListAdapter(private val clickListener: ElectionListener): ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElectionViewHolder {
     //to ensure card view width is match parent
         return ElectionViewHolder(ListItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -18,6 +18,9 @@ class ElectionListAdapter(): ListAdapter<Election, ElectionListAdapter.ElectionV
 
     override fun onBindViewHolder(holder: ElectionViewHolder, position: Int) {
         val election = getItem(position)
+        holder.itemView.setOnClickListener{
+            clickListener.onClick(election)
+        }
         holder.bind(election)
     }
 
@@ -42,10 +45,12 @@ class ElectionListAdapter(): ListAdapter<Election, ElectionListAdapter.ElectionV
         }
 
     }
+
+    class ElectionListener(val clickListener:(election:Election) -> Unit){
+        fun onClick(election: Election) = clickListener(election)
+    }
 }
 
 
-//TODO: Add companion object to inflate ViewHolder (from)
-//TODO: Create ElectionDiffCallback
 
-//TODO: Create ElectionListener
+

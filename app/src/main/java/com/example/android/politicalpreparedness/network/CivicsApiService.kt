@@ -37,7 +37,7 @@ private val retrofit = Retrofit.Builder()
 
 //we need scalar factory to parse json as a string
 private val retrofitScalar = Retrofit.Builder()
-.addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(ScalarsConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .client(CivicsHttpClient.getClient())
     .baseUrl(BASE_URL)
@@ -51,6 +51,7 @@ interface CivicsApiService {
     //TODO: Add elections API Call
     @GET("elections")
     suspend fun getElections(): ElectionResponse
+
 
     //TODO: Add voterinfo API Call
 
