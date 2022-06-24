@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/launchFragment"
         android:name="com.example.android.politicalpreparedness.launch.LaunchFragment"
-        android:label="fragment_launch"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_launch">
         <action
             android:id="@+id/action_launchFragment_to_electionsFragment"
@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/electionsFragment"
         android:name="com.example.android.politicalpreparedness.election.ElectionsFragment"
-        android:label="@string/election_frag_title">
+        android:label="@string/app_name">
         <action
             android:id="@+id/action_electionsFragment_to_voterInfoFragment"
             app:destination="@id/voterInfoFragment" />
