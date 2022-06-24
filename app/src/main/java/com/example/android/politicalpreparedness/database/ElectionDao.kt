@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.SavedElection
 
 @Dao
 interface ElectionDao {
@@ -11,7 +12,7 @@ interface ElectionDao {
     suspend fun insertAllElections(elections:List<Election>)
 
 //    // Add insert query
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(entity = SavedElection::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveElection(election: Election)
 
     // Add select all election query
