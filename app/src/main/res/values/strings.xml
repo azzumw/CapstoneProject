@@ -6,5 +6,8 @@
     <string name="find_my_representatives_btn_text">find my representatives</string>
     <string name="election_frag_title">Upcoming Elections</string>
     <string name="representatives_frag_title">Find Representatives</string>
+    <string name="save_election_button_text">Follow</string>
+    <string name="remove_election_button_text">Unfollow</string>
+
 
 </resources>

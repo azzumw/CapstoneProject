@@ -12,16 +12,16 @@ interface ElectionDao {
     suspend fun insertAllElections(elections:List<Election>)
 
 //    // Add insert query
-    @Insert(entity = SavedElection::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveElection(election: Election)
+//    @Insert(entity = SavedElection::class, onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun saveElection(election: Election)
 
     // Add select all election query
     @Query("select * from election_table")
-    fun getAllElections():LiveData<List<Election>>
+    fun getAllElections(): LiveData<List<Election>>
 
     // Add select single election query
     @Query("select * from election_table where id = :id")
-    fun getAnElection(id:Int):LiveData<Election>
+    suspend fun getAnElection(id:Int): Election?
 
     // Add delete query
     @Delete

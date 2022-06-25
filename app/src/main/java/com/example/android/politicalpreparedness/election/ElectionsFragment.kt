@@ -8,14 +8,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 
 class ElectionsFragment : Fragment() {
 
-    private val electionsViewModel: ElectionsViewModel by viewModels()
+    private val electionsViewModel: ElectionsViewModel by viewModels{
+        ElectionsViewModelFactory(ElectionDatabase.getInstance(requireContext()).electionDao)
+    }
 
     private var _binding: FragmentElectionBinding? = null
     val binding get() = _binding!!

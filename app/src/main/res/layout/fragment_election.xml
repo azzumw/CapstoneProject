@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/list_item_view"
-            app:electionListData="@{electionsViewModel.elections}"
+            app:electionListData="@{electionsViewModel.electionsFromDataBase}"
             />
 
         <ImageView

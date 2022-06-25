@@ -9,8 +9,4 @@ import java.util.*
 
 @Entity(tableName = "saved_election_table")
 class SavedElection(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "name")val name: String,
-    @ColumnInfo(name = "electionDay")val electionDay: Date,
-    @Embedded(prefix = "division_") @Json(name="ocdDivisionId") val division: Division
-)
+    @PrimaryKey val id: Int)
