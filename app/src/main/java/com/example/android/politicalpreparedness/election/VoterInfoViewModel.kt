@@ -1,45 +1,55 @@
 package com.example.android.politicalpreparedness.election
 
+import android.content.ClipData
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
-enum class SAVE_STATUS(val str:String){
+enum class SAVE_STATUS(val str: String) {
     SAVED("unfollow"),
     NOT_SAVED("follow")
 }
+
 //replace ElectionDao with ElectionRepository obj
-class VoterInfoViewModel(private val dataSource: ElectionDao, private val electionId:Int) : ViewModel() {
+class VoterInfoViewModel(private val datasource: ElectionDao, private val electionId: Int) :
+    ViewModel() {
 
     //TODO: Add live data to hold voter info
     private val _savedStatus = MutableLiveData<SAVE_STATUS>(SAVE_STATUS.NOT_SAVED)
-    val savedStatus:LiveData<SAVE_STATUS> = _savedStatus
+    val savedStatus: LiveData<SAVE_STATUS> = _savedStatus
 
     //TODO: Add var and methods to populate voter info
 
     //TODO: Add var and methods to support loading URLs
 
-    private val election = MutableLiveData<Election?>()
+//    private val _election = MutableLiveData<Election>()
+//    val election : LiveData<Election> get() = _election
 
-    val saveBtnTextState = Transformations.map(election){
-        if(it == null){
-            "Follow"
-        }else{
-            "Unfollow"
-        }
-    }
+    val election: LiveData<Election> = datasource.getAnElection(electionId).asLiveData()
+
+
+//    val saveBtnTextState = Transformations.map(election){
+//        if(it == null){
+//            "Follow"
+//        }else{
+//            "Unfollow"
+//        }
+//    }
 
     init {
-        viewModelScope.launch {
-            election.value = getElection()
-        }
+        Log.e("VoterInfoViewModel", electionId.toString())
+
     }
 
-    private suspend fun getElection(): Election? {
-        return dataSource.getAnElection(electionId)
-    }
 
+
+
+//    private suspend fun getElection() {
+//        _election.value = datasource.getAnElection(electionId)
+//    }
 
 
     //TODO: Add var and methods to save and remove elections to local database

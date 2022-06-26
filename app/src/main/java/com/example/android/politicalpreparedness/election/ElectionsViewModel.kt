@@ -8,24 +8,25 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
 enum class ElectionsApiStatus {
     LOADING, ERROR, DONE
 }
 
-class ElectionsViewModel(val database: ElectionDao) : ViewModel() {
+class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
     //TODO: Create live data val for upcoming elections
-//    private val _elections = MutableLiveData<List<Election>>()
-//    val elections : LiveData<List<Election>>
-//    get() = _elections
 
-    val electionsFromDataBase = database.getAllElections()
+    val electionsFromDataBase = repository.elections
 
     private val _status = MutableLiveData<ElectionsApiStatus>()
     val status: LiveData<ElectionsApiStatus>
         get() = _status
+
+    private val _statusMessage = MutableLiveData<String>()
+    val statusMessage : LiveData<String> get() = _statusMessage
 
     private val _navToSingleElectionVoterInfo = MutableLiveData<Election>()
     val navToSingleElectionVoterInfo: LiveData<Election>
@@ -44,18 +45,17 @@ class ElectionsViewModel(val database: ElectionDao) : ViewModel() {
         viewModelScope.launch {
             _status.value = ElectionsApiStatus.LOADING
             try {
-                val electionsFromApi = CivicsApi.retrofitService.getElections().elections
-                database.insertAllElections(electionsFromApi)
+
+                repository.getElections()
                 _status.value = ElectionsApiStatus.DONE
 
             } catch (e: Exception) {
                 _status.value = ElectionsApiStatus.ERROR
-
+                _statusMessage.value = e.message
             }
         }
     }
 
-    //TODO: Create functions to navigate to saved or upcoming election voter info
     fun displayElectionVoterInfo(singleElectionInfo: Election) {
         _navToSingleElectionVoterInfo.value = singleElectionInfo
     }

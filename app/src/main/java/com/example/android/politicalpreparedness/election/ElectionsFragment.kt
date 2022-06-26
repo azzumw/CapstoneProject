@@ -14,11 +14,12 @@ import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.repository.TheRepository
 
 class ElectionsFragment : Fragment() {
 
     private val electionsViewModel: ElectionsViewModel by viewModels{
-        ElectionsViewModelFactory(ElectionDatabase.getInstance(requireContext()).electionDao)
+        ElectionsViewModelFactory(TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao))
     }
 
     private var _binding: FragmentElectionBinding? = null
@@ -49,6 +50,12 @@ class ElectionsFragment : Fragment() {
                     )
                 )
                 electionsViewModel.onNavComplete()
+            }
+        })
+
+        electionsViewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == ElectionsApiStatus.ERROR){
+                binding.errorStatusMsg.visibility = View.VISIBLE
             }
         })
 

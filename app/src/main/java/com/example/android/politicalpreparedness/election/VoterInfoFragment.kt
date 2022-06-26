@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
+import com.example.android.politicalpreparedness.repository.TheRepository
 
 class VoterInfoFragment : Fragment() {
 
@@ -27,13 +28,14 @@ class VoterInfoFragment : Fragment() {
         */
 
         val arguments = VoterInfoFragmentArgs.fromBundle(arguments!!)
-        val dataSource = ElectionDatabase.getInstance(requireContext()).electionDao
-
-        val viewModelFactory = VoterInfoViewModelFactory(dataSource,arguments.argElectionId)
+//        val repository = TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao)
+        val database = ElectionDatabase.getInstance(requireContext()).electionDao
+        val viewModelFactory = VoterInfoViewModelFactory(database,arguments.argElectionId)
 
         val viewModel = ViewModelProvider(this,viewModelFactory).get(VoterInfoViewModel::class.java)
 
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         //TODO: Handle loading of URLs
 

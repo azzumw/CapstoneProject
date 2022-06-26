@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ElectionDao {
@@ -21,13 +22,13 @@ interface ElectionDao {
 
     // Add select single election query
     @Query("select * from election_table where id = :id")
-    suspend fun getAnElection(id:Int): Election?
+    fun getAnElection(id:Int): Flow<Election>
 
     // Add delete query
     @Delete
-    fun deleteElection(election: Election)
+    suspend fun deleteElection(election: Election)
 
     // Add clear query
     @Query("delete from election_table")
-    fun clear()
+    suspend fun clear()
 }
