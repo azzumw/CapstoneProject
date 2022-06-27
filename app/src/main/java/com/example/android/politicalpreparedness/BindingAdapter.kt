@@ -13,7 +13,7 @@ import com.example.android.politicalpreparedness.network.models.ElectionAndSaved
 
 
 @BindingAdapter("electionListData")
-fun bindElectionRecyclerView(recyclerView: RecyclerView, electionsData: List<Election>?) {
+fun bindElectionRecyclerView(recyclerView: RecyclerView, electionsData: List<ElectionAndSavedElection>?) {
     val adapter = recyclerView.adapter as ElectionListAdapter
     Log.e("BINDING ADAPTER: ", electionsData?.size.toString())
     adapter.submitList(electionsData)

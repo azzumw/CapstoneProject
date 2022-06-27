@@ -1,15 +1,8 @@
 package com.example.android.politicalpreparedness.election
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.android.politicalpreparedness.database.ElectionDao
-import com.example.android.politicalpreparedness.network.CivicsApi
+import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
-import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
@@ -19,7 +12,7 @@ enum class ElectionsApiStatus {
 
 class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
-    val electionsFromDataBase = repository.elections
+    val allElections = repository.elections
 
     val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
 
@@ -31,12 +24,32 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
     private val _statusMessage = MutableLiveData<String>()
     val statusMessage : LiveData<String> get() = _statusMessage
 
-    private val _navToSingleElectionVoterInfo = MutableLiveData<Election?>()
-    val navToSingleElectionVoterInfo: LiveData<Election?>
+    private val _navToSingleElectionVoterInfo = MutableLiveData<ElectionAndSavedElection?>()
+    val navToSingleElectionVoterInfo: LiveData<ElectionAndSavedElection?>
         get() = _navToSingleElectionVoterInfo
+
+    private var filter: MutableLiveData<Int> = MutableLiveData()
+    val filteredElections: LiveData<List<ElectionAndSavedElection>> = filter.switchMap {
+        when (it) {
+            1 -> {
+                allElections
+            }
+            2 -> {
+                savedElections
+            }
+            else -> {
+                allElections
+            }
+        }
+    }
+
 
     init {
         getElectionsInfo()
+    }
+
+    fun selectFilter(selectedFilter: Int) {
+        filter.value = selectedFilter
     }
 
     private fun getElectionsInfo() {
@@ -55,7 +68,7 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         }
     }
 
-    fun displayElectionVoterInfo(singleElectionInfo: Election) {
+    fun displayElectionVoterInfo(singleElectionInfo: ElectionAndSavedElection) {
         _navToSingleElectionVoterInfo.value = singleElectionInfo
     }
 

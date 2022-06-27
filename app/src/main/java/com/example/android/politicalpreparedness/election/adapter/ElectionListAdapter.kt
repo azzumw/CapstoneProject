@@ -11,7 +11,7 @@ import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
 //import com.example.android.politicalpreparedness.network.models.TheElection
 
-class ElectionListAdapter(private val clickListener: ElectionListener): ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
+class ElectionListAdapter(private val clickListener: ElectionListener): ListAdapter<ElectionAndSavedElection, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElectionViewHolder {
     //to ensure card view width is match parent
@@ -28,28 +28,28 @@ class ElectionListAdapter(private val clickListener: ElectionListener): ListAdap
 
 
     class ElectionViewHolder(val binding:ListItemViewBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(election: Election){
-            binding.election = election
+        fun bind(election: ElectionAndSavedElection){
+            binding.electionAndSaved = election
             binding.executePendingBindings()
         }
     }
 
-    companion object ElectionDiffCallback : DiffUtil.ItemCallback<Election>(){
+    companion object ElectionDiffCallback : DiffUtil.ItemCallback<ElectionAndSavedElection>(){
         //This method is called by DiffUtil to decide whether two objects represent the same Item.
         //DiffUtil uses this method to figure out if the new Election object is the same as the old Election object.
-        override fun areItemsTheSame(oldItem: Election, newItem: Election): Boolean {
+        override fun areItemsTheSame(oldItem: ElectionAndSavedElection, newItem: ElectionAndSavedElection): Boolean {
             return oldItem == newItem
         }
 
         //This method is called by DiffUtil when it wants to check whether two items have the same data
-        override fun areContentsTheSame(oldItem: Election, newItem: Election): Boolean {
-            return oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: ElectionAndSavedElection, newItem: ElectionAndSavedElection): Boolean {
+            return oldItem.election.id == newItem.election.id
         }
 
     }
 
-    class ElectionListener(val clickListener:(election:Election) -> Unit){
-        fun onClick(election: Election) = clickListener(election)
+    class ElectionListener(val clickListener:(election:ElectionAndSavedElection) -> Unit){
+        fun onClick(election: ElectionAndSavedElection) = clickListener(election)
     }
 }
 

@@ -36,7 +36,7 @@
                     android:textSize="24sp"
                     android:gravity="center_vertical"
                     android:layout_margin="8dp"
-                    android:text="@{election.name}"
+                    android:text="@{electionAndSaved.name}"
                     tools:text="Election 1" />
             </LinearLayout>
 

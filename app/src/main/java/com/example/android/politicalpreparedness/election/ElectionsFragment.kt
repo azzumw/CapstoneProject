@@ -39,6 +39,8 @@ class ElectionsFragment : Fragment() {
                 electionsViewModel.displayElectionVoterInfo(it)
             })
 
+
+
         electionsViewModel.navToSingleElectionVoterInfo.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 findNavController().navigate(
@@ -69,6 +71,14 @@ class ElectionsFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.all_elections -> {
+
+            }
+            R.id.saved_elections -> {
+
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
