@@ -9,18 +9,14 @@ import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
-enum class SAVE_STATUS(val str: String) {
-    SAVED("unfollow"),
-    NOT_SAVED("follow")
-}
+
 
 //replace ElectionDao with ElectionRepository obj
 class VoterInfoViewModel(private val datasource: ElectionDao, private val electionId: Int) :
     ViewModel() {
 
     //TODO: Add live data to hold voter info
-    private val _savedStatus = MutableLiveData<SAVE_STATUS>(SAVE_STATUS.NOT_SAVED)
-    val savedStatus: LiveData<SAVE_STATUS> = _savedStatus
+
 
     //TODO: Add var and methods to populate voter info
 
@@ -31,12 +27,12 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
 
     val election: LiveData<Election> = datasource.getAnElection(electionId).asLiveData()
 
-    private val isElectionSaved  = datasource.getElectionIdFromSavedElection(electionId)
+    private val isElectionSaved = datasource.getElectionIdFromSavedElection(electionId)
 
-    val saveBtnTextState = Transformations.map(isElectionSaved){
-        if(it == null){
+    val saveBtnTextState = Transformations.map(isElectionSaved) {
+        if (it == null) {
             "Follow"
-        }else{
+        } else {
             "Unfollow"
         }
     }
@@ -47,8 +43,6 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
     }
 
 
-
-
 //    private suspend fun getElection() {
 //        _election.value = datasource.getAnElection(electionId)
 //    }
@@ -56,11 +50,11 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
 
     //TODO: Add var and methods to save and remove elections to local database
     //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-    private fun saveThisElection(){
-            val savedElection = SavedElection(electionId)
-            viewModelScope.launch {
-                datasource.saveElection(savedElection)
-            }
+    fun saveThisElection() {
+        val savedElection = SavedElection(electionId)
+        viewModelScope.launch {
+            datasource.saveElection(savedElection)
+        }
     }
 
 //    private fun removeThisElection(){
