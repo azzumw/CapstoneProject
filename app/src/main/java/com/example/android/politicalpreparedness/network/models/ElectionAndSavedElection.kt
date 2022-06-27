@@ -8,7 +8,7 @@ data class ElectionAndSavedElection(
     @Embedded val election: Election,
     @Relation(
         parentColumn = "id",
-        entityColumn = "savedElectionId"
+        entityColumn = "saved_election_id"
     )
     val savedElection: SavedElection
 )
