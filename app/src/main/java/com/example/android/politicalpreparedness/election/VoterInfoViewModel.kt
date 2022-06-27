@@ -57,9 +57,9 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
     //TODO: Add var and methods to save and remove elections to local database
     //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
     private fun saveThisElection(){
-
+            val savedElection = SavedElection(electionId)
             viewModelScope.launch {
-                datasource.saveElection()
+                datasource.saveElection(savedElection)
             }
     }
 
