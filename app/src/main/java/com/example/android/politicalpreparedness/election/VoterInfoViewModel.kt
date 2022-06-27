@@ -10,7 +10,6 @@ import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
 
-
 //replace ElectionDao with ElectionRepository obj
 class VoterInfoViewModel(private val datasource: ElectionDao, private val electionId: Int) :
     ViewModel() {
@@ -37,9 +36,11 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
         }
     }
 
+    private var savedElection:SavedElection
+
     init {
         Log.e("VoterInfoViewModel", electionId.toString())
-
+        savedElection = SavedElection(electionId)
     }
 
 
@@ -51,18 +52,26 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
     //TODO: Add var and methods to save and remove elections to local database
     //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
     fun saveThisElection() {
-        val savedElection = SavedElection(electionId)
+
         viewModelScope.launch {
             datasource.saveElection(savedElection)
         }
     }
 
-//    private fun removeThisElection(){
-//        if(_savedStatus.value ==true){
-//            dataSource.deleteElection(election)
-//        }
-//        _savedStatus.value = false
-//    }
+    private fun removeThisElection() {
+
+        viewModelScope.launch {
+            datasource.deleteElection(savedElection)
+        }
+    }
+
+    fun followOrUnFollowClick(){
+        if(saveBtnTextState.value =="Follow"){
+            saveThisElection()
+        }else{
+            removeThisElection()
+        }
+    }
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
