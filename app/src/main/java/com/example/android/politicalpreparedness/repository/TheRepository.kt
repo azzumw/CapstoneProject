@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.SavedElection
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
@@ -26,9 +27,9 @@ class TheRepository(val database: ElectionDao) {
 
     }
 
-    suspend fun deleteElection(election: Election) {
+    suspend fun deleteElection(savedElection: SavedElection) {
         withContext(IO) {
-            database.deleteElection(election)
+            database.deleteElection(savedElection)
         }
     }
 

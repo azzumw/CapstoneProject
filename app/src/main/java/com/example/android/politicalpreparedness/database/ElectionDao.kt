@@ -29,9 +29,9 @@ interface ElectionDao {
     //Queries for Saved_Election_Table
     //    // Add insert query
     @Insert(entity = SavedElection::class)
-    suspend fun insert(savedElection: SavedElection)
+    suspend fun saveElection(savedElection: SavedElection)
 
     // Add delete query
-    @Delete
-    suspend fun deleteElection(election: Election)
+    @Delete(entity = SavedElection::class)
+    suspend fun deleteElection(savedElection: SavedElection)
 }
