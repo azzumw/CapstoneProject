@@ -36,7 +36,7 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
         }
     }
 
-    private var savedElection:SavedElection
+    private var savedElection: SavedElection
 
     init {
         Log.e("VoterInfoViewModel", electionId.toString())
@@ -44,14 +44,9 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
     }
 
 
-//    private suspend fun getElection() {
-//        _election.value = datasource.getAnElection(electionId)
-//    }
-
-
     //TODO: Add var and methods to save and remove elections to local database
     //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-    fun saveThisElection() {
+    private fun saveThisElection() {
 
         viewModelScope.launch {
             datasource.saveElection(savedElection)
@@ -65,10 +60,10 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
         }
     }
 
-    fun followOrUnFollowClick(){
-        if(saveBtnTextState.value =="Follow"){
+    fun followOrUnFollowClick() {
+        if (saveBtnTextState.value == "Follow") {
             saveThisElection()
-        }else{
+        } else {
             removeThisElection()
         }
     }

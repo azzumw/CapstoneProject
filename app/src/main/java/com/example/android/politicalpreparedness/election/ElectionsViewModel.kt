@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
+import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
@@ -28,14 +30,15 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
     private val _statusMessage = MutableLiveData<String>()
     val statusMessage : LiveData<String> get() = _statusMessage
 
-    private val _navToSingleElectionVoterInfo = MutableLiveData<Election>()
-    val navToSingleElectionVoterInfo: LiveData<Election>
+    private val _navToSingleElectionVoterInfo = MutableLiveData<Election?>()
+    val navToSingleElectionVoterInfo: LiveData<Election?>
         get() = _navToSingleElectionVoterInfo
 
     init {
         getElectionsInfo()
     }
     //TODO: Create live data val for saved elections
+    val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
 
     //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
 
