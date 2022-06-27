@@ -9,4 +9,5 @@ import java.util.*
 
 @Entity(tableName = "saved_election_table")
 class SavedElection(
-    @PrimaryKey val id: Int)
+    @PrimaryKey
+    @ColumnInfo(name ="saved_election_id")val savedElectionId: Int)
