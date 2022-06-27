@@ -29,7 +29,7 @@ interface ElectionDao {
     //Queries for Saved_Election_Table
     //    // Add insert query
     @Insert(entity = SavedElection::class)
-    suspend fun insert(id:Int)
+    suspend fun insert(savedElection: SavedElection)
 
     // Add delete query
     @Delete
