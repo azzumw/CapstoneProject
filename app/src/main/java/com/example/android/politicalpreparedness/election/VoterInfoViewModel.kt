@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 
 //replace ElectionDao with ElectionRepository obj
-class VoterInfoViewModel(private val datasource: ElectionDao, private val electionId: Int) :
+class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int) :
     ViewModel() {
 
     //TODO: Add live data to hold voter info
@@ -21,8 +21,6 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
 
     //TODO: Add var and methods to support loading URLs
 
-//    private val _election = MutableLiveData<Election>()
-//    val election : LiveData<Election> get() = _election
 
     val election: LiveData<Election> = datasource.getAnElection(electionId).asLiveData()
 
@@ -44,8 +42,6 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
     }
 
 
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
     private fun saveThisElection() {
 
         viewModelScope.launch {
@@ -60,15 +56,12 @@ class VoterInfoViewModel(private val datasource: ElectionDao, private val electi
         }
     }
 
-    fun followOrUnFollowClick() {
+    fun followOrUnFollowElection() {
         if (saveBtnTextState.value == "Follow") {
             saveThisElection()
         } else {
             removeThisElection()
         }
     }
-    /**
-     * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
-     */
 
 }

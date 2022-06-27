@@ -8,6 +8,8 @@
     <string name="representatives_frag_title">Find Representatives</string>
     <string name="save_election_button_text">Follow</string>
     <string name="remove_election_button_text">Unfollow</string>
+    <string name="saved_election_menu_title">Saved Elections</string>>
+    <string name="all_elections_menu_title">All Elections</string>>
 
 
 </resources>

@@ -94,7 +94,7 @@
             android:layout_marginBottom="@dimen/padding_16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="@{()->viewModel.followOrUnFollowClick()}"
+            android:onClick="@{()->viewModel.followOrUnFollowElection()}"
             android:text="@{viewModel.saveBtnTextState}"
             tools:text="@string/save_election_button_text"
             app:layout_constraintStart_toStartOf="parent"/>

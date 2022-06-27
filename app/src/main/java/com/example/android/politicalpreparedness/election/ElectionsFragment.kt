@@ -1,9 +1,7 @@
 package com.example.android.politicalpreparedness.election
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,7 +16,7 @@ import com.example.android.politicalpreparedness.repository.TheRepository
 
 class ElectionsFragment : Fragment() {
 
-    private val electionsViewModel: ElectionsViewModel by viewModels{
+    private val electionsViewModel: ElectionsViewModel by viewModels {
         ElectionsViewModelFactory(TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao))
     }
 
@@ -54,15 +52,26 @@ class ElectionsFragment : Fragment() {
         })
 
         electionsViewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == ElectionsApiStatus.ERROR){
+            if (it == ElectionsApiStatus.ERROR) {
                 binding.errorStatusMsg.visibility = View.VISIBLE
             }
         })
+
+        setHasOptionsMenu(true)
 
         return binding.root
     }
 
     //TODO: Refresh adapters when fragment loads
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.overflow_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

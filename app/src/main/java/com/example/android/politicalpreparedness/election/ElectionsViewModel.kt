@@ -19,9 +19,10 @@ enum class ElectionsApiStatus {
 
 class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
-    //TODO: Create live data val for upcoming elections
-
     val electionsFromDataBase = repository.elections
+
+    val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
+
 
     private val _status = MutableLiveData<ElectionsApiStatus>()
     val status: LiveData<ElectionsApiStatus>
@@ -37,11 +38,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
     init {
         getElectionsInfo()
     }
-    //TODO: Create live data val for saved elections
-    val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
-
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
-
 
     private fun getElectionsInfo() {
 
