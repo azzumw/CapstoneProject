@@ -94,7 +94,7 @@
             android:layout_marginBottom="@dimen/padding_16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="@string/save_election_button_text"
+            tools:text="@{viewModel.saveBtnTextState}"
             app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

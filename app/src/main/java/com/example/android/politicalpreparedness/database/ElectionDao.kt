@@ -28,7 +28,7 @@ interface ElectionDao {
     suspend fun clear()
 
     //Queries for Saved_Election_Table
-    //    // Add insert query
+    // Add insert query
     @Insert(entity = SavedElection::class)
     suspend fun saveElection(savedElection: SavedElection)
 
@@ -36,7 +36,11 @@ interface ElectionDao {
     @Delete(entity = SavedElection::class)
     suspend fun deleteElection(savedElection: SavedElection)
 
+    @Query("select * from saved_election_table where saved_election_id= :electionId")
+    fun getElectionIdFromSavedElection(electionId:Int):LiveData<SavedElection>
+
     @Transaction
     @Query("SELECT * FROM election_table")
-    fun getElectionAndSavedElection(): List<ElectionAndSavedElection>
+    fun getElectionAndSavedElection(): Flow<List<ElectionAndSavedElection>>
+
 }
