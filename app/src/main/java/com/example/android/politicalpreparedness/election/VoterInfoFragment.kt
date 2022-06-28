@@ -41,6 +41,9 @@ class VoterInfoFragment : Fragment() {
             if (!it.isNullOrEmpty()){
                 binding.stateLocations.visibility = View.VISIBLE
                 binding.stateBallot.visibility = View.VISIBLE
+
+            }else{
+                binding.noInfoTextView.visibility = View.VISIBLE
             }
         })
         return binding.root

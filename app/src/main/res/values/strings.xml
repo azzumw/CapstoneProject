@@ -12,7 +12,8 @@
     <string name="all_elections_menu_title">All Elections</string>
     <string name="election_information_text">Election Information</string>
     <string name="voting_location_btn_text">Voting Location</string>
-    <string name="ballot_information_btn_text">Ballot Information</string>>
+    <string name="ballot_information_btn_text">Ballot Information</string>
+    <string name="no_information_available_msg">No Information available</string>>
 
 
 </resources>

@@ -65,6 +65,18 @@
 
         <!-- TODO: Add click binding to open web URL -->
         <!-- TODO: Add visual styling and content -->
+
+        <TextView
+            android:id="@+id/no_info_text_view"
+            android:layout_width="0dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/no_information_available_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/state_header"/>
         <Button
             android:id="@+id/state_ballot"
             android:visibility="gone"
