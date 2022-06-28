@@ -1,5 +1,7 @@
 package com.example.android.politicalpreparedness.election
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -9,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
-import com.example.android.politicalpreparedness.repository.TheRepository
 
 class VoterInfoFragment : Fragment() {
 
@@ -42,6 +43,17 @@ class VoterInfoFragment : Fragment() {
                 binding.stateLocations.visibility = View.VISIBLE
                 binding.stateBallot.visibility = View.VISIBLE
 
+                val voterLocationUrl = it[0].electionAdministrationBody.votingLocationFinderUrl
+                val ballotInfoUrl = it[0].electionAdministrationBody.ballotInfoUrl
+
+                binding.stateLocations.setOnClickListener{
+                    startIntentForUrl(voterLocationUrl)
+                }
+
+                binding.stateBallot.setOnClickListener{
+                    startIntentForUrl(ballotInfoUrl)
+                }
+
             }else{
                 binding.noInfoTextView.visibility = View.VISIBLE
             }
@@ -50,9 +62,12 @@ class VoterInfoFragment : Fragment() {
     }
 
     //TODO: Create method to load URL intents
-    private fun startIntentForVotingLocation(){}
+    private fun startIntentForUrl(stringUrl:String?){
+        val stringToUrl = Uri.parse(stringUrl)
+        val intent = Intent(Intent.ACTION_VIEW,stringToUrl)
+        context?.startActivity(intent)
+    }
 
-    private fun startIntentForBallotInformation(){}
 
 
 }

@@ -61,8 +61,7 @@ interface CivicsApiService {
         @Query("electionId") electionId: String,
         @Query("officialOnly") official: Boolean = false,
         @Query("returnAllAvailableData") available: Boolean = true
-    )
-            : VoterInfoResponse
+    ): VoterInfoResponse
 
     //TODO: Add representatives API Call
 }
