@@ -44,5 +44,9 @@ class VoterInfoFragment : Fragment() {
     }
 
     //TODO: Create method to load URL intents
+    private fun startIntentForVotingLocation(){}
+
+    private fun startIntentForBallotInformation(){}
+
 
 }

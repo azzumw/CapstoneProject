@@ -20,19 +20,19 @@ private const val BASE_URL = "https://www.googleapis.com/civicinfo/v2/"
 
 //we need moshi to parse json into kotlin objects
 private val moshi = Moshi.Builder()
-        .add(ElectionAdapter())
-        .add(Date::class.java, Rfc3339DateJsonAdapter())
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    .add(ElectionAdapter())
+    .add(Date::class.java, Rfc3339DateJsonAdapter())
+    .add(KotlinJsonAdapterFactory())
+    .build()
 
 //in order for Moshi's annotations to work with kotlin we need KotlinJsonAdapterFactory
 
 private val retrofit = Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .client(CivicsHttpClient.getClient())
-        .baseUrl(BASE_URL)
-        .build()
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .client(CivicsHttpClient.getClient())
+    .baseUrl(BASE_URL)
+    .build()
 
 //to enable retrofit to produce coroutines based api: CoroutineCallAdapterFactory
 //version 2.6.0 + retrofit has built in suspend support.
@@ -51,18 +51,18 @@ private val retrofitScalar = Retrofit.Builder()
  */
 
 interface CivicsApiService {
-    //TODO: Add elections API Call
+
     @GET("elections")
     suspend fun getElections(): ElectionResponse
 
-
-    //TODO: Add voterinfo API Call
     @GET("voterinfo")
-    suspend fun getVoterInfo(@Query("address")address:String,
-    @Query("electionId") electionId:String,
-    @Query("officialOnly")official: Boolean = true,
-    @Query("returnAllAvailableData") available:Boolean = true)
-    :VoterInfoResponse
+    suspend fun getVoterInfo(
+        @Query("address") address: String,
+        @Query("electionId") electionId: String,
+        @Query("officialOnly") official: Boolean = true,
+        @Query("returnAllAvailableData") available: Boolean = true
+    )
+            : VoterInfoResponse
 
     //TODO: Add representatives API Call
 }

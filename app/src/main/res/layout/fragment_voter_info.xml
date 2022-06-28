@@ -32,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_padding"
+            android:text="@{viewModel.election.electionDay.toString()}"
             app:layout_constraintTop_toBottomOf="@id/election_name"
             tools:text="12 November 2055" />
 
@@ -40,24 +41,38 @@
             android:id="@+id/state_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_16dp"
+            android:text="@string/election_information_text"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/election_date"
             app:layout_constraintStart_toStartOf="@id/election_date" />
 
         <!-- TODO: Add click binding to open web URL -->
         <!-- TODO: Add visual styling and content -->
-        <TextView
+        <Button
             android:id="@+id/state_locations"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@string/voting_location_btn_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@color/white"
+            android:outlineAmbientShadowColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/state_header"
             app:layout_constraintStart_toStartOf="@id/election_date" />
 
         <!-- TODO: Add click binding to open web URL -->
         <!-- TODO: Add visual styling and content -->
-        <TextView
+        <Button
             android:id="@+id/state_ballot"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@string/ballot_information_btn_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/state_locations"
             app:layout_constraintStart_toStartOf="@id/election_date" />
 
