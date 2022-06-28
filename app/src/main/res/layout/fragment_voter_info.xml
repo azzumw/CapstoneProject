@@ -92,6 +92,7 @@
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/address_group"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="state_correspondence_header,address" />
@@ -99,7 +100,11 @@
         <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/state_correspondence_header"
+            android:layout_marginTop="@dimen/padding_16dp"
             android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="@string/correspondence_address_text"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/state_ballot"
             app:layout_constraintStart_toStartOf="@id/election_date" />
@@ -109,10 +114,9 @@
             android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.correspondenceAddress.toFormattedString()}"
             app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
             app:layout_constraintStart_toStartOf="@id/election_date" />
-
-        <!-- TODO: Add button to save election to Room -->
 
         <Button
             android:id="@+id/saveElectionButton"

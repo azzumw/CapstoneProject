@@ -113,6 +113,14 @@ class VoterInfoFragment : Fragment() {
             binding.stateBallot.visibility = View.GONE
         }
 
+        viewModel.correspondenceAddress.observe(viewLifecycleOwner, Observer {
+            if (it!=null){
+                binding.addressGroup.visibility = View.VISIBLE
+            }
+        })
+
+
+
         return binding.root
     }
 

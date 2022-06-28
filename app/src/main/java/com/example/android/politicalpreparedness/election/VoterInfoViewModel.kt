@@ -1,15 +1,11 @@
 package com.example.android.politicalpreparedness.election
 
-import android.content.ClipData
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.models.Division
-import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.SavedElection
-import com.example.android.politicalpreparedness.network.models.State
-import com.example.android.politicalpreparedness.repository.TheRepository
+import com.example.android.politicalpreparedness.network.models.*
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -23,7 +19,7 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
 
     //TODO: Add var and methods to populate voter info
 
-    //TODO: Add var and methods to support loading URLs
+
     private val _voterLocationUrl = MutableLiveData<String?>()
     val voterLocationUrl : LiveData<String?> get() = _voterLocationUrl
 
@@ -31,6 +27,11 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
     val ballotInfoUrl : LiveData<String?> get() = _ballotInfoUrl
 
     val isVoterAndBallotInfoNull: Boolean = (voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty())
+
+    private val _correspondenceAddress = MutableLiveData<Address?>()
+    val correspondenceAddress : LiveData<Address?> get() = _correspondenceAddress
+
+
 
     private val _state = MutableLiveData<List<State>?>()
     val state :LiveData<List<State>?> get() = _state
@@ -73,12 +74,14 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
                     _state.value = voterInfoFromApi.state
                     _voterLocationUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl
                     _ballotInfoUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
+                    _correspondenceAddress.value = voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
 
                     Log.e("VoterModel",voterInfoFromApi.state.toString())
                     Log.e("VoterModel",voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl.toString())
                 }else{
                     Log.e("VoterModel",voterInfoFromApi.state.toString())
                     _state.value = emptyList()
+
                 }
 
             }catch (e:Exception){
