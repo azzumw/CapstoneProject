@@ -10,6 +10,7 @@ import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 
 //replace ElectionDao with ElectionRepository obj
@@ -49,14 +50,22 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
     private fun getVoterInformation( electId:Int){
         val country = division.country
         val state = division.state
-        val address = "$country,$state"
+        val address = if(state.isEmpty()) country else "$country,$state"
         //make api call to voters information
         Log.e("VoterModel:","country: $country")
         Log.e("VoterModel:","state: $state")
+        Log.e("VoterModel:","address: $address")
 
         viewModelScope.launch {
-            val voterInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electId.toString())
-            Log.e("VoterModel",voterInfoFromApi.state.toString())
+
+            try {
+                val voterInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electId.toString())
+                Log.e("VoterModel",voterInfoFromApi.state.toString())
+            }catch (e:Exception){
+                Log.e("VoterModel: ","error: ${e.cause}")
+                Log.e("VoterModel: ","error: ${e.message}")
+                Log.e("VoterModel: ","error: ${e.localizedMessage}")
+            }
         }
 
 

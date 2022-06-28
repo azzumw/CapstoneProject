@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.network
 
+import android.util.Log
 import okhttp3.OkHttpClient
 
 class CivicsHttpClient : OkHttpClient() {
@@ -19,10 +20,14 @@ class CivicsHttpClient : OkHttpClient() {
                         .addQueryParameter("key", API_KEY)
                         .build()
 
+                    Log.e("CivisHttpClient: ",url.toString())
+
                     val request = original
                         .newBuilder()
                         .url(url)
                         .build()
+
+                    Log.e("CivisHttpClient: ",request.toString())
                     chain.proceed(request)
                 }
                 .build()

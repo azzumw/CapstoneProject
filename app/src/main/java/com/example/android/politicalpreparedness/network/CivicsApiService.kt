@@ -1,6 +1,7 @@
 package com.example.android.politicalpreparedness.network
 
 import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
+import com.example.android.politicalpreparedness.network.models.ElectionOfficial
 import com.example.android.politicalpreparedness.network.models.ElectionResponse
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -58,7 +59,10 @@ interface CivicsApiService {
     //TODO: Add voterinfo API Call
     @GET("voterinfo")
     suspend fun getVoterInfo(@Query("address")address:String,
-    @Query("electionId") electionId:String):VoterInfoResponse
+    @Query("electionId") electionId:String,
+    @Query("officialOnly")official: Boolean = true,
+    @Query("returnAllAvailableData") available:Boolean = true)
+    :VoterInfoResponse
 
     //TODO: Add representatives API Call
 }
