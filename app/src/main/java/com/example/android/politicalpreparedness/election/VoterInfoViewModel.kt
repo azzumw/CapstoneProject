@@ -4,6 +4,8 @@ import android.content.ClipData
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
+import com.example.android.politicalpreparedness.network.CivicsApi
+import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.TheRepository
@@ -11,7 +13,7 @@ import kotlinx.coroutines.launch
 
 
 //replace ElectionDao with ElectionRepository obj
-class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int) :
+class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, val division: Division) :
     ViewModel() {
 
     //TODO: Add live data to hold voter info
@@ -20,6 +22,7 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int) :
     //TODO: Add var and methods to populate voter info
 
     //TODO: Add var and methods to support loading URLs
+
 
 
     val election: LiveData<Election> = datasource.getAnElection(electionId).asLiveData()
@@ -39,6 +42,24 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int) :
     init {
         Log.e("VoterInfoViewModel", electionId.toString())
         savedElection = SavedElection(electionId)
+
+        getVoterInformation(electionId)
+    }
+
+    private fun getVoterInformation( electId:Int){
+        val country = division.country
+        val state = division.state
+        val address = "$country,$state"
+        //make api call to voters information
+        Log.e("VoterModel:","country: $country")
+        Log.e("VoterModel:","state: $state")
+
+        viewModelScope.launch {
+            val voterInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electId.toString())
+            Log.e("VoterModel",voterInfoFromApi.state.toString())
+        }
+
+
     }
 
 

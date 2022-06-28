@@ -40,4 +40,10 @@ class TheRepository(val database: ElectionDao) {
             database.clear()
         }
     }
+
+    suspend fun getVoterInfo(address:String,electionId:String){
+        withContext(IO){
+            val votersInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electionId)
+        }
+    }
 }

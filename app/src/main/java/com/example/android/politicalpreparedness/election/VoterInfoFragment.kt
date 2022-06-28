@@ -30,7 +30,7 @@ class VoterInfoFragment : Fragment() {
         val arguments = VoterInfoFragmentArgs.fromBundle(arguments!!)
 //        val repository = TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao)
         val database = ElectionDatabase.getInstance(requireContext()).electionDao
-        val viewModelFactory = VoterInfoViewModelFactory(database,arguments.argElectionId)
+        val viewModelFactory = VoterInfoViewModelFactory(database,arguments.argElectionId,arguments.argDivision)
 
         val viewModel = ViewModelProvider(this,viewModelFactory).get(VoterInfoViewModel::class.java)
 
@@ -39,7 +39,7 @@ class VoterInfoFragment : Fragment() {
 
         //TODO: Handle loading of URLs
 
-        //TODO: cont'd Handle save button clicks
+
         return binding.root
     }
 
