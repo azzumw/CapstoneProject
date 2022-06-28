@@ -20,8 +20,6 @@ class VoterInfoFragment : Fragment() {
         val binding : FragmentVoterInfoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_voter_info,container,false)
 
 
-
-
         //TODO: Populate voter info -- hide views without provided data.
         /**
         Hint: You will need to ensure proper data is provided from previous fragment.
@@ -39,7 +37,12 @@ class VoterInfoFragment : Fragment() {
 
         //TODO: Handle loading of URLs
 
-
+        viewModel.state.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()){
+                binding.stateLocations.visibility = View.VISIBLE
+                binding.stateBallot.visibility = View.VISIBLE
+            }
+        })
         return binding.root
     }
 

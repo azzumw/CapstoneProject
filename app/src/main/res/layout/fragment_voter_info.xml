@@ -52,6 +52,7 @@
         <!-- TODO: Add visual styling and content -->
         <Button
             android:id="@+id/state_locations"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/voting_location_btn_text"
@@ -66,6 +67,7 @@
         <!-- TODO: Add visual styling and content -->
         <Button
             android:id="@+id/state_ballot"
+            android:visibility="gone"
             android:layout_marginTop="8dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -8,6 +8,7 @@ import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
+import com.example.android.politicalpreparedness.network.models.State
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -26,7 +27,8 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
     private val _voterLocationUrl = MutableLiveData<String>()
     val voterLocationUrl : LiveData<String> get() = _voterLocationUrl
 
-
+    private val _state = MutableLiveData<List<State>?>()
+    val state :LiveData<List<State>?> get() = _state
 
     val election: LiveData<Election> = datasource.getAnElection(electionId).asLiveData()
 
@@ -63,11 +65,13 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
             try {
                 val voterInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electId.toString())
                 if(!voterInfoFromApi.state.isNullOrEmpty()){
+                    _state.value = voterInfoFromApi.state
                     _voterLocationUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl.toString()
                     Log.e("VoterModel",voterInfoFromApi.state.toString())
                     Log.e("VoterModel",voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl.toString())
                 }else{
                     Log.e("VoterModel",voterInfoFromApi.state.toString())
+                    _state.value = emptyList()
                 }
 
             }catch (e:Exception){
