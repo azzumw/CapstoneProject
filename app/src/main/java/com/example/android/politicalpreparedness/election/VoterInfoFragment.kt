@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.election
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -38,26 +39,80 @@ class VoterInfoFragment : Fragment() {
 
         //TODO: Handle loading of URLs
 
-        viewModel.state.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty()){
+//        viewModel.state.observe(viewLifecycleOwner, Observer {
+//            if (!it.isNullOrEmpty()){
+//                binding.stateLocations.visibility = View.VISIBLE
+//                binding.stateBallot.visibility = View.VISIBLE
+//
+//                val voterLocationUrl = it[0].electionAdministrationBody.votingLocationFinderUrl
+//                val ballotInfoUrl = it[0].electionAdministrationBody.ballotInfoUrl
+//
+//                if (voterLocationUrl.isNullOrEmpty()||ballotInfoUrl.isNullOrEmpty()){
+//                    if(voterLocationUrl.isNullOrEmpty() && ballotInfoUrl.isNullOrEmpty()){
+//                        binding.stateLocations.visibility = View.GONE
+//                        binding.stateBallot.visibility = View.GONE
+//                        binding.noInfoTextView.visibility = View.VISIBLE
+//
+//                    }else if (ballotInfoUrl.isNullOrEmpty()){
+//                        binding.stateBallot.visibility = View.GONE
+//                    }else{
+//                        binding.stateLocations.visibility = View.GONE
+//                    }
+//                }
+//
+//
+//
+//                binding.stateLocations.setOnClickListener{
+//                    startIntentForUrl(voterLocationUrl)
+//                }
+//
+//                binding.stateBallot.setOnClickListener{
+//                    startIntentForUrl(ballotInfoUrl)
+//                }
+//
+//            }else{
+//                binding.noInfoTextView.visibility = View.VISIBLE
+//            }
+//        })
+
+//        viewModel.state.observe(viewLifecycleOwner, Observer {
+//            if(!it.isNullOrEmpty()){
+//                binding.stateBallot.visibility = View.VISIBLE
+//                binding.stateLocations.visibility = View.VISIBLE
+//
+//            }else{
+//                binding.noInfoTextView.visibility = View.VISIBLE
+//            }
+//        })
+
+
+        viewModel.voterLocationUrl.observe(viewLifecycleOwner, Observer { url ->
+            if(url!=null){
+                Log.e(this.javaClass.canonicalName,url)
                 binding.stateLocations.visibility = View.VISIBLE
-                binding.stateBallot.visibility = View.VISIBLE
-
-                val voterLocationUrl = it[0].electionAdministrationBody.votingLocationFinderUrl
-                val ballotInfoUrl = it[0].electionAdministrationBody.ballotInfoUrl
-
-                binding.stateLocations.setOnClickListener{
-                    startIntentForUrl(voterLocationUrl)
+                binding.stateLocations.setOnClickListener {
+                    startIntentForUrl(url)
                 }
-
-                binding.stateBallot.setOnClickListener{
-                    startIntentForUrl(ballotInfoUrl)
-                }
-
-            }else{
-                binding.noInfoTextView.visibility = View.VISIBLE
             }
         })
+
+        viewModel.ballotInfoUrl.observe(viewLifecycleOwner, Observer { url ->
+            if(url!=null){
+                Log.e(this.javaClass.canonicalName,url)
+                binding.stateBallot.visibility = View.VISIBLE
+                binding.stateBallot.setOnClickListener {
+                    startIntentForUrl(url)
+                }
+            }
+        })
+
+        if (viewModel.isVoterAndBallotInfoNull){
+            binding.noInfoTextView.visibility =View.VISIBLE
+
+            binding.stateLocations.visibility = View.GONE
+            binding.stateBallot.visibility = View.GONE
+        }
+
         return binding.root
     }
 

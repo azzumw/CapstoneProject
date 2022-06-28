@@ -24,8 +24,13 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
     //TODO: Add var and methods to populate voter info
 
     //TODO: Add var and methods to support loading URLs
-    private val _voterLocationUrl = MutableLiveData<String>()
-    val voterLocationUrl : LiveData<String> get() = _voterLocationUrl
+    private val _voterLocationUrl = MutableLiveData<String?>()
+    val voterLocationUrl : LiveData<String?> get() = _voterLocationUrl
+
+    private val _ballotInfoUrl = MutableLiveData<String?>()
+    val ballotInfoUrl : LiveData<String?> get() = _ballotInfoUrl
+
+    val isVoterAndBallotInfoNull: Boolean = (voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty())
 
     private val _state = MutableLiveData<List<State>?>()
     val state :LiveData<List<State>?> get() = _state
@@ -66,7 +71,9 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
                 val voterInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electId.toString())
                 if(!voterInfoFromApi.state.isNullOrEmpty()){
                     _state.value = voterInfoFromApi.state
-                    _voterLocationUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl.toString()
+                    _voterLocationUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl
+                    _ballotInfoUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
+
                     Log.e("VoterModel",voterInfoFromApi.state.toString())
                     Log.e("VoterModel",voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl.toString())
                 }else{
