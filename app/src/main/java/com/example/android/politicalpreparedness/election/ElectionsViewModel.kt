@@ -24,33 +24,16 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
     private val _statusMessage = MutableLiveData<String>()
     val statusMessage : LiveData<String> get() = _statusMessage
 
-    private val _navToSingleElectionVoterInfo = MutableLiveData<ElectionAndSavedElection?>()
-    val navToSingleElectionVoterInfo: LiveData<ElectionAndSavedElection?>
+    private val _navToSingleElectionVoterInfo = MutableLiveData<Election?>()
+    val navToSingleElectionVoterInfo: LiveData<Election?>
         get() = _navToSingleElectionVoterInfo
 
-    private var filter: MutableLiveData<Int> = MutableLiveData()
-    val filteredElections: LiveData<List<ElectionAndSavedElection>> = filter.switchMap {
-        when (it) {
-            1 -> {
-                allElections
-            }
-            2 -> {
-                savedElections
-            }
-            else -> {
-                allElections
-            }
-        }
-    }
 
 
     init {
         getElectionsInfo()
     }
 
-    fun selectFilter(selectedFilter: Int) {
-        filter.value = selectedFilter
-    }
 
     private fun getElectionsInfo() {
 
@@ -68,7 +51,7 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         }
     }
 
-    fun displayElectionVoterInfo(singleElectionInfo: ElectionAndSavedElection) {
+    fun displayElectionVoterInfo(singleElectionInfo: Election) {
         _navToSingleElectionVoterInfo.value = singleElectionInfo
     }
 
