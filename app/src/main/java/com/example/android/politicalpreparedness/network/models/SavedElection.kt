@@ -8,6 +8,6 @@ import com.squareup.moshi.Json
 import java.util.*
 
 @Entity(tableName = "saved_election_table")
-class SavedElection(
+data class SavedElection(
     @PrimaryKey
     @ColumnInfo(name ="saved_election_id")val savedElectionId: Int)
