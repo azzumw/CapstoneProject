@@ -44,8 +44,6 @@ class ElectionsFragment : Fragment() {
                 electionsViewModel.displayElectionVoterInfo(it)
             })
 
-
-
         electionsViewModel.navToSingleElectionVoterInfo.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 findNavController().navigate(
@@ -64,32 +62,31 @@ class ElectionsFragment : Fragment() {
             }
         })
 
+
+        electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
+            if (it.isNullOrEmpty()) {
+                if (it.isEmpty()) {
+                    binding.noDataInDbMsg.visibility = View.VISIBLE
+                }
+            }
+        })
+
         setHasOptionsMenu(true)
 
         return binding.root
     }
-
-    //TODO: Refresh adapters when fragment loads
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.overflow_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.all_elections -> {
                 electionsViewModel.selectFilter(1)
-//                val elec = Election(23,"blah",Date(20000L), Division("division","Spain","Andalusia"))
-//                val elections = listOf(elec)
-//                (binding.upComingElectionsRecyclerView.adapter as ElectionListAdapter).submitList(elections)
             }
-            R.id.saved_elections -> {
-//                val value = electionsViewModel.savedElections.value
-//                val elections = value?.map {
-//                    it.election
-//                }
 
-//                (binding.upComingElectionsRecyclerView.adapter as ElectionListAdapter).submitList(elections)
+            R.id.saved_elections -> {
                 electionsViewModel.selectFilter(2)
             }
         }
