@@ -18,7 +18,8 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
 
 
     //TODO: Add var and methods to populate voter info
-
+    private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
+    val showSnackBarEvent : LiveData<Boolean> = _showSnackBarEvent
 
     private val _voterLocationUrl = MutableLiveData<String?>()
     val voterLocationUrl : LiveData<String?> get() = _voterLocationUrl
@@ -88,6 +89,7 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
                 Log.e("VoterModel: ","error: ${e.cause}")
                 Log.e("VoterModel: ","error: ${e.message}")
                 Log.e("VoterModel: ","error: ${e.localizedMessage}")
+                _showSnackBarEvent.value = true
             }
         }
 
@@ -115,6 +117,10 @@ class VoterInfoViewModel(private val datasource: ElectionDao, electionId: Int, v
         } else {
             removeThisElection()
         }
+    }
+
+    fun doneShowingSnackBar(){
+        _showSnackBarEvent.value = false
     }
 
 }

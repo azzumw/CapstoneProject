@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
+import com.google.android.material.snackbar.Snackbar
 
 class VoterInfoFragment : Fragment() {
 
@@ -116,6 +117,13 @@ class VoterInfoFragment : Fragment() {
         viewModel.correspondenceAddress.observe(viewLifecycleOwner, Observer {
             if (it!=null){
                 binding.addressGroup.visibility = View.VISIBLE
+            }
+        })
+
+        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+            if(it){
+                Snackbar.make(binding.root,"Check your network",Snackbar.LENGTH_SHORT).show()
+                viewModel.doneShowingSnackBar()
             }
         })
 
