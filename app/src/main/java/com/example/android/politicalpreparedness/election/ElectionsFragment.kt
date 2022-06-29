@@ -7,12 +7,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
+import com.example.android.politicalpreparedness.network.models.Division
+import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.repository.TheRepository
+import java.util.*
 
 class ElectionsFragment : Fragment() {
 
@@ -73,10 +78,19 @@ class ElectionsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.all_elections -> {
-
+                electionsViewModel.selectFilter(1)
+//                val elec = Election(23,"blah",Date(20000L), Division("division","Spain","Andalusia"))
+//                val elections = listOf(elec)
+//                (binding.upComingElectionsRecyclerView.adapter as ElectionListAdapter).submitList(elections)
             }
             R.id.saved_elections -> {
+//                val value = electionsViewModel.savedElections.value
+//                val elections = value?.map {
+//                    it.election
+//                }
 
+//                (binding.upComingElectionsRecyclerView.adapter as ElectionListAdapter).submitList(elections)
+                electionsViewModel.selectFilter(2)
             }
         }
         return super.onOptionsItemSelected(item)

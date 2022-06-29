@@ -40,7 +40,7 @@ interface ElectionDao {
     fun getElectionIdFromSavedElection(electionId:Int):LiveData<SavedElection>
 
     @Transaction
-    @Query("SELECT * FROM election_table")
+    @Query("SELECT * FROM election_table, saved_election_table WHERE id == saved_election_id")
     fun getElectionAndSavedElection(): Flow<List<ElectionAndSavedElection>>
 
 }

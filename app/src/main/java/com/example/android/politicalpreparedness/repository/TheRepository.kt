@@ -1,7 +1,6 @@
 package com.example.android.politicalpreparedness.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
@@ -14,7 +13,8 @@ import kotlinx.coroutines.withContext
 class TheRepository(val database: ElectionDao) {
 
     val elections: LiveData<List<Election>> = database.getAllElections()
-    val savedElections :LiveData<List<ElectionAndSavedElection>> = database.getElectionAndSavedElection().asLiveData()
+    val savedElections : LiveData<List<ElectionAndSavedElection>> = database.getElectionAndSavedElection().asLiveData()
+
 
 
     suspend fun getElections() {

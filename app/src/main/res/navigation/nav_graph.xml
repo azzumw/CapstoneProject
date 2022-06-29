@@ -22,12 +22,12 @@
     <fragment
         android:id="@+id/representativeFragment"
         android:name="com.example.android.politicalpreparedness.representative.DetailFragment"
-        android:label="@string/representatives_frag_title"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_representative"></fragment>
     <fragment
         android:id="@+id/voterInfoFragment"
         android:name="com.example.android.politicalpreparedness.election.VoterInfoFragment"
-        android:label="fragment_voter_info">
+        android:label="@string/app_name">
         <argument
             android:name="arg_election_id"
             app:argType="integer" />

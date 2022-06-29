@@ -16,7 +16,6 @@
         android:padding="@dimen/padding_16dp"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
-        <!-- TODO: Add title to toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/election_name"
             android:layout_width="match_parent"
@@ -43,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_16dp"
             android:text="@string/election_information_text"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/election_date"
             app:layout_constraintStart_toStartOf="@id/election_date" />
@@ -103,7 +102,7 @@
             android:layout_marginTop="@dimen/padding_16dp"
             android:layout_width="wrap_content"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="@string/correspondence_address_text"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/state_ballot"

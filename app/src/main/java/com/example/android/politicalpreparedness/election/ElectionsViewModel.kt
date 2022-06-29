@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
@@ -12,10 +13,32 @@ enum class ElectionsApiStatus {
 
 class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
-    val allElections = repository.elections
+    var allElections = repository.elections
 
     val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
 
+    private var filter: MutableLiveData<Int> = MutableLiveData()
+    val filteredElections: LiveData<List<Election>> = filter.switchMap { filter ->
+        when (filter) {
+            1 -> {
+                allElections
+            }
+            2 -> {
+                savedElections.map { it ->
+                    it.map {
+                        it.election
+                    }
+                }
+            }
+            else-> {
+                allElections
+            }
+        }
+    }
+
+    fun selectFilter(selectedFilter: Int) {
+        filter.value = selectedFilter
+    }
 
     private val _status = MutableLiveData<ElectionsApiStatus>()
     val status: LiveData<ElectionsApiStatus>
@@ -32,6 +55,8 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
     init {
         getElectionsInfo()
+        selectFilter(1)
+
     }
 
 
