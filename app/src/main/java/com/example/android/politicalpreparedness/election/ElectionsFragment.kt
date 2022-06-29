@@ -67,6 +67,8 @@ class ElectionsFragment : Fragment() {
         electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
                     binding.noDataInDbMsg.visibility = View.VISIBLE
+            }else{
+                binding.noDataInDbMsg.visibility = View.GONE
             }
         })
 
@@ -89,13 +91,6 @@ class ElectionsFragment : Fragment() {
                 electionsViewModel.selectFilter(2)
             }
         }
-        electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
-            if (it.isEmpty()) {
-                binding.noDataInDbMsg.visibility = View.VISIBLE
-            }else{
-                binding.noDataInDbMsg.visibility = View.GONE
-            }
-        })
         return super.onOptionsItemSelected(item)
     }
 
