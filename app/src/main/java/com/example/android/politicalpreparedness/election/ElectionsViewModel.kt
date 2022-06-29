@@ -22,7 +22,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         when (filter) {
             1 -> {
                 allElections
-
             }
             2 -> {
                 savedElections.map { it ->

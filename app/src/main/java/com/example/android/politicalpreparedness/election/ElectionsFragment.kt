@@ -2,6 +2,7 @@ package com.example.android.politicalpreparedness.election
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -64,10 +65,8 @@ class ElectionsFragment : Fragment() {
 
 
         electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
-            if (it.isNullOrEmpty()) {
-                if (it.isEmpty()) {
+            if (it.isEmpty()) {
                     binding.noDataInDbMsg.visibility = View.VISIBLE
-                }
             }
         })
 
@@ -90,6 +89,13 @@ class ElectionsFragment : Fragment() {
                 electionsViewModel.selectFilter(2)
             }
         }
+        electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
+            if (it.isEmpty()) {
+                binding.noDataInDbMsg.visibility = View.VISIBLE
+            }else{
+                binding.noDataInDbMsg.visibility = View.GONE
+            }
+        })
         return super.onOptionsItemSelected(item)
     }
 
