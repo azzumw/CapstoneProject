@@ -7,6 +7,7 @@ import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
 import com.example.android.politicalpreparedness.network.models.SavedElection
+import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
@@ -45,5 +46,10 @@ class TheRepository(val database: ElectionDao) {
         withContext(IO){
             val votersInfoFromApi = CivicsApi.retrofitService.getVoterInfo(address,electionId)
         }
+    }
+
+    //network call for VoterInfo
+    suspend fun callVoterInfoApi(address: String,electionId:String):VoterInfoResponse{
+        return CivicsApi.retrofitService.getVoterInfo(address, electionId = electionId)
     }
 }

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
+import com.example.android.politicalpreparedness.repository.TheRepository
 import com.google.android.material.snackbar.Snackbar
 
 class VoterInfoFragment : Fragment() {
@@ -31,7 +32,8 @@ class VoterInfoFragment : Fragment() {
         val arguments = VoterInfoFragmentArgs.fromBundle(arguments!!)
 //        val repository = TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao)
         val database = ElectionDatabase.getInstance(requireContext()).electionDao
-        val viewModelFactory = VoterInfoViewModelFactory(database,arguments.argElectionId,arguments.argDivision)
+        val repository = TheRepository(database)
+        val viewModelFactory = VoterInfoViewModelFactory(repository,database,arguments.argElectionId,arguments.argDivision)
 
         val viewModel = ViewModelProvider(this,viewModelFactory).get(VoterInfoViewModel::class.java)
 
@@ -138,7 +140,7 @@ class VoterInfoFragment : Fragment() {
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if(it){
-                Snackbar.make(binding.root,"Check your network",Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root,"You are offline.",Snackbar.LENGTH_SHORT).show()
                 viewModel.doneShowingSnackBar()
             }
         })

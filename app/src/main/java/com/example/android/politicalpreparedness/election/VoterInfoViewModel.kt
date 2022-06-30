@@ -6,12 +6,14 @@ import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.*
+import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 
 //replace ElectionDao with ElectionRepository obj
 class VoterInfoViewModel(
+    private val repository: TheRepository,
     private val datasource: ElectionDao,
     electionId: Int,
     val division: Division
@@ -74,9 +76,7 @@ class VoterInfoViewModel(
         viewModelScope.launch {
 
             try {
-                val voterInfoFromApi =
-                    CivicsApi.retrofitService.getVoterInfo(address, electId.toString())
-
+                val voterInfoFromApi = repository.callVoterInfoApi(address,electId.toString())
 
                 if (!voterInfoFromApi.state.isNullOrEmpty()) {
 //                    datasource.insertState(voterInfoFromApi.state)
