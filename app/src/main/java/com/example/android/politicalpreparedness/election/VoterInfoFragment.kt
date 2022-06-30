@@ -86,6 +86,22 @@ class VoterInfoFragment : Fragment() {
 //            }
 //        })
 
+//        viewModel._state.observe(viewLifecycleOwner, Observer { currentState ->
+//           if(currentState!= null){
+//
+//               val url = currentState.electionAdministrationBody.votingLocationFinderUrl
+//
+//               if(url!=null){
+//                   binding.stateLocations.visibility = View.VISIBLE
+//                   binding.stateLocations.setOnClickListener {
+//                       startIntentForUrl(url)
+//                   }
+//               }
+//
+//           }
+//
+//        })
+
 
         viewModel.voterLocationUrl.observe(viewLifecycleOwner, Observer { url ->
             if(url!=null){

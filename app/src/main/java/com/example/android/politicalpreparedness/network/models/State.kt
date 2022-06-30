@@ -10,5 +10,5 @@ import com.squareup.moshi.JsonClass
 @Entity(tableName = "state_table")
 data class State (
     @PrimaryKey val name: String,
-    @Embedded val electionAdministrationBody: AdministrationBody
+    @Embedded(prefix = "admin_") val electionAdministrationBody: AdministrationBody
 )
