@@ -62,8 +62,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusImage"/>
 
-
-        <!-- TODO: Add Saved Election Recycler and Header -->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
