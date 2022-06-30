@@ -1,64 +1,91 @@
 package com.example.android.politicalpreparedness.election
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.android.politicalpreparedness.network.CivicsApi
+import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
+import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
-enum class ElectionsApiStatus{
-    LOADING,ERROR,DONE
+enum class ElectionsApiStatus {
+    LOADING, ERROR, DONE
 }
 
-class ElectionsViewModel: ViewModel() {
+class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
-    //TODO: Create live data val for upcoming elections
-    private val _elections = MutableLiveData<List<Election>>()
-    val elections : LiveData<List<Election>>
-    get() = _elections
+    val allElections = repository.elections
 
+    val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
 
-    private val _status = MutableLiveData<ElectionsApiStatus>()
-    val status : LiveData<ElectionsApiStatus>
-    get() = _status
-
-    private val _navToSingleElectionVoterInfo = MutableLiveData<Election>()
-    val navToSingleElectionVoterInfo : LiveData<Election>
-    get() = _navToSingleElectionVoterInfo
-
-    init {
-        getElectionsInfo()
-        Log.e("ElectionsViewModel",elections.value?.size.toString())
-    }
-    //TODO: Create live data val for saved elections
-
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
-
-
-    private fun getElectionsInfo(){
-        viewModelScope.launch {
-            _status.value = ElectionsApiStatus.LOADING
-            try {
-                 _elections.value = CivicsApi.retrofitService.getElections().elections
-                _status.value = ElectionsApiStatus.DONE
-            }catch (e: Exception){
-                _status.value = ElectionsApiStatus.ERROR
-                _elections.value = emptyList()
+    private var filter: MutableLiveData<Int> = MutableLiveData()
+    val filteredElections: LiveData<List<Election>> = filter.switchMap { filter ->
+        when (filter) {
+            1 -> {
+                allElections
+            }
+            2 -> {
+                savedElections.map { it ->
+                    it.map {
+                        it.election
+                    }
+                }
+            }
+            else-> {
+                allElections
             }
         }
     }
 
-    //TODO: Create functions to navigate to saved or upcoming election voter info
-    fun displayElectionVoterInfo(singleElectionInfo:Election){
+    fun selectFilter(selectedFilter: Int) {
+        filter.value = selectedFilter
+    }
+
+    private val _status = MutableLiveData<ElectionsApiStatus>()
+    val status: LiveData<ElectionsApiStatus>
+        get() = _status
+
+    private val _statusMessage = MutableLiveData<String>()
+    val statusMessage : LiveData<String> get() = _statusMessage
+
+    private val _showNoDataInDatabaseMessage = MutableLiveData<Boolean>(false)
+    val showNoDataInDatabaseMessage : LiveData<Boolean>  get() = _showNoDataInDatabaseMessage
+
+    private val _navToSingleElectionVoterInfo = MutableLiveData<Election?>()
+    val navToSingleElectionVoterInfo: LiveData<Election?>
+        get() = _navToSingleElectionVoterInfo
+
+
+
+    init {
+        getElectionsInfo()
+        selectFilter(1)
+    }
+
+
+    private fun getElectionsInfo() {
+
+        viewModelScope.launch {
+            _status.value = ElectionsApiStatus.LOADING
+            try {
+
+                repository.getElections()
+                _status.value = ElectionsApiStatus.DONE
+
+            } catch (e: Exception) {
+                _status.value = ElectionsApiStatus.ERROR
+                _statusMessage.value = e.message
+            }
+        }
+    }
+
+    fun displayElectionVoterInfo(singleElectionInfo: Election) {
         _navToSingleElectionVoterInfo.value = singleElectionInfo
     }
 
     //done navigating
-    fun onNavComplete(){
+    fun onNavComplete() {
         _navToSingleElectionVoterInfo.value = null
     }
+
 
 }

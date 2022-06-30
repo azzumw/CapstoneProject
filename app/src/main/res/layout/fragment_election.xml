@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/list_item_view"
-            app:electionListData="@{electionsViewModel.elections}"
+            app:electionListData="@{electionsViewModel.filteredElections}"
             />
 
         <ImageView
@@ -39,6 +39,29 @@
             app:electionsApiStatus="@{electionsViewModel.status}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/error_status_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:text="@{electionsViewModel.statusMessage}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/statusImage"/>
+
+        <TextView
+            android:id="@+id/no_data_in_db_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:text="There is no data available!"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/statusImage"/>
+
 
         <!-- TODO: Add Saved Election Recycler and Header -->
 
