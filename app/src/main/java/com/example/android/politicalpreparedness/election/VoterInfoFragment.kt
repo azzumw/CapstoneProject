@@ -17,25 +17,30 @@ import com.google.android.material.snackbar.Snackbar
 
 class VoterInfoFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        val binding : FragmentVoterInfoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_voter_info,container,false)
+        val binding: FragmentVoterInfoBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_voter_info, container, false)
 
 
         //TODO: Populate voter info -- hide views without provided data.
         /**
         Hint: You will need to ensure proper data is provided from previous fragment.
-        */
+         */
 
         val arguments = VoterInfoFragmentArgs.fromBundle(arguments!!)
-//        val repository = TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao)
+
         val database = ElectionDatabase.getInstance(requireContext()).electionDao
         val repository = TheRepository(database)
-        val viewModelFactory = VoterInfoViewModelFactory(repository,database,arguments.argElectionId,arguments.argDivision)
+        val viewModelFactory =
+            VoterInfoViewModelFactory(repository, arguments.argElectionId, arguments.argDivision)
 
-        val viewModel = ViewModelProvider(this,viewModelFactory).get(VoterInfoViewModel::class.java)
+        val viewModel =
+            ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -104,10 +109,9 @@ class VoterInfoFragment : Fragment() {
 //
 //        })
 
-
         viewModel.voterLocationUrl.observe(viewLifecycleOwner, Observer { url ->
-            if(url!=null){
-                Log.e(this.javaClass.canonicalName,url)
+            if (url != null) {
+                Log.e(this.javaClass.canonicalName, url)
                 binding.stateLocations.visibility = View.VISIBLE
                 binding.stateLocations.setOnClickListener {
                     startIntentForUrl(url)
@@ -116,8 +120,8 @@ class VoterInfoFragment : Fragment() {
         })
 
         viewModel.ballotInfoUrl.observe(viewLifecycleOwner, Observer { url ->
-            if(url!=null){
-                Log.e(this.javaClass.canonicalName,url)
+            if (url != null) {
+                Log.e(this.javaClass.canonicalName, url)
                 binding.stateBallot.visibility = View.VISIBLE
                 binding.stateBallot.setOnClickListener {
                     startIntentForUrl(url)
@@ -125,38 +129,33 @@ class VoterInfoFragment : Fragment() {
             }
         })
 
-        if (viewModel.isVoterAndBallotInfoNull){
-            binding.noInfoTextView.visibility =View.VISIBLE
+        if (viewModel.isVoterAndBallotInfoNull) {
+            binding.noInfoTextView.visibility = View.VISIBLE
 
             binding.stateLocations.visibility = View.GONE
             binding.stateBallot.visibility = View.GONE
         }
 
         viewModel.correspondenceAddress.observe(viewLifecycleOwner, Observer {
-            if (it!=null){
+            if (it != null) {
                 binding.addressGroup.visibility = View.VISIBLE
             }
         })
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
-            if(it){
-                Snackbar.make(binding.root,"You are offline.",Snackbar.LENGTH_SHORT).show()
+            if (it) {
+                Snackbar.make(binding.root, "You are offline.", Snackbar.LENGTH_SHORT).show()
                 viewModel.doneShowingSnackBar()
             }
         })
-
-
 
         return binding.root
     }
 
     //TODO: Create method to load URL intents
-    private fun startIntentForUrl(stringUrl:String?){
+    private fun startIntentForUrl(stringUrl: String?) {
         val stringToUrl = Uri.parse(stringUrl)
-        val intent = Intent(Intent.ACTION_VIEW,stringToUrl)
+        val intent = Intent(Intent.ACTION_VIEW, stringToUrl)
         context?.startActivity(intent)
     }
-
-
-
 }

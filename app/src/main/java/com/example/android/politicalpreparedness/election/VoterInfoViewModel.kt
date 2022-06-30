@@ -10,13 +10,10 @@ import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-
-//replace ElectionDao with ElectionRepository obj
 class VoterInfoViewModel(
     private val repository: TheRepository,
-    private val datasource: ElectionDao,
     electionId: Int,
-    val division: Division
+    private val division: Division
 ) :
     ViewModel() {
 
@@ -40,12 +37,11 @@ class VoterInfoViewModel(
     val correspondenceAddress: LiveData<Address?> get() = _correspondenceAddress
 
     private val _state = MutableLiveData<List<State>?>()
-    val state :LiveData<List<State>?> get() = _state
+    val state: LiveData<List<State>?> get() = _state
 
+    val election: LiveData<Election> = repository.getAnElection(electionId)
 
-    val election: LiveData<Election> = datasource.getAnElection(electionId).asLiveData()
-
-    private val isElectionSaved = datasource.getElectionIdFromSavedElection(electionId)
+    private val isElectionSaved = repository.getElectionIdFromSavedElection(electionId)
 
     val saveBtnTextState = Transformations.map(isElectionSaved) {
         if (it == null) {
@@ -64,6 +60,7 @@ class VoterInfoViewModel(
         getVoterInformation(electionId)
     }
 
+
     private fun getVoterInformation(electId: Int) {
         val country = division.country
         val state = division.state
@@ -76,15 +73,18 @@ class VoterInfoViewModel(
         viewModelScope.launch {
 
             try {
-                val voterInfoFromApi = repository.callVoterInfoApi(address,electId.toString())
+                val voterInfoFromApi = repository.callVoterInfoApi(address, electId.toString())
 
                 if (!voterInfoFromApi.state.isNullOrEmpty()) {
 //                    datasource.insertState(voterInfoFromApi.state)
                     _state.value = voterInfoFromApi.state
 
-                    _voterLocationUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl
-                    _ballotInfoUrl.value = voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
-                    _correspondenceAddress.value = voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
+                    _voterLocationUrl.value =
+                        voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl
+                    _ballotInfoUrl.value =
+                        voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
+                    _correspondenceAddress.value =
+                        voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
 
                     Log.e("VoterModel", voterInfoFromApi.state.toString())
                     Log.e(
@@ -94,7 +94,6 @@ class VoterInfoViewModel(
                 } else {
                     Log.e("VoterModel", voterInfoFromApi.state.toString())
 //                    _state.value = emptyList()
-
                 }
 
             } catch (e: Exception) {
@@ -104,35 +103,21 @@ class VoterInfoViewModel(
                 _showSnackBarEvent.value = true
             }
         }
-
-
     }
 
-
-    private fun saveThisElection() {
-
-        viewModelScope.launch {
-            datasource.saveElection(savedElection)
-        }
-    }
-
-    private fun removeThisElection() {
-
-        viewModelScope.launch {
-            datasource.deleteElection(savedElection)
-        }
-    }
 
     fun followOrUnFollowElection() {
-        if (saveBtnTextState.value == "Follow") {
-            saveThisElection()
-        } else {
-            removeThisElection()
+        viewModelScope.launch {
+            if (saveBtnTextState.value == "Follow") {
+                repository.saveThisElection(savedElection)
+            } else {
+                repository.removeThisElection(savedElection)
+            }
         }
     }
+
 
     fun doneShowingSnackBar() {
         _showSnackBarEvent.value = false
     }
-
 }

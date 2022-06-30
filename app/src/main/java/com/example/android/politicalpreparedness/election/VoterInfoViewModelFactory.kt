@@ -8,10 +8,14 @@ import com.example.android.politicalpreparedness.repository.TheRepository
 import java.lang.IllegalArgumentException
 
 //TODO: Create Factory to generate VoterInfoViewModel with provided election datasource
-class VoterInfoViewModelFactory(private val repository: TheRepository,private val database: ElectionDao, private val electionId:Int,private val division: Division): ViewModelProvider.Factory {
+class VoterInfoViewModelFactory(
+    private val repository: TheRepository,
+    private val electionId: Int,
+    private val division: Division
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(VoterInfoViewModel::class.java)){
-            return VoterInfoViewModel(repository,database,electionId,division) as T
+        if (modelClass.isAssignableFrom(VoterInfoViewModel::class.java)) {
+            return VoterInfoViewModel(repository, electionId, division) as T
         }
 
         throw IllegalArgumentException("?Unknown ViewModel")
