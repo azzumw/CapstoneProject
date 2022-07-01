@@ -1,11 +1,15 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,26 +17,35 @@ import com.example.android.poliiicalpreparedness.representative.RepresentativeVi
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
 class DetailFragment : Fragment() {
 
     companion object {
         //TODO: Add Constant for Location request
+        private const val REQUEST_PERMISSION_LOCATION = 1
     }
 
     //TODO: Declare ViewModel
-    private val viewModel : RepresentativeViewModel by viewModels()
+    private val viewModel: RepresentativeViewModel by viewModels()
 
-    private  var _binding : FragmentRepresentativeBinding? = null
+    private var _binding: FragmentRepresentativeBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         //TODO: Establish bindings
-        _binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_representative, container,false)
+        _binding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.fragment_representative,
+            container,
+            false
+        )
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -40,7 +53,10 @@ class DetailFragment : Fragment() {
         //TODO: Define and assign Representative adapter
 
         //TODO: Populate Representative adapter
-
+        binding.buttonLocation.setOnClickListener {
+//            Toast.makeText(context,"Clicked",Toast.LENGTH_SHORT).show()
+            checkLocationPermissions()
+        }
 
         //TODO: Establish button listeners for field and location search
         return binding.root
@@ -48,24 +64,65 @@ class DetailFragment : Fragment() {
     }
 
 
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         //TODO: Handle location permission result to get location on permission granted
-    }
-
-    private fun checkLocationPermissions(): Boolean {
-        return if (isPermissionGranted()) {
-            true
-        } else {
-            //TODO: Request Location permissions
-            false
+        when (requestCode) {
+            REQUEST_PERMISSION_LOCATION -> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
+                    //continue...
+                    checkLocationPermissions()
+                } else {
+                    Snackbar.make(binding.root, "Location permission must be granted to use this feature.", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+                return
+            }
         }
     }
 
-    private fun isPermissionGranted() : Boolean {
-        //TODO: Check if permission is already granted and return (true = granted, false = denied/other)
-        return true
+    private fun checkLocationPermissions() {
+        return if (isPermissionGranted()) {
+            Toast.makeText(context, "GRANTED", Toast.LENGTH_SHORT).show()
+            //continue...
+
+
+        } else {
+            Toast.makeText(context, "DENIED", Toast.LENGTH_SHORT).show()
+
+            val result =
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+
+            if (result) {
+                Snackbar.make(
+                    binding.root,
+                    "To use this feature, location permissions must be granted.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+            } else {
+                //the response from here goes to onRequestPermissionsResult
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_PERMISSION_LOCATION
+                )
+            }
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        //GRANTED == 0
+        //DENIED == -1
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getLocation() {
@@ -76,10 +133,16 @@ class DetailFragment : Fragment() {
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
-                }
-                .first()
+            .map { address ->
+                Address(
+                    address.thoroughfare,
+                    address.subThoroughfare,
+                    address.locality,
+                    address.adminArea,
+                    address.postalCode
+                )
+            }
+            .first()
     }
 
     private fun hideKeyboard() {
