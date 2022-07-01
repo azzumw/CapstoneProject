@@ -14,7 +14,10 @@
     <string name="voting_location_btn_text">Voting Location</string>
     <string name="ballot_information_btn_text">Ballot Information</string>
     <string name="no_information_available_msg">No Information available</string>
-    <string name="correspondence_address_text">Correspondence Address</string>>
+    <string name="correspondence_address_text">Correspondence Address</string>
+    <string name="my_location_btn_text">use my location</string>
+    <string name="representative_title_text">My Representatives</string>
+    <string name="no_data_available_msg">There is no data available!</string>>
 
 
 </resources>

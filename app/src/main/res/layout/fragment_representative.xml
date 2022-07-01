@@ -14,6 +14,7 @@
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:padding="@dimen/padding_16dp"
         app:layoutDescription="@xml/fragment_representative_scene">
 
         <!-- TODO: Add visual styling and content -->
@@ -90,6 +91,9 @@
             android:id="@+id/button_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/find_my_representatives_btn_text"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/zip" />
 
         <!-- TODO: Add visual styling and content -->
@@ -97,6 +101,10 @@
             android:id="@+id/button_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/my_location_btn_text"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
         <!-- TODO: Add visual styling and content -->
@@ -104,10 +112,26 @@
             android:id="@+id/representative_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_16dp"
+            android:text="@string/representative_title_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_location" />
 
         <!-- TODO: Add Representatives RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/representative_recycler"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/representative_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                motion:listitem="@layout/list_item_view"/>
+
 
         <!-- TODO: Add visual styling and content -->
         <TextView
@@ -117,6 +141,7 @@
             android:gravity="center"
             android:textAlignment="center"
             android:visibility="gone"
+            android:text="@string/no_data_available_msg"
             motion:visibilityMode="ignore"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             app:layout_constraintBottom_toBottomOf="parent" />

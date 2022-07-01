@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginTop="8dp"
-            android:text="There is no data available!"
+            android:text="@string/no_data_available_msg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusImage"/>

@@ -41,10 +41,13 @@ class DetailFragment : Fragment() {
 
         //TODO: Populate Representative adapter
 
+
         //TODO: Establish button listeners for field and location search
         return binding.root
 
     }
+
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
