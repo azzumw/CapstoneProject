@@ -58,10 +58,13 @@ class DetailFragment : Fragment() {
             checkLocationPermissions()
         }
 
+
         //TODO: Establish button listeners for field and location search
         return binding.root
 
     }
+
+
 
 
     override fun onRequestPermissionsResult(
@@ -70,9 +73,9 @@ class DetailFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //TODO: Handle location permission result to get location on permission granted
         when (requestCode) {
             REQUEST_PERMISSION_LOCATION -> {
+
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
@@ -91,7 +94,7 @@ class DetailFragment : Fragment() {
         return if (isPermissionGranted()) {
             Toast.makeText(context, "GRANTED", Toast.LENGTH_SHORT).show()
             //continue...
-
+            getLocation()
 
         } else {
             Toast.makeText(context, "DENIED", Toast.LENGTH_SHORT).show()
@@ -109,7 +112,8 @@ class DetailFragment : Fragment() {
             } else {
                 //the response from here goes to onRequestPermissionsResult
                 requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION),
                     REQUEST_PERMISSION_LOCATION
                 )
             }
@@ -127,6 +131,7 @@ class DetailFragment : Fragment() {
 
     private fun getLocation() {
         //TODO: Get location from LocationServices
+
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
     }
 
