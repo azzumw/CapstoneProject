@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.representative
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -65,8 +66,6 @@ class DetailFragment : Fragment() {
     }
 
 
-
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -75,48 +74,70 @@ class DetailFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_PERMISSION_LOCATION -> {
+                var canProceed = false
+                if ((grantResults.isNotEmpty() && ( grantResults[0] == PERMISSION_GRANTED || grantResults[1] == PERMISSION_GRANTED))) {
 
-                if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                ) {
-                    //continue...
-                    checkLocationPermissions()
+                    permissions.forEachIndexed { index, s ->
+                        when {
+                            s == "android.permission.ACCESS_FINE_LOCATION" && grantResults[index] == PERMISSION_GRANTED -> {
+                                canProceed = true
+                            }
+                            s == "android.permission.ACCESS_COARSE_LOCATION" && grantResults[index] == PERMISSION_GRANTED -> {
+                                canProceed = true
+                            }
+                        }
+                    }
+                    if (canProceed) {
+                        //continue...
+                        checkLocationPermissions()
+                    }
                 } else {
                     Snackbar.make(binding.root, "Location permission must be granted to use this feature.", Snackbar.LENGTH_SHORT)
                         .show()
                 }
                 return
             }
+
+
         }
     }
 
-    private fun checkLocationPermissions() {
+    private fun checkLocationPermissions():Boolean {
         return if (isPermissionGranted()) {
             Toast.makeText(context, "GRANTED", Toast.LENGTH_SHORT).show()
             //continue...
             getLocation()
+            true
 
         } else {
             Toast.makeText(context, "DENIED", Toast.LENGTH_SHORT).show()
 
-            val result =
+            val resultFine =
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
 
-            if (result) {
+            val resultCoarse =
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+
+            if (resultFine || resultCoarse) {
                 Snackbar.make(
                     binding.root,
                     "To use this feature, location permissions must be granted.",
                     Snackbar.LENGTH_SHORT
                 ).show()
 
+
             } else {
                 //the response from here goes to onRequestPermissionsResult
                 requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION),
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
                     REQUEST_PERMISSION_LOCATION
                 )
+
             }
+            false
         }
     }
 
@@ -126,12 +147,16 @@ class DetailFragment : Fragment() {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+        ) == PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PERMISSION_GRANTED
+
     }
 
     private fun getLocation() {
         //TODO: Get location from LocationServices
-
+        Toast.makeText(context,"getLocation",Toast.LENGTH_SHORT).show()
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
     }
 
