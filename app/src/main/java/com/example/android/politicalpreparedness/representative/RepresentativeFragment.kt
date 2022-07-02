@@ -176,7 +176,7 @@ class DetailFragment : Fragment() {
         when (requestCode) {
             REQUEST_TURN_DEVICE_LOCATION_ON -> {
                 Log.e(TAG, "onActivityResult - REQ_DEV_LOC")
-                checkDeviceLocationSettings(false)
+                checkDeviceLocationSettings()
             }
         }
     }
@@ -193,10 +193,37 @@ class DetailFragment : Fragment() {
         val locationSettingsResponseTask =
             settingsClient.checkLocationSettings(builder.build())
 
-        locationSettingsResponseTask.addOnCompleteListener {
-            if ( it.isSuccessful ) {
-                Toast.makeText(context,"Device Location ON!",Toast.LENGTH_SHORT).show()
-            }
+//        locationSettingsResponseTask.addOnCompleteListener {
+//            if ( it.isSuccessful ) {
+//                Toast.makeText(context,"Device Location ON!",Toast.LENGTH_SHORT).show()
+//            }else{
+//                if (it.exception is ResolvableApiException &&  resolve){
+//                    try {
+//                        Log.e("LocationSettingsResponseOnFailure","I am here")
+//                        startIntentSenderForResult(
+//                            (it.exception as ResolvableApiException).resolution.intentSender,
+//                            REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null
+//                        )
+//
+//                    } catch (sendEx: IntentSender.SendIntentException) {
+//                        Log.d(
+//                            TAG,
+//                            "Error getting location settings resolution: " + sendEx.message
+//                        )
+//                    }
+//                }else {
+//                    Snackbar.make(
+//                        binding.root,
+//                        "Device location must be on to use this feature", Snackbar.LENGTH_SHORT
+//                    ).show()
+//                }
+//
+//            }
+//        }
+
+        locationSettingsResponseTask.addOnSuccessListener {
+            Toast.makeText(context,"Device Location ON!",Toast.LENGTH_SHORT).show()
+
         }
 
         locationSettingsResponseTask.addOnFailureListener { exception ->
@@ -220,7 +247,6 @@ class DetailFragment : Fragment() {
                     "Device location must be on to use this feature", Snackbar.LENGTH_SHORT
                 ).show()
             }
-
         }
 
     }
