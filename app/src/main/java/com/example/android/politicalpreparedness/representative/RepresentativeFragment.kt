@@ -75,7 +75,7 @@ class DetailFragment : Fragment() {
         when (requestCode) {
             REQUEST_PERMISSION_LOCATION -> {
                 var canProceed = false
-                if ((grantResults.isNotEmpty() && ( grantResults[0] == PERMISSION_GRANTED || grantResults[1] == PERMISSION_GRANTED))) {
+                if ((grantResults.isNotEmpty() && (grantResults[0] == PERMISSION_GRANTED || grantResults[1] == PERMISSION_GRANTED))) {
 
                     permissions.forEachIndexed { index, s ->
                         when {
@@ -92,17 +92,19 @@ class DetailFragment : Fragment() {
                         checkLocationPermissions()
                     }
                 } else {
-                    Snackbar.make(binding.root, "Location permission must be granted to use this feature.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        binding.root,
+                        "Location permission must be granted to use this feature.",
+                        Snackbar.LENGTH_SHORT
+                    )
                         .show()
                 }
                 return
             }
-
-
         }
     }
 
-    private fun checkLocationPermissions():Boolean {
+    private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
             Toast.makeText(context, "GRANTED", Toast.LENGTH_SHORT).show()
             //continue...
@@ -156,7 +158,7 @@ class DetailFragment : Fragment() {
 
     private fun getLocation() {
         //TODO: Get location from LocationServices
-        Toast.makeText(context,"getLocation",Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "getLocation", Toast.LENGTH_SHORT).show()
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
     }
 
