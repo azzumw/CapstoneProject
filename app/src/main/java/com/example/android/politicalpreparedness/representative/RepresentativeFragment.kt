@@ -1,15 +1,20 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,17 +23,28 @@ import com.example.android.poliiicalpreparedness.representative.RepresentativeVi
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.model.Representative
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
 class DetailFragment : Fragment() {
 
     companion object {
-        //TODO: Add Constant for Location request
+
+        private const val TAG= "Representative_Fragment:"
+        private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
         private const val REQUEST_PERMISSION_LOCATION = 1
+        private const val FINE_LOCATION_KEY = "android.permission.ACCESS_FINE_LOCATION"
+        private const val COARSE_LOCATION_KEY = "android.permission.ACCESS_COARSE_LOCATION"
     }
 
-    //TODO: Declare ViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private val viewModel: RepresentativeViewModel by viewModels()
 
     private var _binding: FragmentRepresentativeBinding? = null
@@ -40,7 +56,6 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        //TODO: Establish bindings
         _binding = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.fragment_representative,
@@ -51,11 +66,12 @@ class DetailFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
         //TODO: Define and assign Representative adapter
 
         //TODO: Populate Representative adapter
         binding.buttonLocation.setOnClickListener {
-//            Toast.makeText(context,"Clicked",Toast.LENGTH_SHORT).show()
             checkLocationPermissions()
         }
 
@@ -79,10 +95,10 @@ class DetailFragment : Fragment() {
 
                     permissions.forEachIndexed { index, s ->
                         when {
-                            s == "android.permission.ACCESS_FINE_LOCATION" && grantResults[index] == PERMISSION_GRANTED -> {
+                            s == FINE_LOCATION_KEY && grantResults[index] == PERMISSION_GRANTED -> {
                                 canProceed = true
                             }
-                            s == "android.permission.ACCESS_COARSE_LOCATION" && grantResults[index] == PERMISSION_GRANTED -> {
+                            s == COARSE_LOCATION_KEY && grantResults[index] == PERMISSION_GRANTED -> {
                                 canProceed = true
                             }
                         }
@@ -106,13 +122,12 @@ class DetailFragment : Fragment() {
 
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
-            Toast.makeText(context, "GRANTED", Toast.LENGTH_SHORT).show()
             //continue...
-            getLocation()
+            checkDeviceLocationSettings()
+//            getLocation()
             true
 
         } else {
-            Toast.makeText(context, "DENIED", Toast.LENGTH_SHORT).show()
 
             val resultFine =
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -137,7 +152,6 @@ class DetailFragment : Fragment() {
                     ),
                     REQUEST_PERMISSION_LOCATION
                 )
-
             }
             false
         }
@@ -156,11 +170,92 @@ class DetailFragment : Fragment() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_TURN_DEVICE_LOCATION_ON -> {
+                Log.e(TAG, "onActivityResult - REQ_DEV_LOC")
+                checkDeviceLocationSettings(false)
+            }
+        }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private fun checkDeviceLocationSettings(resolve: Boolean = true) {
+        val locationRequest = createLocationRequest()
+
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+
+        val settingsClient = LocationServices.getSettingsClient(requireActivity())
+
+        val locationSettingsResponseTask =
+            settingsClient.checkLocationSettings(builder.build())
+
+        locationSettingsResponseTask.addOnCompleteListener {
+            if ( it.isSuccessful ) {
+                Toast.makeText(context,"Device Location ON!",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        locationSettingsResponseTask.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException &&  resolve){
+                try {
+                    Log.e("LocationSettingsResponseOnFailure","I am here")
+                    startIntentSenderForResult(
+                        exception.resolution.intentSender,
+                        REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null
+                    )
+
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.d(
+                        TAG,
+                        "Error getting location settings resolution: " + sendEx.message
+                    )
+                }
+            }else {
+                Snackbar.make(
+                    binding.root,
+                    "Device location must be on to use this feature", Snackbar.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+
+    }
+
+    private fun createLocationRequest(): LocationRequest {
+
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_LOW_POWER
+            interval = 10000L
+//            fastestInterval
+        }
+        return locationRequest
+    }
+
+    @SuppressLint("MissingPermission")
     private fun getLocation() {
         //TODO: Get location from LocationServices
-        Toast.makeText(context, "getLocation", Toast.LENGTH_SHORT).show()
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener {
+                if (it != null) {
+                    Toast.makeText(
+                        context,
+                        "Location: Lat: ${it.latitude}, Long:${it.longitude}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+                }
+                // Got last known location. In some rare situations this can be null.
+            }
+
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
     }
+
 
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
@@ -177,6 +272,7 @@ class DetailFragment : Fragment() {
             .first()
     }
 
+
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
@@ -186,5 +282,4 @@ class DetailFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
 }
