@@ -21,6 +21,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModel
+import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModelFactory
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
@@ -31,9 +32,9 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
-class DetailFragment : Fragment() {
+class RepresentativeFragment : Fragment() {
 
-    private lateinit var locationCallback: LocationCallback
+
     companion object {
 
         private const val TAG = "Representative_Fragment:"
@@ -47,7 +48,9 @@ class DetailFragment : Fragment() {
     private var mCurrentLocation: Location? = null
 
 
-    private val viewModel: RepresentativeViewModel by viewModels()
+    private val viewModel: RepresentativeViewModel by viewModels(){
+        RepresentativeViewModelFactory(activity!!.application)
+    }
 
     private var _binding: FragmentRepresentativeBinding? = null
     private val binding get() = _binding!!
@@ -83,6 +86,85 @@ class DetailFragment : Fragment() {
 
     }
 
+
+
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation(locationRequest: LocationRequest) {
+        //TODO: Get location from LocationServices
+        val locationCallback = object : LocationCallback() {
+
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+
+                Log.e(TAG, "Inside on Location Result")
+
+                val locationList = locationResult.locations
+                Log.e(TAG, "Loc List: $locationList")
+
+                Log.e(TAG, "${locationResult.locations}")
+
+                val mostRecentLocation = locationResult.lastLocation
+                mCurrentLocation = mostRecentLocation
+                Log.e(TAG, "Most Recent Loc: $mostRecentLocation")
+                Log.e(TAG, "mCurrentLocation: $mCurrentLocation")
+                fusedLocationClient.removeLocationUpdates(this)
+
+//                getLocation(locationRequest)
+            }
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+
+        Toast.makeText(
+                        context,
+                        "Location: Lat: ${mCurrentLocation!!.latitude}, Long:${mCurrentLocation!!.longitude}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+
+//        fusedLocationClient.lastLocation
+//            .addOnSuccessListener { pLocation ->
+//                if (pLocation != null) {
+//                    mCurrentLocation = pLocation
+//                    Toast.makeText(
+//                        context,
+//                        "Location: Lat: ${mCurrentLocation!!.latitude}, Long:${mCurrentLocation!!.longitude}",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//
+//                    val address = viewModel.geoCodeLocation(mCurrentLocation!!)
+//                    Log.e("Address:","${address.city}")
+//
+//
+//                } else {
+//                    //force to get new location
+//                    fusedLocationClient.requestLocationUpdates(
+//                        locationRequest,
+//                        locationCallback,
+//                        Looper.getMainLooper()
+//                    )
+//                }
+//            }
+
+        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
+    }
+
+
+//    private fun geoCodeLocation(location: Location): Address {
+//        val geocoder = Geocoder(context, Locale.getDefault())
+//        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
+//            .map { address ->
+//                Address(
+//                    address.thoroughfare,
+//                    address.subThoroughfare,
+//                    address.locality,
+//                    address.adminArea,
+//                    address.postalCode
+//                )
+//            }
+//            .first()
+//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -233,77 +315,6 @@ class DetailFragment : Fragment() {
 //            fastestInterval
         }
         return locationRequest
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getLocation(locationRequest: LocationRequest) {
-        //TODO: Get location from LocationServices
-        val locationCallback = object : LocationCallback() {
-
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-
-                Log.e(TAG, "Inside on Location Result")
-
-                val locationList = locationResult.locations
-                Log.e(TAG, "Loc List: $locationList")
-
-                Log.e(TAG, "${locationResult.locations}")
-
-                val mostRecentLocation = locationResult.lastLocation
-                mCurrentLocation = mostRecentLocation
-                Log.e(TAG, "Most Recent Loc: $mostRecentLocation")
-                Log.e(TAG, "mCurrentLocation: $mCurrentLocation")
-                fusedLocationClient.removeLocationUpdates(this)
-
-                getLocation(locationRequest)
-            }
-        }
-
-
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { pLocation ->
-                if (pLocation != null) {
-                    mCurrentLocation = pLocation
-                    Toast.makeText(
-                        context,
-                        "Location: Lat: ${mCurrentLocation!!.latitude}, Long:${mCurrentLocation!!.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                } else {
-                    //force to get new location
-                    fusedLocationClient.requestLocationUpdates(
-                        locationRequest,
-                        locationCallback,
-                        Looper.getMainLooper()
-                    )
-
-                    Toast.makeText(context, "$mCurrentLocation", Toast.LENGTH_SHORT).show()
-
-
-//                    getLocation(locationRequest)
-//                    Toast.makeText(context,"Lng: ${mCurrentLocation.longitude}, Lat: ${mCurrentLocation.longitude}",Toast.LENGTH_SHORT).show()
-                }
-            }
-
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
-    }
-
-
-    private fun geoCodeLocation(location: Location): Address {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            .map { address ->
-                Address(
-                    address.thoroughfare,
-                    address.subThoroughfare,
-                    address.locality,
-                    address.adminArea,
-                    address.postalCode
-                )
-            }
-            .first()
     }
 
 
