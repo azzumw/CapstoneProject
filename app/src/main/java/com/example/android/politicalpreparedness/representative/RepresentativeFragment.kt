@@ -36,7 +36,7 @@ class DetailFragment : Fragment() {
 
     companion object {
 
-        private const val TAG= "Representative_Fragment:"
+        private const val TAG = "Representative_Fragment:"
         private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
         private const val REQUEST_PERMISSION_LOCATION = 1
         private const val FINE_LOCATION_KEY = "android.permission.ACCESS_FINE_LOCATION"
@@ -122,9 +122,7 @@ class DetailFragment : Fragment() {
 
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
-            //continue...
             checkDeviceLocationSettings()
-//            getLocation()
             true
 
         } else {
@@ -176,7 +174,7 @@ class DetailFragment : Fragment() {
         when (requestCode) {
             REQUEST_TURN_DEVICE_LOCATION_ON -> {
                 Log.e(TAG, "onActivityResult - REQ_DEV_LOC")
-                checkDeviceLocationSettings()
+                checkDeviceLocationSettings(false)
             }
         }
     }
@@ -193,43 +191,17 @@ class DetailFragment : Fragment() {
         val locationSettingsResponseTask =
             settingsClient.checkLocationSettings(builder.build())
 
-//        locationSettingsResponseTask.addOnCompleteListener {
-//            if ( it.isSuccessful ) {
-//                Toast.makeText(context,"Device Location ON!",Toast.LENGTH_SHORT).show()
-//            }else{
-//                if (it.exception is ResolvableApiException &&  resolve){
-//                    try {
-//                        Log.e("LocationSettingsResponseOnFailure","I am here")
-//                        startIntentSenderForResult(
-//                            (it.exception as ResolvableApiException).resolution.intentSender,
-//                            REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null
-//                        )
-//
-//                    } catch (sendEx: IntentSender.SendIntentException) {
-//                        Log.d(
-//                            TAG,
-//                            "Error getting location settings resolution: " + sendEx.message
-//                        )
-//                    }
-//                }else {
-//                    Snackbar.make(
-//                        binding.root,
-//                        "Device location must be on to use this feature", Snackbar.LENGTH_SHORT
-//                    ).show()
-//                }
-//
-//            }
-//        }
-
         locationSettingsResponseTask.addOnSuccessListener {
-            Toast.makeText(context,"Device Location ON!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Device Location ON!", Toast.LENGTH_SHORT).show()
+            //continue
+            getLocation()
 
         }
 
         locationSettingsResponseTask.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException &&  resolve){
+            if (exception is ResolvableApiException && resolve) {
                 try {
-                    Log.e("LocationSettingsResponseOnFailure","I am here")
+                    Log.e("LocationSettingsResponseOnFailure", "I am here")
                     startIntentSenderForResult(
                         exception.resolution.intentSender,
                         REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null
@@ -241,7 +213,7 @@ class DetailFragment : Fragment() {
                         "Error getting location settings resolution: " + sendEx.message
                     )
                 }
-            }else {
+            } else {
                 Snackbar.make(
                     binding.root,
                     "Device location must be on to use this feature", Snackbar.LENGTH_SHORT
@@ -254,7 +226,7 @@ class DetailFragment : Fragment() {
     private fun createLocationRequest(): LocationRequest {
 
         val locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_LOW_POWER
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 10000L
 //            fastestInterval
         }
@@ -275,8 +247,8 @@ class DetailFragment : Fragment() {
                     ).show()
                 } else {
                     Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+                    //force to get new location
                 }
-                // Got last known location. In some rare situations this can be null.
             }
 
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
