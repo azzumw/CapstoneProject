@@ -10,6 +10,7 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -25,10 +26,8 @@ import com.example.android.politicalpreparedness.databinding.FragmentRepresentat
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
@@ -44,6 +43,8 @@ class DetailFragment : Fragment() {
     }
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var mCurrentLocation: Location
+
 
     private val viewModel: RepresentativeViewModel by viewModels()
 
@@ -194,7 +195,7 @@ class DetailFragment : Fragment() {
         locationSettingsResponseTask.addOnSuccessListener {
             Toast.makeText(context, "Device Location ON!", Toast.LENGTH_SHORT).show()
             //continue
-            getLocation()
+            getLocation(locationRequest)
 
         }
 
@@ -234,24 +235,77 @@ class DetailFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation() {
+    private fun getLocation(locationRequest: LocationRequest) {
         //TODO: Get location from LocationServices
+         val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+
+                Log.e(TAG, "Inside on Location Result")
+
+                val locationList = locationResult.locations
+                Log.e(TAG, "Loc List: $locationList")
+
+                Log.e(TAG, "${locationResult.locations}")
+
+                val mostRecentLocation = locationResult.lastLocation
+                mCurrentLocation = mostRecentLocation
+                Log.e(TAG, "Most Recent Loc: $mostRecentLocation")
+                Log.e(TAG, "mCurrentLocation: $mCurrentLocation")
+                fusedLocationClient.removeLocationUpdates(this)
+            }
+        }
+
 
         fusedLocationClient.lastLocation
-            .addOnSuccessListener {
-                if (it != null) {
+            .addOnSuccessListener { pLocation ->
+                if (pLocation != null) {
                     Toast.makeText(
                         context,
-                        "Location: Lat: ${it.latitude}, Long:${it.longitude}",
+                        "Location: Lat: ${pLocation.latitude}, Long:${pLocation.longitude}",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "$pLocation", Toast.LENGTH_SHORT).show()
                     //force to get new location
+                    fusedLocationClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallback,
+                        Looper.getMainLooper()
+                    )
+
+                    return@addOnSuccessListener
+//                    Toast.makeText(context,"Lng: ${mCurrentLocation.longitude}, Lat: ${mCurrentLocation.longitude}",Toast.LENGTH_SHORT).show()
+
                 }
             }
 
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLiveFusedLocation(locationRequest: LocationRequest) {
+        val locationResult: Task<Location> = fusedLocationClient.lastLocation
+
+        locationResult.addOnSuccessListener { location ->
+            if (location == null) {
+//                fusedLocationClient.requestLocationUpdates(
+//                    locationRequest,
+//                    locationCallback,
+//                    Looper.getMainLooper()
+//                )
+                Log.e(TAG, "Inside location is null")
+                checkDeviceLocationSettings()
+//               return@addOnSuccessListener
+
+            } else {
+//                mCurrentLocation = location
+
+//                currentLatLng = LatLng(mCurrentLocation.latitude, mCurrentLocation.longitude)
+
+
+            }
+        }
     }
 
 
