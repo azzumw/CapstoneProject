@@ -81,6 +81,8 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermissions()
         }
 
+        binding.zip.setAutofillHints(View.AUTOFILL_HINT_POSTAL_CODE)
+
         //TODO: Establish button listeners for field and location search
         return binding.root
 
