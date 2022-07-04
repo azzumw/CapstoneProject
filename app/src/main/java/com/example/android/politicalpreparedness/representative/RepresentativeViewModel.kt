@@ -80,7 +80,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 
      fun findMyRepresentatives() {
 //        Log.e("RepresentativeViewMode:", address.toFormattedString())
-        if(isValidEntry()){
+        if(!isValidEntry()){
             getRepresentativesFromApi(_address.value!!)
         }else{
             //show snackbar
@@ -91,7 +91,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 
     //TODO: Create function to get address from individual fields
     fun createAddressFromFields() {
-        if(isValidEntry()){
+        if(!isValidEntry()){
             _address.value =  Address(
                 line1.value!!,
                 line2.value!!,
