@@ -14,8 +14,17 @@ import kotlin.time.milliseconds
 
 class RepresentativeViewModel(val app: Application) : ViewModel() {
 
+    private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
+    val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
+
     //TODO: Establish live data for representatives and address
     val _address = MutableLiveData<Address>()
+
+    val line1 = MutableLiveData<String>("")
+    val line2 = MutableLiveData<String>("")
+    val city = MutableLiveData<String>("")
+    val state = MutableLiveData<String>("")
+    val zip = MutableLiveData<String>("")
 
 
 
@@ -47,7 +56,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
     //TODO: Create function get address from geo location
 
 
-    private fun geoCodeLocation(location: Location): Address? {
+    private fun geoCodeLocation(location: Location){
         val geocoder = Geocoder(app, Locale.getDefault())
         _address.value = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             .map { address ->
@@ -61,22 +70,21 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
             }
             .first()
 
-        return _address.value
     }
 
     fun useMyLocation(location: Location) {
-        val add = geoCodeLocation(location)
-        findMyRepresentatives(add!!)
+        geoCodeLocation(location)
+        findMyRepresentatives()
     }
 
 
-    private fun findMyRepresentatives(address: Address) {
-        Log.e("RepresentativeViewMode:", address.toFormattedString())
+     fun findMyRepresentatives() {
+//        Log.e("RepresentativeViewMode:", address.toFormattedString())
         if(isValidEntry()){
-            getRepresentativesFromApi(address)
+            getRepresentativesFromApi(_address.value!!)
         }else{
             //show snackbar
-
+            _showSnackBarEvent.value = true
         }
     }
 
@@ -85,24 +93,30 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
     fun createAddressFromFields() {
         if(isValidEntry()){
             _address.value =  Address(
-                _address.value!!.line1,
-                _address.value!!.line2,
-                _address.value!!.city,
-                _address.value!!.state,
-                _address.value!!.zip
+                line1.value!!,
+                line2.value!!,
+                city.value!!,
+                state.value!!,
+               zip.value!!
             )
-            findMyRepresentatives(_address.value!!)
+            findMyRepresentatives()
+        }else{
+            _showSnackBarEvent.value = true
         }
 
     }
 
     private fun isValidEntry():Boolean{
-        return _address.value?.line1.isNullOrBlank()||
-                _address.value?.line2.isNullOrBlank() ||
-                _address.value?.city.isNullOrBlank() ||
-                _address.value?.state.isNullOrBlank()
-                _address.value?.zip.toString().isNullOrBlank()
+        return   line1.value.isNullOrBlank()||
+                line2.value.isNullOrBlank() ||
+                city.value.isNullOrBlank() ||
+                state.value.isNullOrBlank()||
+            zip.value.isNullOrBlank()
 
+    }
+
+    fun doneShowingSnackBar() {
+        _showSnackBarEvent.value = false
     }
 
 }

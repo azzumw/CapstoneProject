@@ -31,10 +31,10 @@
             android:id="@+id/address_line_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Address Line 1"
             android:autofillHints="postalAddress"
+            android:hint="Address Line 1"
             android:inputType="textPostalAddress"
-            android:text="@={viewModel._address.line1}"
+            android:text="@={viewModel.line1}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_title" />
 
@@ -47,7 +47,7 @@
             android:hint="Address Line 2"
             android:autofillHints="postalAddress"
             android:inputType="textPostalAddress"
-            android:text="@={viewModel._address.line2}"
+            android:text="@={viewModel.line2}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
@@ -60,7 +60,7 @@
             android:hint="City"
             android:autofillHints=""
             android:inputType="textPostalAddress"
-            android:text="@={viewModel._address.city}"
+            android:text="@={viewModel.city}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/state_spinner"
             app:layout_constraintTop_toBottomOf="@id/address_line_2" />
@@ -73,7 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:autofillHints=""
-            app:stateValue="@{viewModel._address.state}"
+            app:stateValue="@{viewModel.state}"
             android:entries="@array/states"
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toEndOf="@id/city"
@@ -90,7 +90,7 @@
             android:autofillHints="postalCode"
             android:inputType="number"
             android:maxLength="5"
-            android:text="@{viewModel._address.zip}"
+            android:text="@{viewModel.zip}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/city"
             app:layout_constraintTop_toBottomOf="@id/city" />

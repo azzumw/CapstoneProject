@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModelFactory
 import com.example.android.politicalpreparedness.R
@@ -81,7 +82,18 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermissions()
         }
 
-        binding.zip.setAutofillHints(View.AUTOFILL_HINT_POSTAL_CODE)
+        binding.buttonSearch.setOnClickListener {
+            viewModel.createAddressFromFields()
+        }
+
+
+        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+            if(it){
+                Snackbar.make(binding.root,"Invalid entry",Snackbar.LENGTH_SHORT).show()
+                viewModel.doneShowingSnackBar()
+            }
+        })
+
 
         //TODO: Establish button listeners for field and location search
         return binding.root
