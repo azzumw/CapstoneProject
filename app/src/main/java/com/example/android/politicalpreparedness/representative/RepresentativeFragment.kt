@@ -71,6 +71,7 @@ class RepresentativeFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         //TODO: Define and assign Representative adapter
@@ -80,14 +81,10 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermissions()
         }
 
-
         //TODO: Establish button listeners for field and location search
         return binding.root
 
     }
-
-
-
 
     @SuppressLint("MissingPermission")
     private fun getLocation(locationRequest: LocationRequest) {
@@ -110,18 +107,12 @@ class RepresentativeFragment : Fragment() {
                 Log.e(TAG, "mCurrentLocation: $mCurrentLocation")
                 fusedLocationClient.removeLocationUpdates(this)
 
+                viewModel.useMyLocation(mCurrentLocation!!)
 //                getLocation(locationRequest)
             }
         }
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
-
-        Toast.makeText(
-                        context,
-                        "Location: Lat: ${mCurrentLocation!!.latitude}, Long:${mCurrentLocation!!.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
 
 //        fusedLocationClient.lastLocation
 //            .addOnSuccessListener { pLocation ->
@@ -133,8 +124,8 @@ class RepresentativeFragment : Fragment() {
 //                        Toast.LENGTH_SHORT
 //                    ).show()
 //
-//                    val address = viewModel.geoCodeLocation(mCurrentLocation!!)
-//                    Log.e("Address:","${address.city}")
+//                   viewModel.useMyLocation(mCurrentLocation!!)
+////                    Log.e("Address:","${address.city}")
 //
 //
 //                } else {

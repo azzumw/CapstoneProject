@@ -31,8 +31,9 @@
             android:id="@+id/address_line_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
+            android:autofillHints="Address Line 1"
             android:inputType="textPostalAddress"
+            android:text="@{viewModel.address.line1}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_title" />
 
@@ -42,8 +43,9 @@
             android:id="@+id/address_line_2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:autofillHints=""
+            android:autofillHints="Address Line 2"
             android:inputType="textPostalAddress"
+            android:text="@{viewModel.address.line2}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
@@ -53,20 +55,23 @@
             android:id="@+id/city"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autofillHints=""
+            android:autofillHints="City"
             android:inputType="textPostalAddress"
+            android:text="@{viewModel.address.city}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/state"
+            app:layout_constraintEnd_toStartOf="@id/state_spinner"
             app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
         <!-- TODO: Add default values from provided resources  -->
         <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
         <Spinner
-            android:id="@+id/state"
+            android:id="@+id/state_spinner"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:autofillHints=""
+            app:stateValue="@{viewModel.address.state}"
+            android:entries="@array/states"
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toEndOf="@id/city"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +87,7 @@
             android:autofillHints=""
             android:inputType="number"
             android:maxLength="5"
+            android:text="@{viewModel.address.zip}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/city"
             app:layout_constraintTop_toBottomOf="@id/city" />

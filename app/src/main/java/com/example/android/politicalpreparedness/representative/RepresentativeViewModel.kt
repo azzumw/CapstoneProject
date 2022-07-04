@@ -30,13 +30,11 @@ class RepresentativeViewModel(val app:Application): ViewModel() {
 
      */
 
-    init {
-        getRepresentativesFromApi()
-    }
 
-    private fun getRepresentativesFromApi(){
+    private fun getRepresentativesFromApi(address: Address){
+        //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
-            val result = CivicsApi.retrofitService.getRepresentativesInfo("Ampitheatre Parkway 1600 Mountain View California 94043")
+            val result = CivicsApi.retrofitService.getRepresentativesInfo(address)
             Log.e("RepresentativesViewModel: ", result.officials[0].name)
         }
     }
@@ -44,12 +42,10 @@ class RepresentativeViewModel(val app:Application): ViewModel() {
     //TODO: Create function get address from geo location
 
 
-    //TODO: Create function to get address from individual fields
 
-
-     fun geoCodeLocation(location: Location): Address {
+     private fun geoCodeLocation(location: Location) :Address?{
         val geocoder = Geocoder(app, Locale.getDefault())
-        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        _address.value =  geocoder.getFromLocation(location.latitude, location.longitude, 1)
             .map { address ->
                 Address(
                     address.thoroughfare,
@@ -60,8 +56,28 @@ class RepresentativeViewModel(val app:Application): ViewModel() {
                 )
             }
             .first()
+
+         return address.value
     }
 
+    fun useMyLocation(location: Location){
+        val add = geoCodeLocation(location)
+        findMyRepresentatives(add!!)
+    }
+
+
+    private fun findMyRepresentatives(address: Address){
+        Log.e("RepresentativeViewMode:" , address.toFormattedString())
+        getRepresentativesFromApi(address)
+    }
+
+
+
+
+    //TODO: Create function to get address from individual fields
+    fun createAddressFromFields():Address?{
+        return null
+    }
 
 }
 
