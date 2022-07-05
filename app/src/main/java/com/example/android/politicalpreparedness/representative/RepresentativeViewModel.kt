@@ -5,27 +5,31 @@ import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.model.Representative
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
-import kotlin.time.milliseconds
 
 class RepresentativeViewModel(val app: Application) : ViewModel() {
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 
+    private val _representatives = MutableLiveData<List<Representative>>()
+    val representatives : LiveData<List<Representative>> get() = _representatives
+
     //TODO: Establish live data for representatives and address
     val _address = MutableLiveData<Address>()
 
+    val selectedItem = MutableLiveData<Int>()
     val line1 = MutableLiveData<String>("")
     val line2 = MutableLiveData<String>("")
     val city = MutableLiveData<String>("")
-    val state = MutableLiveData<String>("")
+    val state = MediatorLiveData<String>()
     val zip = MutableLiveData<String>("")
-
 
 
     //TODO: Create function to fetch representatives from API from a provided address
@@ -41,7 +45,10 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 
      */
     init {
-        _address.value = Address("","","","","")
+
+        state.addSource(selectedItem) {
+            state.value = app.resources.getStringArray(R.array.states)[it]
+        }
     }
 
 
@@ -49,14 +56,16 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
             val result = CivicsApi.retrofitService.getRepresentativesInfo(address)
+            val officials = result.officials
+            val offices = result.offices
+
             Log.e("RepresentativesViewModel: ", result.officials[0].name)
         }
     }
 
     //TODO: Create function get address from geo location
 
-
-    private fun geoCodeLocation(location: Location){
+    private fun geoCodeLocation(location: Location) {
         val geocoder = Geocoder(app, Locale.getDefault())
         _address.value = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             .map { address ->
@@ -69,7 +78,6 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
                 )
             }
             .first()
-
     }
 
     fun useMyLocation(location: Location) {
@@ -78,47 +86,48 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
     }
 
 
-     fun findMyRepresentatives() {
+    fun findMyRepresentatives() {
 //        Log.e("RepresentativeViewMode:", address.toFormattedString())
-        if(!isValidEntry()){
             getRepresentativesFromApi(_address.value!!)
-        }else{
-            //show snackbar
-            _showSnackBarEvent.value = true
-        }
+
     }
+
+    private fun getAddress(): Address = Address(
+        line1.value!!,
+        line2.value,
+        city.value!!,
+        state.value!!,
+        zip.value!!
+    )
 
 
     //TODO: Create function to get address from individual fields
     fun createAddressFromFields() {
-        if(!isValidEntry()){
-            _address.value =  Address(
+        if (isNotValidEntry()) {
+            _showSnackBarEvent.value = true
+
+        } else {
+            _address.value = Address(
                 line1.value!!,
-                line2.value!!,
+                line2.value,
                 city.value!!,
                 state.value!!,
-               zip.value!!
+                zip.value!!
             )
             findMyRepresentatives()
-        }else{
-            _showSnackBarEvent.value = true
         }
 
     }
 
-    private fun isValidEntry():Boolean{
-        return   line1.value.isNullOrBlank()||
-                line2.value.isNullOrBlank() ||
+    private fun isNotValidEntry(): Boolean {
+        return line1.value.isNullOrBlank() ||
                 city.value.isNullOrBlank() ||
-                state.value.isNullOrBlank()||
-            zip.value.isNullOrBlank()
-
+                zip.value.isNullOrBlank()
     }
 
     fun doneShowingSnackBar() {
         _showSnackBarEvent.value = false
     }
-
 }
 
 
@@ -130,5 +139,4 @@ class RepresentativeViewModelFactory(val app: Application) : ViewModelProvider.F
 
         throw IllegalArgumentException("Unknown ViewModel")
     }
-
 }
