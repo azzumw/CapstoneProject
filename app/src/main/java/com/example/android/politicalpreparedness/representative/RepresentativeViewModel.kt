@@ -19,10 +19,9 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 
     private val _representatives = MutableLiveData<List<Representative>>()
-    val representatives : LiveData<List<Representative>> get() = _representatives
+    val representatives: LiveData<List<Representative>> get() = _representatives
 
-    //TODO: Establish live data for representatives and address
-    val _address = MutableLiveData<Address>()
+    private val _address = MutableLiveData<Address>()
 
     val selectedItem = MutableLiveData<Int>()
     val line1 = MutableLiveData<String>("")
@@ -31,8 +30,6 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
     val state = MediatorLiveData<String>()
     val zip = MutableLiveData<String>("")
 
-
-    //TODO: Create function to fetch representatives from API from a provided address
 
     /**
      *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
@@ -73,7 +70,6 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
         }
     }
 
-    //TODO: Create function get address from geo location
 
     private fun geoCodeLocation(location: Location) {
         val geocoder = Geocoder(app, Locale.getDefault())
@@ -92,7 +88,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
         updateAddressFields()
     }
 
-    private fun updateAddressFields(){
+    private fun updateAddressFields() {
         line1.value = _address.value!!.line1
         line2.value = _address.value!!.line2!!
         city.value = _address.value!!.city
@@ -108,7 +104,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 
     fun findMyRepresentatives() {
 //        Log.e("RepresentativeViewMode:", address.toFormattedString())
-            getRepresentativesFromApi(_address.value!!)
+        getRepresentativesFromApi(_address.value!!)
 
     }
 
@@ -119,7 +115,6 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 //        state.value!!,
 //        zip.value!!
 //    )
-
 
     //TODO: Create function to get address from individual fields
     fun createAddressFromFields() {
