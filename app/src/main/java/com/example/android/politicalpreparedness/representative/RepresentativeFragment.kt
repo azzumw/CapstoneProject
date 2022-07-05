@@ -26,6 +26,7 @@ import com.example.android.poliiicalpreparedness.representative.RepresentativeVi
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -75,9 +76,6 @@ class RepresentativeFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        //TODO: Define and assign Representative adapter
-
-        //TODO: Populate Representative adapter
         binding.buttonLocation.setOnClickListener {
             checkLocationPermissions()
         }
@@ -85,7 +83,6 @@ class RepresentativeFragment : Fragment() {
         binding.buttonSearch.setOnClickListener {
             viewModel.createAddressFromFields()
         }
-
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if(it){
@@ -95,14 +92,22 @@ class RepresentativeFragment : Fragment() {
         })
 
 
-        //TODO: Establish button listeners for field and location search
         return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //TODO: Define and assign Representative adapter
+        //TODO: Populate Representative adapter
+        binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
     }
 
     @SuppressLint("MissingPermission")
     private fun getLocation(locationRequest: LocationRequest) {
-        //TODO: Get location from LocationServices
+
         val locationCallback = object : LocationCallback() {
 
             override fun onLocationResult(locationResult: LocationResult) {
@@ -152,7 +157,6 @@ class RepresentativeFragment : Fragment() {
 //                }
 //            }
 
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
     }
 
 

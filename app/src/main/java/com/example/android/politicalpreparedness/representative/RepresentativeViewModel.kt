@@ -58,8 +58,18 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
             val result = CivicsApi.retrofitService.getRepresentativesInfo(address)
             val officials = result.officials
             val offices = result.offices
+            val rList = mutableListOf<Representative>()
+            offices.forEach {
+                val representative = it.getRepresentatives(officials)
+                rList.addAll(representative)
+                Log.e("REPVIEWM ", "${representative.size}")
+            }
+
+            _representatives.value = rList
 
             Log.e("RepresentativesViewModel: ", result.officials[0].name)
+            Log.e("RepresentativesViewModel: Officials: ", result.officials.size.toString())
+            Log.e("RepresentativesViewModel: Offices: ", result.offices.size.toString())
         }
     }
 
@@ -78,6 +88,16 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
                 )
             }
             .first()
+
+        updateAddressFields()
+    }
+
+    private fun updateAddressFields(){
+        line1.value = _address.value!!.line1
+        line2.value = _address.value!!.line2!!
+        city.value = _address.value!!.city
+        state.value = _address.value!!.state
+        zip.value = _address.value!!.zip
     }
 
     fun useMyLocation(location: Location) {
@@ -92,13 +112,13 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 
     }
 
-    private fun getAddress(): Address = Address(
-        line1.value!!,
-        line2.value,
-        city.value!!,
-        state.value!!,
-        zip.value!!
-    )
+//    private fun getAddress(): Address = Address(
+//        line1.value!!,
+//        line2.value,
+//        city.value!!,
+//        state.value!!,
+//        zip.value!!
+//    )
 
 
     //TODO: Create function to get address from individual fields

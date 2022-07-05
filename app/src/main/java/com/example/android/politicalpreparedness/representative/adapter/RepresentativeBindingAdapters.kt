@@ -1,10 +1,15 @@
 package com.example.android.politicalpreparedness.representative.adapter
 
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.representative.model.Representative
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
@@ -12,6 +17,14 @@ fun fetchImage(view: ImageView, src: String?) {
         val uri = src.toUri().buildUpon().scheme("https").build()
         //TODO: Add Glide call to load image and circle crop - user ic_profile as a placeholder and for errors.
     }
+}
+
+
+@BindingAdapter("representativeListData")
+fun bindRepresentativeRecyclerView(recyclerView: RecyclerView, representativeData: List<Representative>?) {
+    val adapter = recyclerView.adapter as RepresentativeListAdapter
+    Log.e("REP BIND ADAPTER: ", representativeData?.size.toString())
+    adapter.submitList(representativeData)
 }
 
 
@@ -27,6 +40,8 @@ fun Spinner.setNewValue(value: String?) {
         setSelection(position)
     }
 }
+
+
 
 
 inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T>{
