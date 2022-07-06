@@ -51,9 +51,12 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
             binding.twitterImg.visibility = View.GONE
             binding.facebookImg.visibility = View.GONE
         }
-        //TODO: Show social links ** Hint: Use provided helper methods
         //TODO: Show www link ** Hint: Use provided helper methods
-
+        if(item.official.urls != null){
+            showWWWLinks(item.official.urls)
+        }else{
+            binding.webImg.visibility = View.GONE
+        }
         binding.executePendingBindings()
     }
 
@@ -71,7 +74,7 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
     }
 
     private fun showWWWLinks(urls: List<String>) {
-//        enableLink(binding.wwwIcon, urls.first())
+        enableLink(binding.webImg, urls.first())
     }
 
     private fun getFacebookUrl(channels: List<Channel>): String? {
