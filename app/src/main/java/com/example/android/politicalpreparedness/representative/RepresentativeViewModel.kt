@@ -106,9 +106,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 
 
     fun findMyRepresentatives() {
-//        Log.e("RepresentativeViewMode:", address.toFormattedString())
         getRepresentativesFromApi(_address.value!!)
-
     }
 
 //    private fun getAddress(): Address = Address(
@@ -119,7 +117,6 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 //        zip.value!!
 //    )
 
-    //TODO: Create function to get address from individual fields
     fun createAddressFromFields() {
         if (isNotValidEntry()) {
             _showSnackBarEvent.value = true

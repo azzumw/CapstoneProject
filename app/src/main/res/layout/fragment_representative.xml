@@ -88,6 +88,7 @@
             android:id="@+id/zip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:hint="Zip Code"
             android:autofillHints="postalCode"
             android:inputType="number"
             android:maxLength="5"
