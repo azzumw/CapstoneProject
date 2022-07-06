@@ -17,6 +17,9 @@ import com.example.android.politicalpreparedness.representative.model.Representa
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
+
+    view.setImageResource(R.drawable.ic_profile)
+
     src?.let {
         val uri = src.toUri().buildUpon().scheme("https").build()
 
@@ -30,15 +33,15 @@ fun fetchImage(view: ImageView, src: String?) {
     }
 }
 
-
 @BindingAdapter("representativeListData")
-fun bindRepresentativeRecyclerView(recyclerView: RecyclerView, representativeData: List<Representative>?) {
+fun bindRepresentativeRecyclerView(
+    recyclerView: RecyclerView,
+    representativeData: List<Representative>?
+) {
     val adapter = recyclerView.adapter as RepresentativeListAdapter
     Log.e("REP BIND ADAPTER: ", representativeData?.size.toString())
     adapter.submitList(representativeData)
 }
-
-
 
 @BindingAdapter("stateValue")
 fun Spinner.setNewValue(value: String?) {
@@ -52,9 +55,6 @@ fun Spinner.setNewValue(value: String?) {
     }
 }
 
-
-
-
-inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T>{
+inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T> {
     return adapter as ArrayAdapter<T>
 }

@@ -36,7 +36,6 @@ import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
 
-
     companion object {
 
         private const val TAG = "Representative_Fragment:"
@@ -49,8 +48,7 @@ class RepresentativeFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
-
-    private val viewModel: RepresentativeViewModel by viewModels(){
+    private val viewModel: RepresentativeViewModel by viewModels() {
         RepresentativeViewModelFactory(activity!!.application)
     }
 
@@ -85,24 +83,19 @@ class RepresentativeFragment : Fragment() {
         }
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
-            if(it){
-                Snackbar.make(binding.root,"Invalid entry",Snackbar.LENGTH_SHORT).show()
+            if (it) {
+                Snackbar.make(binding.root, "Invalid entry", Snackbar.LENGTH_SHORT).show()
                 viewModel.doneShowingSnackBar()
             }
         })
 
-
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO: Define and assign Representative adapter
-        //TODO: Populate Representative adapter
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
-
     }
 
     @SuppressLint("MissingPermission")
@@ -127,11 +120,14 @@ class RepresentativeFragment : Fragment() {
                 fusedLocationClient.removeLocationUpdates(this)
 
                 viewModel.useMyLocation(mCurrentLocation!!)
-//                getLocation(locationRequest)
             }
         }
 
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
 
 //        fusedLocationClient.lastLocation
 //            .addOnSuccessListener { pLocation ->
@@ -232,8 +228,6 @@ class RepresentativeFragment : Fragment() {
                     "To use this feature, location permissions must be granted.",
                     Snackbar.LENGTH_SHORT
                 ).show()
-
-
             } else {
                 //the response from here goes to onRequestPermissionsResult
                 requestPermissions(
@@ -263,7 +257,6 @@ class RepresentativeFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
-
         when (requestCode) {
             REQUEST_TURN_DEVICE_LOCATION_ON -> {
                 Log.e(TAG, "onActivityResult - REQ_DEV_LOC")
@@ -313,7 +306,6 @@ class RepresentativeFragment : Fragment() {
                 ).show()
             }
         }
-
     }
 
     private fun createLocationRequest(): LocationRequest {
