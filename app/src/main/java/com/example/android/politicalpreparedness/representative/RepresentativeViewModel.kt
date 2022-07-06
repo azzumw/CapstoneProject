@@ -53,9 +53,12 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
             val result = CivicsApi.retrofitService.getRepresentativesInfo(address)
+
             val officials = result.officials
             val offices = result.offices
+
             val rList = mutableListOf<Representative>()
+
             offices.forEach {
                 val representative = it.getRepresentatives(officials)
                 rList.addAll(representative)

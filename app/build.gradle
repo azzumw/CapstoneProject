@@ -75,7 +75,7 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$version_moshi"
 
     // Glide
-    //TODO: Add Glide Implementation
+    implementation "com.github.bumptech.glide:glide:$version_glide"
 
     //Room
     implementation "androidx.room:room-runtime:$version_room"
