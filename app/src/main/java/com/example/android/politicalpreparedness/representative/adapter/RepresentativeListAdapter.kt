@@ -45,7 +45,12 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
     fun bind(item: Representative) {
         binding.representative = item
 //        binding.representativePhoto.setImageResource(R.drawable.ic_profile)
-
+        if(item.official.channels!=null){
+            showSocialLinks(item.official.channels)
+        }else{
+            binding.twitterImg.visibility = View.GONE
+            binding.facebookImg.visibility = View.GONE
+        }
         //TODO: Show social links ** Hint: Use provided helper methods
         //TODO: Show www link ** Hint: Use provided helper methods
 
@@ -56,10 +61,13 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
 
     private fun showSocialLinks(channels: List<Channel>) {
         val facebookUrl = getFacebookUrl(channels)
-//        if (!facebookUrl.isNullOrBlank()) { enableLink(binding.facebookIcon, facebookUrl) }
+        if (!facebookUrl.isNullOrBlank()) {
+            enableLink(binding.facebookImg, facebookUrl)
+        }else binding.facebookImg.visibility = View.GONE
 
         val twitterUrl = getTwitterUrl(channels)
-//        if (!twitterUrl.isNullOrBlank()) { enableLink(binding.twitterIcon, twitterUrl) }
+        if (!twitterUrl.isNullOrBlank()) { enableLink(binding.twitterImg, twitterUrl) }
+        else  binding.twitterImg.visibility = View.GONE
     }
 
     private fun showWWWLinks(urls: List<String>) {
@@ -82,6 +90,9 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
         view.visibility = View.VISIBLE
         view.setOnClickListener { setIntent(url) }
     }
+    private fun disableLink(view: ImageView) {
+        view.visibility = View.GONE
+    }
 
     private fun setIntent(url: String) {
         val uri = Uri.parse(url)
@@ -90,8 +101,5 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
     }
 
 }
-
-//TODO: Create RepresentativeDiffCallback
-
 
 //TODO: Create RepresentativeListener

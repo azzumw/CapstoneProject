@@ -25,7 +25,7 @@ fun fetchImage(view: ImageView, src: String?) {
             .load(uri)
             .transition(withCrossFade())
             .circleCrop()
-            .apply(RequestOptions().placeholder(R.drawable.ic_profile).error(R.drawable.ic_broken_image))
+            .apply(RequestOptions().placeholder(R.drawable.ic_profile))
             .into(view)
     }
 }
