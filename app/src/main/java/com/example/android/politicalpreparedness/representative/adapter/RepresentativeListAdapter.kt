@@ -44,6 +44,9 @@ class RepresentativeViewHolder(val binding : RepresentativeListItemBinding): Rec
 
     fun bind(item: Representative) {
         binding.representative = item
+        if(item.official.photoUrl == null){
+            binding.profilePic.setImageResource(R.drawable.ic_profile)
+        }
 //        binding.representativePhoto.setImageResource(R.drawable.ic_profile)
         if(item.official.channels!=null){
             showSocialLinks(item.official.channels)
