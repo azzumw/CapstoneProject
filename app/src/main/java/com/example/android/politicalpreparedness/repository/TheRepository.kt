@@ -5,10 +5,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
-import com.example.android.politicalpreparedness.network.models.SavedElection
-import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.network.models.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,5 +54,11 @@ class TheRepository(val database: ElectionDao) {
     //network call for VoterInfo
     suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         return CivicsApi.retrofitService.getVoterInfo(address, electionId = electionId)
+    }
+
+    suspend fun getRepresentativeInfo(address: Address):RepresentativeResponse{
+        return withContext(IO){
+               CivicsApi.retrofitService.getRepresentativesInfo(address)
+        }
     }
 }

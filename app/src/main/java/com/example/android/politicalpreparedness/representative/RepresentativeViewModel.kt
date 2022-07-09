@@ -8,12 +8,13 @@ import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.model.Representative
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
 
-class RepresentativeViewModel(val app: Application) : ViewModel() {
+class RepresentativeViewModel(val app: Application, val repository: TheRepository) : ViewModel() {
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
@@ -52,7 +53,7 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
     private fun getRepresentativesFromApi(address: Address) {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
-            val result = CivicsApi.retrofitService.getRepresentativesInfo(address)
+            val result = repository.getRepresentativeInfo(address)
 
             val officials = result.officials
             val offices = result.offices
@@ -146,10 +147,10 @@ class RepresentativeViewModel(val app: Application) : ViewModel() {
 }
 
 
-class RepresentativeViewModelFactory(val app: Application) : ViewModelProvider.Factory {
+class RepresentativeViewModelFactory(val app: Application,val repository: TheRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RepresentativeViewModel::class.java)) {
-            return RepresentativeViewModel(app) as T
+            return RepresentativeViewModel(app,repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel")

@@ -24,8 +24,10 @@ import androidx.lifecycle.Observer
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModelFactory
 import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.google.android.gms.common.api.ResolvableApiException
@@ -49,7 +51,7 @@ class RepresentativeFragment : Fragment() {
     private var mCurrentLocation: Location? = null
 
     private val viewModel: RepresentativeViewModel by viewModels() {
-        RepresentativeViewModelFactory(activity!!.application)
+        RepresentativeViewModelFactory(activity!!.application, TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao))
     }
 
     private var _binding: FragmentRepresentativeBinding? = null
