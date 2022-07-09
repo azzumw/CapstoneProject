@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
 
-class RepresentativeViewModel(val app: Application, val repository: TheRepository) : ViewModel() {
+class RepresentativeViewModel(val app: Application, private val repository: TheRepository) :
+    ViewModel() {
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
@@ -147,10 +148,11 @@ class RepresentativeViewModel(val app: Application, val repository: TheRepositor
 }
 
 
-class RepresentativeViewModelFactory(val app: Application,val repository: TheRepository) : ViewModelProvider.Factory {
+class RepresentativeViewModelFactory(val app: Application, val repository: TheRepository) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RepresentativeViewModel::class.java)) {
-            return RepresentativeViewModel(app,repository) as T
+            return RepresentativeViewModel(app, repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel")
