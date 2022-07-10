@@ -55,7 +55,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         get() = _navToSingleElectionVoterInfo
 
 
-
     init {
         getElectionsInfo()
         selectFilter(1)
@@ -63,7 +62,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
 
     private fun getElectionsInfo() {
-
         viewModelScope.launch {
             _status.value = ElectionsApiStatus.LOADING
             try {

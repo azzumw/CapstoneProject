@@ -6,7 +6,6 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.model.Representative
@@ -54,7 +53,7 @@ class RepresentativeViewModel(val app: Application, private val repository: TheR
     private fun getRepresentativesFromApi(address: Address) {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
-            val result = repository.getRepresentativeInfo(address)
+            val result = repository.callRepresentativeInfoApi(address)
 
             val officials = result.officials
             val offices = result.offices
