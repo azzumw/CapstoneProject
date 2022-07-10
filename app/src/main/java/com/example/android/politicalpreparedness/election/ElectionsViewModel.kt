@@ -13,9 +13,9 @@ enum class ElectionsApiStatus {
 
 class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
-    val allElections = repository.elections
+    private val allElections = repository.elections
 
-    val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
+    private val savedElections:LiveData<List<ElectionAndSavedElection>> = repository.savedElections
 
     private var filter: MutableLiveData<Int> = MutableLiveData()
     val filteredElections: LiveData<List<Election>> = filter.switchMap { filter ->
@@ -55,7 +55,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         get() = _navToSingleElectionVoterInfo
 
 
-
     init {
         getElectionsInfo()
         selectFilter(1)
@@ -63,7 +62,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
 
     private fun getElectionsInfo() {
-
         viewModelScope.launch {
             _status.value = ElectionsApiStatus.LOADING
             try {

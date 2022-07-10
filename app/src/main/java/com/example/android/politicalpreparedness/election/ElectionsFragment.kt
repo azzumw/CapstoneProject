@@ -66,8 +66,8 @@ class ElectionsFragment : Fragment() {
 
         electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
-                    binding.noDataInDbMsg.visibility = View.VISIBLE
-            }else{
+                binding.noDataInDbMsg.visibility = View.VISIBLE
+            } else {
                 binding.noDataInDbMsg.visibility = View.GONE
             }
         })

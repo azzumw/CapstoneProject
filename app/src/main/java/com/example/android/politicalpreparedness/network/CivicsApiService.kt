@@ -1,9 +1,7 @@
 package com.example.android.politicalpreparedness.network
 
 import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
-import com.example.android.politicalpreparedness.network.models.ElectionOfficial
-import com.example.android.politicalpreparedness.network.models.ElectionResponse
-import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.network.models.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -64,6 +62,8 @@ interface CivicsApiService {
     ): VoterInfoResponse
 
     //TODO: Add representatives API Call
+    @GET("representatives")
+    suspend fun getRepresentativesInfo(@Query("address") address: Address):RepresentativeResponse
 }
 
 object CivicsApi {

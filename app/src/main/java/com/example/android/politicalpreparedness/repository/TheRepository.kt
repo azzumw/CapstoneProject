@@ -5,10 +5,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
-import com.example.android.politicalpreparedness.network.models.SavedElection
-import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.network.models.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,9 +18,8 @@ class TheRepository(val database: ElectionDao) {
         database.getElectionAndSavedElection().asLiveData()
 
     suspend fun getElections() {
-
         withContext(IO) {
-            val electionsFromApi = CivicsApi.retrofitService.getElections().elections
+            val electionsFromApi = callElectionsInfoApi().elections
             database.insertAllElections(electionsFromApi)
         }
     }
@@ -32,7 +29,6 @@ class TheRepository(val database: ElectionDao) {
     }
 
     suspend fun saveThisElection(savedElection: SavedElection) {
-
         withContext(IO) {
             database.saveElection(savedElection)
         }
@@ -54,8 +50,22 @@ class TheRepository(val database: ElectionDao) {
         }
     }
 
-    //network call for VoterInfo
+    //network call for elections
+    private suspend fun callElectionsInfoApi():ElectionResponse{
+        return withContext(IO){
+            CivicsApi.retrofitService.getElections()
+        }
+    }
+
+    //network call for voters
     suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         return CivicsApi.retrofitService.getVoterInfo(address, electionId = electionId)
+    }
+
+    //network call for representatives
+    suspend fun callRepresentativeInfoApi(address: Address):RepresentativeResponse{
+        return withContext(IO){
+               CivicsApi.retrofitService.getRepresentativesInfo(address)
+        }
     }
 }

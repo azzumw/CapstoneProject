@@ -11,3 +11,6 @@ import java.util.*
 data class SavedElection(
     @PrimaryKey
     @ColumnInfo(name ="saved_election_id")val savedElectionId: Int)
+
+
+
