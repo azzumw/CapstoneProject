@@ -12,8 +12,10 @@ import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
+import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
@@ -23,7 +25,9 @@ import java.util.*
 class ElectionsFragment : Fragment() {
 
     private val electionsViewModel: ElectionsViewModel by viewModels {
-        ElectionsViewModelFactory(TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao))
+        ElectionsViewModelFactory(TheRepository(
+            LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao), RemoteDataSource
+        ))
     }
 
     private var _binding: FragmentElectionBinding? = null

@@ -25,7 +25,9 @@ import com.example.android.poliiicalpreparedness.representative.RepresentativeVi
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModelFactory
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
+import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
+import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
@@ -50,8 +52,13 @@ class RepresentativeFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
+
+
     private val viewModel: RepresentativeViewModel by viewModels() {
-        RepresentativeViewModelFactory(activity!!.application, TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao))
+        RepresentativeViewModelFactory(activity!!.application, TheRepository(
+            LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
+           RemoteDataSource
+        ))
     }
 
     private var _binding: FragmentRepresentativeBinding? = null
