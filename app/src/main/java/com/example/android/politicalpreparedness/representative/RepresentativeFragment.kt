@@ -98,27 +98,12 @@ class RepresentativeFragment : Fragment() {
             }
         })
 
-        viewModel.representatives.observe(viewLifecycleOwner, Observer {
+        binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
-            if(it.isNullOrEmpty()){
-                binding.representativeRecycler.visibility = View.GONE
-                binding.listPlaceholder.visibility = View.VISIBLE
-
-            }else{
-                binding.listPlaceholder.visibility = View.GONE
-                binding.representativeRecycler.visibility = View.VISIBLE
-            }
-
-        })
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.representativeRecycler.adapter = RepresentativeListAdapter()
-    }
 
     @SuppressLint("MissingPermission")
     private fun getLocation(locationRequest: LocationRequest) {

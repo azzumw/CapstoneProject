@@ -4,6 +4,7 @@ import android.app.Application
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.election.ApiStatus
@@ -26,6 +27,14 @@ class RepresentativeViewModel(val app: Application, private val repository: TheR
 
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>> get() = _representatives
+
+    val textViewVisbility = Transformations.map(representatives){
+        if(it.isEmpty()){
+            View.VISIBLE
+        }else{
+            View.GONE
+        }
+    }
 
     private val _address = MutableLiveData<Address>()
 

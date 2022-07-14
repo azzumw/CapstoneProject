@@ -12,7 +12,7 @@
 
 
     <ConstraintSet android:id="@+id/end">
-<!--        <Constraint android:id="@id/search_title" />-->
+        <Constraint android:id="@id/search_title" />
 
 
 
@@ -23,11 +23,7 @@
 
     <Transition
         app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@+id/start"
-        app:motionInterpolator="easeInOut"
-        app:duration="5000"
-        >
-
+        app:constraintSetStart="@+id/start">
 
     </Transition>
 </MotionScene>

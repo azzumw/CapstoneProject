@@ -75,6 +75,19 @@ fun apiStatus(imgView: ImageView, status: ApiStatus) {
     }
 }
 
+@BindingAdapter("listPlaceHolder")
+fun bindRepresentativePlaceholder(
+    textView: TextView,
+    representativeData: List<Representative>?
+) {
+    if(representativeData.isNullOrEmpty()) {
+        textView.visibility = View.VISIBLE
+    } else {
+        textView.text = ""
+        textView.visibility = View.GONE
+    }
+}
+
 inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T> {
     return adapter as ArrayAdapter<T>
 }

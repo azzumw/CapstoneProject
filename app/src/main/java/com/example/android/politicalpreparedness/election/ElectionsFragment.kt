@@ -24,7 +24,7 @@ class ElectionsFragment : Fragment() {
     }
 
     private var _binding: FragmentElectionBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,11 +54,11 @@ class ElectionsFragment : Fragment() {
             }
         })
 
-        electionsViewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == ApiStatus.ERROR) {
-                binding.errorStatusMsg.visibility = View.VISIBLE
-            }
-        })
+//        electionsViewModel.status.observe(viewLifecycleOwner, Observer {
+//            if (it == ApiStatus.ERROR) {
+//                binding.errorStatusMsg.visibility = View.VISIBLE
+//            }
+//        })
 
 
         electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
