@@ -1,13 +1,11 @@
 package com.example.android.politicalpreparedness.election
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 
-enum class ElectionsApiStatus {
+enum class ApiStatus {
     LOADING, ERROR, DONE
 }
 
@@ -40,8 +38,8 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         filter.value = selectedFilter
     }
 
-    private val _status = MutableLiveData<ElectionsApiStatus>()
-    val status: LiveData<ElectionsApiStatus>
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
         get() = _status
 
     private val _statusMessage = MutableLiveData<String>()
@@ -63,14 +61,15 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
     private fun getElectionsInfo() {
         viewModelScope.launch {
-            _status.value = ElectionsApiStatus.LOADING
+            _status.value = ApiStatus.LOADING
             try {
 
                 repository.getElections()
-                _status.value = ElectionsApiStatus.DONE
+                _status.value = ApiStatus.DONE
 
             } catch (e: Exception) {
-                _status.value = ElectionsApiStatus.ERROR
+
+                _status.value = ApiStatus.ERROR
                 _statusMessage.value = e.message
             }
         }

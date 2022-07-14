@@ -9,12 +9,20 @@ import kotlinx.coroutines.withContext
 
 class LocalDataSource(val database:ElectionDao) : DataSourceInterface{
 
-    val elections: LiveData<List<Election>> = database.getAllElections()
-    val savedElections: LiveData<List<ElectionAndSavedElection>> =
-        database.getElectionAndSavedElection().asLiveData()
+//    override val elections: LiveData<List<Election>> = database.getAllElections()
+//     val savedElections: LiveData<List<ElectionAndSavedElection>> =
+//        database.getElectionAndSavedElection().asLiveData()
 
-    suspend fun insertElections(elections:List<Election>){
+    override suspend fun insertElections(elections:List<Election>){
         database.insertAllElections(elections)
+    }
+
+    fun getSavedElections():LiveData<List<ElectionAndSavedElection>>{
+        return database.getElectionAndSavedElection().asLiveData()
+    }
+
+    fun getElections():LiveData<List<Election>>{
+        return database.getAllElections()
     }
 
     override fun getAnElection(electionId: Int): LiveData<Election> {

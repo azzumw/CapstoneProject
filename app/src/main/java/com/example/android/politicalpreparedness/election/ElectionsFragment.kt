@@ -2,13 +2,10 @@ package com.example.android.politicalpreparedness.election
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
@@ -16,11 +13,7 @@ import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
-import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
-import com.example.android.politicalpreparedness.network.models.Division
-import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.repository.TheRepository
-import java.util.*
 
 class ElectionsFragment : Fragment() {
 
@@ -62,7 +55,7 @@ class ElectionsFragment : Fragment() {
         })
 
         electionsViewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == ElectionsApiStatus.ERROR) {
+            if (it == ApiStatus.ERROR) {
                 binding.errorStatusMsg.visibility = View.VISIBLE
             }
         })

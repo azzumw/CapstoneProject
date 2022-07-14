@@ -84,4 +84,12 @@ dependencies {
 
     // Location
     implementation "com.google.android.gms:play-services-location:$version_play_services_location"
+
+
+    //testing
+    //roboelectric
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    //corourintes
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
 }

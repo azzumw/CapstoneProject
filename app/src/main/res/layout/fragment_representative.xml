@@ -11,17 +11,33 @@
     </data>
 
     <!-- TODO: Add motion scene to hide form on vertical scroll. -->
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:padding="@dimen/padding_16dp"
+        android:minHeight="64dp"
+        app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed"
         app:layoutDescription="@xml/fragment_representative_scene">
+
+<!--        <androidx.constraintlayout.widget.Group-->
+<!--            android:id="@+id/address_group"-->
+<!--            android:visibility="visible"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:constraint_referenced_ids="search_title,button_search,button_location,address_line_1,address_line_2,city,state_spinner,zip" />-->
 
         <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/search_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/representative_search_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,6 +53,7 @@
             android:text="@={viewModel.line1}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_title" />
+
 
         <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
@@ -118,6 +135,7 @@
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
+
         <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/representative_title"
@@ -131,17 +149,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_location" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/representative_recycler"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/representative_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/representative_title"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:representativeListData="@{viewModel.representatives}"
             motion:listitem="@layout/representative_list_item" />
+
+        <ImageView
+            android:id="@+id/statusImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/representative_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:apiStatus="@{viewModel.status}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
         <!-- TODO: Add visual styling and content -->
@@ -151,11 +179,12 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:textAlignment="center"
-            android:visibility="gone"
             android:text="@string/no_data_available_msg"
             motion:visibilityMode="ignore"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

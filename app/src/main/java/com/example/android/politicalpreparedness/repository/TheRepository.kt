@@ -10,11 +10,15 @@ import com.example.android.politicalpreparedness.network.models.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
-class TheRepository(private val localDataSource: LocalDataSource, private val remoteDataSource: RemoteDataSource) : DataSourceInterface {
+class TheRepository(private val localDataSource: DataSourceInterface, private val remoteDataSource: DataSourceInterface) : DataSourceInterface {
 
 //    val elections: LiveData<List<Election>> = database.getAllElections()
-    val elections: LiveData<List<Election>> = localDataSource.elections
-    val savedElections : LiveData<List<ElectionAndSavedElection>> = localDataSource.savedElections
+     val elections: LiveData<List<Election>> = (localDataSource as LocalDataSource).getElections()
+     val savedElections : LiveData<List<ElectionAndSavedElection>> = (localDataSource as LocalDataSource).getSavedElections()
+
+    override suspend fun insertElections(elections: List<Election>) {
+        TODO("Not yet implemented")
+    }
 //    val savedElections: LiveData<List<ElectionAndSavedElection>> =
 //        database.getElectionAndSavedElection().asLiveData()
 

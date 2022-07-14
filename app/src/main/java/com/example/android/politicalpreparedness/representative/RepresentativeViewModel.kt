@@ -6,12 +6,17 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.repository.TheRepository
+import com.example.android.politicalpreparedness.representative.adapter.apiStatus
 import com.example.android.politicalpreparedness.representative.model.Representative
+import com.google.android.gms.common.api.Api
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.*
+
 
 class RepresentativeViewModel(val app: Application, private val repository: TheRepository) :
     ViewModel() {
@@ -31,6 +36,9 @@ class RepresentativeViewModel(val app: Application, private val repository: TheR
     val state = MediatorLiveData<String>()
     val zip = MutableLiveData<String>("")
 
+    private val _status = MutableLiveData<ApiStatus>()
+    val status : LiveData<ApiStatus> = _status
+
 
     /**
      *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
@@ -47,30 +55,42 @@ class RepresentativeViewModel(val app: Application, private val repository: TheR
         state.addSource(selectedItem) {
             state.value = app.resources.getStringArray(R.array.states)[it]
         }
+         _status.value = ApiStatus.DONE
+        _representatives.value = emptyList()
     }
 
 
     private fun getRepresentativesFromApi(address: Address) {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
-            val result = repository.callRepresentativeInfoApi(address)
+            try{
 
-            val officials = result.officials
-            val offices = result.offices
+                _status.value = ApiStatus.LOADING
 
-            val rList = mutableListOf<Representative>()
+                val result = repository.callRepresentativeInfoApi(address)
 
-            offices.forEach {
-                val representative = it.getRepresentatives(officials)
-                rList.addAll(representative)
-                Log.e("REPVIEWM ", "${representative.size}")
+                _status.value = ApiStatus.DONE
+
+                val officials = result.officials
+                val offices = result.offices
+
+                val rList = mutableListOf<Representative>()
+
+                offices.forEach {
+                    val representative = it.getRepresentatives(officials)
+                    rList.addAll(representative)
+                    Log.e("REPVIEWM ", "${representative.size}")
+                }
+
+                _representatives.value = rList
+
+                Log.e("RepresentativesViewModel: ", result.officials[0].name)
+                Log.e("RepresentativesViewModel: Officials: ", result.officials.size.toString())
+                Log.e("RepresentativesViewModel: Offices: ", result.offices.size.toString())
+            }catch (e:Exception){
+                _status.value = ApiStatus.ERROR
+                _representatives.value = emptyList()
             }
-
-            _representatives.value = rList
-
-            Log.e("RepresentativesViewModel: ", result.officials[0].name)
-            Log.e("RepresentativesViewModel: Officials: ", result.officials.size.toString())
-            Log.e("RepresentativesViewModel: Offices: ", result.offices.size.toString())
         }
     }
 

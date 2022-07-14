@@ -5,6 +5,8 @@ import com.example.android.politicalpreparedness.network.models.*
 
 interface DataSourceInterface {
 
+    suspend fun insertElections(elections:List<Election>)
+
     fun getAnElection(electionId: Int): LiveData<Election>
 
     suspend fun saveThisElection(savedElection: SavedElection)

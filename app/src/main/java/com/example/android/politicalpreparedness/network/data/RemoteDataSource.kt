@@ -9,6 +9,10 @@ import kotlinx.coroutines.withContext
 
 object RemoteDataSource:DataSourceInterface {
 
+    override suspend fun insertElections(elections: List<Election>) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
         TODO("Not yet implemented")

@@ -5,11 +5,9 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.politicalpreparedness.election.ElectionsApiStatus
+import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
-
 
 
 @BindingAdapter("electionListData")
@@ -20,16 +18,16 @@ fun bindElectionRecyclerView(recyclerView: RecyclerView, electionsData: List<Ele
 }
 
 @BindingAdapter("electionsApiStatus")
-fun electionsApiStatus(imgView: ImageView, status: ElectionsApiStatus) {
+fun electionsApiStatus(imgView: ImageView, status: ApiStatus) {
     when (status) {
-        ElectionsApiStatus.LOADING -> {
+        ApiStatus.LOADING -> {
             imgView.visibility = View.VISIBLE
             imgView.setImageResource(R.drawable.loading_animation)
         }
-        ElectionsApiStatus.DONE -> {
+        ApiStatus.DONE -> {
             imgView.visibility = View.GONE
         }
-        ElectionsApiStatus.ERROR -> {
+        ApiStatus.ERROR -> {
             imgView.visibility = View.VISIBLE
             imgView.setImageResource(R.drawable.ic_connection_error)
         }
