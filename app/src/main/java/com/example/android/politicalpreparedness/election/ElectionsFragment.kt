@@ -91,10 +91,9 @@ class ElectionsFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 }
+

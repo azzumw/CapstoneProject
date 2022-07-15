@@ -19,119 +19,125 @@
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:padding="@dimen/padding_16dp"
+        android:padding="8dp"
         app:layoutDescription="@xml/fragment_representative_scene">
 
-<!--        <androidx.constraintlayout.widget.Group-->
-<!--            android:id="@+id/address_group"-->
-<!--            android:visibility="visible"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:constraint_referenced_ids="search_title,button_search,button_location,address_line_1,address_line_2,city,state_spinner,zip" />-->
-
-        <!-- TODO: Add visual styling and content -->
-        <TextView
-            android:id="@+id/search_title"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/representative_search_text"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- TODO: Add data binding value -->
-        <!-- TODO: Add visual styling and content -->
-        <EditText
-            android:id="@+id/address_line_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="postalAddress"
-            android:hint="Address Line 1"
-            android:inputType="textPostalAddress"
-            android:text="@={viewModel.line1}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_title" />
+            <TextView
+                android:id="@+id/search_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/representative_search_text"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- TODO: Add data binding value -->
+            <!-- TODO: Add visual styling and content -->
+            <EditText
+                android:id="@+id/address_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="postalAddress"
+                android:hint="Address Line 1"
+                android:inputType="textPostalAddress"
+                android:text="@={viewModel.line1}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_title" />
 
 
-        <!-- TODO: Add data binding value -->
-        <!-- TODO: Add visual styling and content -->
-        <EditText
-            android:id="@+id/address_line_2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:hint="Address Line 2"
-            android:autofillHints="postalAddress"
-            android:inputType="textPostalAddress"
-            android:text="@={viewModel.line2}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/address_line_1" />
+            <!-- TODO: Add data binding value -->
+            <!-- TODO: Add visual styling and content -->
+            <EditText
+                android:id="@+id/address_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:hint="Address Line 2"
+                android:autofillHints="postalAddress"
+                android:inputType="textPostalAddress"
+                android:text="@={viewModel.line2}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
-        <!-- TODO: Add data binding value -->
-        <!-- TODO: Add visual styling and content -->
-        <EditText
-            android:id="@+id/city"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="City"
-            android:autofillHints=""
-            android:inputType="textPostalAddress"
-            android:text="@={viewModel.city}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/state_spinner"
-            app:layout_constraintTop_toBottomOf="@id/address_line_2" />
+            <!-- TODO: Add data binding value -->
+            <!-- TODO: Add visual styling and content -->
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="City"
+                android:autofillHints=""
+                android:inputType="textPostalAddress"
+                android:text="@={viewModel.city}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/state_spinner"
+                app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
-        <!-- TODO: Add default values from provided resources  -->
-        <!-- TODO: Add data binding value -->
-        <!-- TODO: Add visual styling and content -->
-        <Spinner
-            android:id="@+id/state_spinner"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:autofillHints=""
-            app:stateValue="@{viewModel.state}"
-            android:selectedItemPosition="@={viewModel.selectedItem}"
-            android:entries="@array/states"
-            android:inputType="textPostalAddress"
-            app:layout_constraintStart_toEndOf="@id/city"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/city"
-            app:layout_constraintBottom_toBottomOf="@id/city"/>
+            <!-- TODO: Add default values from provided resources  -->
+            <!-- TODO: Add data binding value -->
+            <!-- TODO: Add visual styling and content -->
+            <Spinner
+                android:id="@+id/state_spinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autofillHints=""
+                app:stateValue="@{viewModel.state}"
+                android:selectedItemPosition="@={viewModel.selectedItem}"
+                android:entries="@array/states"
+                android:inputType="textPostalAddress"
+                app:layout_constraintStart_toEndOf="@id/city"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/city"
+                app:layout_constraintBottom_toBottomOf="@id/city"/>
 
-        <!-- TODO: Add data binding value -->
-        <!-- TODO: Add visual styling and content -->
-        <EditText
-            android:id="@+id/zip"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Zip Code"
-            android:autofillHints="postalCode"
-            android:inputType="number"
-            android:maxLength="5"
-            android:text="@={viewModel.zip}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/city"
-            app:layout_constraintTop_toBottomOf="@id/city" />
+            <!-- TODO: Add data binding value -->
+            <!-- TODO: Add visual styling and content -->
+            <EditText
+                android:id="@+id/zip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Zip Code"
+                android:autofillHints="postalCode"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text="@={viewModel.zip}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/city"
+                app:layout_constraintTop_toBottomOf="@id/city" />
 
-        <!-- TODO: Add visual styling and label -->
-        <Button
-            android:id="@+id/button_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/find_my_representatives_btn_text"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/zip" />
+            <!-- TODO: Add visual styling and label -->
+            <Button
+                android:id="@+id/button_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/find_my_representatives_btn_text"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/zip" />
 
-        <!-- TODO: Add visual styling and content -->
-        <Button
-            android:id="@+id/button_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/my_location_btn_text"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/button_search" />
+            <!-- TODO: Add visual styling and content -->
+            <Button
+                android:id="@+id/button_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/my_location_btn_text"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/button_search" />
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- TODO: Add visual styling and content -->
         <TextView
@@ -143,8 +149,8 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_location" />
+            app:layout_constraintTop_toBottomOf="@id/appbar"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <androidx.recyclerview.widget.RecyclerView

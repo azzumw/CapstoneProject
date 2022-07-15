@@ -17,6 +17,7 @@ import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.representative.model.Representative
+import kotlinx.android.synthetic.*
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
@@ -44,6 +45,11 @@ fun bindRepresentativeRecyclerView(
     val adapter = recyclerView.adapter as RepresentativeListAdapter
     Log.e("REP BIND ADAPTER: ", representativeData?.size.toString())
     adapter.submitList(representativeData)
+    if(representativeData.isNullOrEmpty()){
+        recyclerView.visibility = View.GONE
+    }else{
+        recyclerView.visibility = View.VISIBLE
+    }
 }
 
 @BindingAdapter("stateValue")
@@ -80,11 +86,13 @@ fun bindRepresentativePlaceholder(
     textView: TextView,
     representativeData: List<Representative>?
 ) {
+    textView.visibility = View.GONE
+
     if(representativeData.isNullOrEmpty()) {
         textView.visibility = View.VISIBLE
     } else {
         textView.text = ""
-        textView.visibility = View.GONE
+        textView.visibility =  View.GONE
     }
 }
 
