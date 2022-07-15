@@ -10,7 +10,7 @@
     <ConstraintSet android:id="@+id/end">
 
         <Constraint android:id="@+id/appbar"
-            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -22,8 +22,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
     </ConstraintSet>
-
-
 
 
     <Transition
