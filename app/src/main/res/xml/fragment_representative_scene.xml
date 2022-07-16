@@ -9,6 +9,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
+        <Constraint android:id="@+id/representative_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/appbar"
+            app:layout_constraintStart_toStartOf="parent"/>
     </ConstraintSet>
 
 
@@ -32,8 +38,7 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:duration="2000"
-        app:motionInterpolator="easeIn">
+       >
         <OnSwipe
             app:touchAnchorSide="middle"
             app:touchAnchorId="@id/representative_recycler"
