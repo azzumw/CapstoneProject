@@ -7,12 +7,11 @@ import com.example.android.politicalpreparedness.repository.DataSourceInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-object RemoteDataSource:DataSourceInterface {
+object RemoteDataSource : DataSourceInterface {
 
     override suspend fun insertElections(elections: List<Election>) {
         TODO("Not yet implemented")
     }
-
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
         TODO("Not yet implemented")
@@ -34,19 +33,18 @@ object RemoteDataSource:DataSourceInterface {
         TODO("Not yet implemented")
     }
 
-
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         return CivicsApi.retrofitService.getVoterInfo(address, electionId = electionId)
     }
 
     override suspend fun callElectionsInfoApi(): ElectionResponse {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             CivicsApi.retrofitService.getElections()
         }
     }
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             CivicsApi.retrofitService.getRepresentativesInfo(address)
         }
     }

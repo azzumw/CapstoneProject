@@ -112,6 +112,8 @@ class RepresentativeFragment : Fragment() {
             val transitionState = savedInstanceState.getBundle("bundle")
             motionLayout.transitionState = transitionState
 
+//            motionLayout.transitionToState(motionLayout.currentState)
+
 
             val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
             motionLayout.transitionToState(state)

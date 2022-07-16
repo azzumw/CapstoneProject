@@ -29,7 +29,6 @@ class VoterInfoFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_voter_info, container, false)
 
 
-        //TODO: Populate voter info -- hide views without provided data.
         /**
         Hint: You will need to ensure proper data is provided from previous fragment.
          */
@@ -47,7 +46,6 @@ class VoterInfoFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        //TODO: Handle loading of URLs
 
 //        viewModel.state.observe(viewLifecycleOwner, Observer {
 //            if (!it.isNullOrEmpty()){
@@ -115,6 +113,7 @@ class VoterInfoFragment : Fragment() {
             if (url != null) {
                 Log.e(this.javaClass.canonicalName, url)
                 binding.stateLocations.visibility = View.VISIBLE
+                binding.noInfoTextView.visibility = View.GONE
                 binding.stateLocations.setOnClickListener {
                     startIntentForUrl(url)
                 }
@@ -125,6 +124,7 @@ class VoterInfoFragment : Fragment() {
             if (url != null) {
                 Log.e(this.javaClass.canonicalName, url)
                 binding.stateBallot.visibility = View.VISIBLE
+                binding.noInfoTextView.visibility = View.GONE
                 binding.stateBallot.setOnClickListener {
                     startIntentForUrl(url)
                 }
@@ -137,6 +137,7 @@ class VoterInfoFragment : Fragment() {
             binding.stateLocations.visibility = View.GONE
             binding.stateBallot.visibility = View.GONE
         }
+//        else binding.noInfoTextView.visibility = View.GONE
 
         viewModel.correspondenceAddress.observe(viewLifecycleOwner, Observer {
             if (it != null) {
@@ -154,7 +155,6 @@ class VoterInfoFragment : Fragment() {
         return binding.root
     }
 
-    //TODO: Create method to load URL intents
     private fun startIntentForUrl(stringUrl: String?) {
         val stringToUrl = Uri.parse(stringUrl)
         val intent = Intent(Intent.ACTION_VIEW, stringToUrl)

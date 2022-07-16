@@ -49,10 +49,6 @@ class RepresentativeViewHolder(val binding: RepresentativeListItemBinding) :
     fun bind(item: Representative) {
         binding.representative = item
 
-//        if(item.official.photoUrl == null){
-//            binding.profilePic.setImageResource(R.drawable.ic_profile)
-//        }
-
         if (item.official.channels != null) {
             showSocialLinks(item.official.channels)
         } else {
@@ -101,7 +97,6 @@ class RepresentativeViewHolder(val binding: RepresentativeListItemBinding) :
         view.visibility = View.VISIBLE
         view.setOnClickListener { setIntent(url) }
     }
-
 
     private fun setIntent(url: String) {
         val uri = Uri.parse(url)

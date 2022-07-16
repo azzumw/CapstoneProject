@@ -6,7 +6,6 @@ import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.repository.TheRepository
 import java.lang.IllegalArgumentException
 
-//TODO: Create Factory to generate ElectionViewModel with provided election repository
 class ElectionsViewModelFactory(private val repository: TheRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(ElectionsViewModel::class.java)){
