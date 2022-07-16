@@ -45,11 +45,11 @@ fun bindRepresentativeRecyclerView(
     val adapter = recyclerView.adapter as RepresentativeListAdapter
     Log.e("REP BIND ADAPTER: ", representativeData?.size.toString())
     adapter.submitList(representativeData)
-    if(representativeData.isNullOrEmpty()){
-        recyclerView.visibility = View.GONE
-    }else{
-        recyclerView.visibility = View.VISIBLE
-    }
+//    if(representativeData.isNullOrEmpty()){
+//        recyclerView.visibility = View.GONE
+//    }else{
+//        recyclerView.visibility = View.VISIBLE
+//    }
 }
 
 @BindingAdapter("stateValue")
