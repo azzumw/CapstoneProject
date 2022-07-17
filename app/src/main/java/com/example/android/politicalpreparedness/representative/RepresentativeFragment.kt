@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModelFactory
 import com.example.android.politicalpreparedness.R
@@ -38,6 +37,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
+import androidx.lifecycle.Observer
 
 class RepresentativeFragment : Fragment() {
 
@@ -53,7 +53,6 @@ class RepresentativeFragment : Fragment() {
     private lateinit var motionLayout: MotionLayout
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
-
 
 
     private val viewModel: RepresentativeViewModel by viewModels() {
@@ -95,14 +94,14 @@ class RepresentativeFragment : Fragment() {
             viewModel.createAddressFromFields()
         }
 
-        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it) {
                 Snackbar.make(binding.root, "Invalid entry", Snackbar.LENGTH_SHORT).show()
                 viewModel.doneShowingSnackBar()
             }
         })
 
-        viewModel.representatives.observe(viewLifecycleOwner, Observer {
+        viewModel.representatives.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             motionLayout.isInteractionEnabled = it.isNotEmpty()
         })
 
@@ -111,12 +110,12 @@ class RepresentativeFragment : Fragment() {
         if(savedInstanceState!=null){
             val transitionState = savedInstanceState.getBundle("bundle")
             motionLayout.transitionState = transitionState
-
 //            motionLayout.transitionToState(motionLayout.currentState)
-
 
             val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
             motionLayout.transitionToState(state)
+
+
         }
 
         return binding.root

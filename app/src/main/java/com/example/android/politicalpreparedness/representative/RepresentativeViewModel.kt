@@ -21,6 +21,7 @@ import java.util.*
 
 class RepresentativeViewModel(val app: Application, private val repository: TheRepository) :
     ViewModel() {
+    private val KEY = "saved_data"
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent

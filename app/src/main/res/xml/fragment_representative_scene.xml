@@ -40,7 +40,9 @@
         app:constraintSetStart="@+id/start"
        >
         <OnSwipe
-
+            app:touchRegionId="@id/representative_recycler"
+            app:touchAnchorSide="middle"
+            app:moveWhenScrollAtTop="true"
             app:touchAnchorId="@id/representative_recycler"
             app:dragDirection="dragUp"/>
     </Transition>
