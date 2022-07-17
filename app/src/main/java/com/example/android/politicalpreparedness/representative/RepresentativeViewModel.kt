@@ -3,9 +3,11 @@ package com.example.android.poliiicalpreparedness.representative
 import android.app.Application
 import android.location.Geocoder
 import android.location.Location
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.network.models.Address
@@ -180,8 +182,10 @@ class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
 }
 
 
-class RepresentativeViewModelFactory(val app: Application, val repository: TheRepository) :
-    AbstractSavedStateViewModelFactory() {
+class RepresentativeViewModelFactory(val app: Application, val repository: TheRepository,
+                                     owner: SavedStateRegistryOwner, defaultArgs: Bundle?
+) :
+    AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
     override fun <T : ViewModel?> create(
         key: String,
