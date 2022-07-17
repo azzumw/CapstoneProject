@@ -19,7 +19,9 @@ import java.lang.IllegalArgumentException
 import java.util.*
 
 
-class RepresentativeViewModel(val app: Application, private val repository: TheRepository) :
+class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
+                                val app: Application,
+                              private val repository: TheRepository) :
     ViewModel() {
     private val KEY = "saved_data"
 
@@ -38,6 +40,7 @@ class RepresentativeViewModel(val app: Application, private val repository: TheR
     }
 
     private val _address = MutableLiveData<Address>()
+    private val _savedStateAddress:LiveData<Address> = savedStateHandle.getLiveData<Address>(KEY)
 
     val selectedItem = MutableLiveData<Int>()
     val line1 = MutableLiveData<String>("")
@@ -178,12 +181,13 @@ class RepresentativeViewModel(val app: Application, private val repository: TheR
 
 
 class RepresentativeViewModelFactory(val app: Application, val repository: TheRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RepresentativeViewModel::class.java)) {
-            return RepresentativeViewModel(app, repository) as T
-        }
+    AbstractSavedStateViewModelFactory() {
 
-        throw IllegalArgumentException("Unknown ViewModel")
+    override fun <T : ViewModel?> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle
+    ): T {
+        TODO("Not yet implemented")
     }
 }

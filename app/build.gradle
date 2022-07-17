@@ -54,7 +54,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     // Kotlin
 //    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$savedStateVersion"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha02'
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha02'
 
 
 
