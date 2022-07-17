@@ -59,7 +59,7 @@ class RepresentativeFragment : Fragment() {
         RepresentativeViewModelFactory(activity!!.application, TheRepository(
             LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
            RemoteDataSource
-        ))
+        ),this,)
     }
 
     private var _binding: FragmentRepresentativeBinding? = null

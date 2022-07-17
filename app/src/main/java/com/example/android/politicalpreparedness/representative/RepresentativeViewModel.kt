@@ -195,6 +195,9 @@ class RepresentativeViewModelFactory(val app: Application, val repository: TheRe
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-
+        if(modelClass.isAssignableFrom(RepresentativeViewModel::class.java)){
+            return RepresentativeViewModel(handle,app,repository) as T
+        }
+        throw IllegalArgumentException("Not a viewmodel")
     }
 }
