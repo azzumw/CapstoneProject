@@ -41,8 +41,8 @@ class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
         }
     }
 
-    private val _address = MutableLiveData<Address>()
-    private val _savedStateAddress:LiveData<Address> = savedStateHandle.getLiveData<Address>(KEY)
+    private val _address : MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
+//    private val _savedStateAddress:LiveData<Address> = savedStateHandle.getLiveData<Address>(KEY)
 
     val selectedItem = MutableLiveData<Int>()
     val line1 = MutableLiveData<String>("")
@@ -124,6 +124,8 @@ class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
             }
             .first()
 
+
+
         updateAddressFields()
     }
 
@@ -143,6 +145,7 @@ class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
 
     fun findMyRepresentatives() {
         getRepresentativesFromApi(_address.value!!)
+        savedStateHandle.set(KEY,_address.value)
     }
 
 //    private fun getAddress(): Address = Address(
@@ -192,6 +195,6 @@ class RepresentativeViewModelFactory(val app: Application, val repository: TheRe
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        TODO("Not yet implemented")
+
     }
 }
