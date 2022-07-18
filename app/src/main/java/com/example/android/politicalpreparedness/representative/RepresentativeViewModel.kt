@@ -42,8 +42,8 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
         }
     }
 
-    private val _address : MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
-    val address: LiveData<Address>
+    private val _address: MutableLiveData<Address> = MutableLiveData()
+        val address: LiveData<Address>
         get() = _address
 
     private val addressObserver = Observer<Address> { address ->
@@ -138,9 +138,8 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
             .first()
 
 
-        // Save the Address once available
-        savedStateHandle[KEY] = _address.value
 
+//        savedStateHandle[KEY] = _address.value
         updateAddressFields()
     }
 
@@ -160,6 +159,8 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
     fun findMyRepresentatives() {
         getRepresentativesFromApi(_address.value!!)
+        // Save the Address once available
+
         savedStateHandle.set(KEY,_address.value)
     }
 
