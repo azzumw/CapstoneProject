@@ -42,15 +42,16 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
         }
     }
 
-    private val _address: MutableLiveData<Address> = MutableLiveData()
+    private val _address: MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
         val address: LiveData<Address>
         get() = _address
 
-    private val addressObserver = Observer<Address> { address ->
-        _address.value = address
-        updateAddressFields()
-        findMyRepresentatives()
-    }
+
+//    private val addressObserver = Observer<Address> { address ->
+//        _address.value = address
+//        updateAddressFields()
+//        findMyRepresentatives()
+//    }
 
 
     val selectedItem = MutableLiveData<Int>()
@@ -82,9 +83,15 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
          _status.value = ApiStatus.DONE
         _representatives.value = emptyList()
 
-        savedStateHandle
-            .getLiveData<Address>(KEY)
-            .observeForever(addressObserver)
+//        _address.value = savedStateHandle
+//            .getLiveData<Address>(KEY).value
+        //            .observeForever(addressObserver)
+
+        if(address.value!=null){
+            updateAddressFields()
+            findMyRepresentatives()
+        }
+
     }
 
 
@@ -137,8 +144,6 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
             }
             .first()
 
-
-
 //        savedStateHandle[KEY] = _address.value
         updateAddressFields()
     }
@@ -158,19 +163,11 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
 
     fun findMyRepresentatives() {
-        getRepresentativesFromApi(_address.value!!)
-        // Save the Address once available
-
         savedStateHandle.set(KEY,_address.value)
+        getRepresentativesFromApi(address.value!!)
+        // Save the Address once available
     }
 
-//    private fun getAddress(): Address = Address(
-//        line1.value!!,
-//        line2.value,
-//        city.value!!,
-//        state.value!!,
-//        zip.value!!
-//    )
 
     fun createAddressFromFields() {
         if (isNotValidEntry()) {
@@ -201,25 +198,24 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
     override fun onCleared() {
         super.onCleared()
-        savedStateHandle
-            .getLiveData<Address>(KEY)
-            .removeObserver(addressObserver)
+//        savedStateHandle
+//            .getLiveData<Address>(KEY)
+//            .removeObserver(addressObserver)
     }
 }
 
-
-class RepresentativeViewModelFactory(val app: Application, val repository: TheRepository,
-                                     owner: SavedStateRegistryOwner, defaultArgs: Bundle?
+class RepresentativeViewModelFactory(
+    val app: Application, val repository: TheRepository,
+    owner: SavedStateRegistryOwner, defaultArgs: Bundle?
 ) :
     AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        if(modelClass.isAssignableFrom(RepresentativeViewModel::class.java)){
-            return RepresentativeViewModel(handle,app,repository) as T
+        if (modelClass.isAssignableFrom(RepresentativeViewModel::class.java)) {
+            return RepresentativeViewModel(handle, app, repository) as T
         }
         throw IllegalArgumentException("Not a viewmodel")
     }
