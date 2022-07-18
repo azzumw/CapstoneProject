@@ -111,11 +111,13 @@ class RepresentativeFragment : Fragment() {
         if(savedInstanceState!=null){
             val transitionState = savedInstanceState.getBundle("bundle")
 
-//            binding.motionLayout.transitionState = transitionState
-//            motionLayout.transitionToState(motionLayout.currentState)
+            binding.motionLayout.transitionState = transitionState
+//            binding.motionLayout.transitionToState(binding.motionLayout.currentState)
 
-            val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
-            binding.motionLayout.transitionToState(state)
+//            val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
+
+//            binding.motionLayout.transitionToState(state)
+
 
 //            motionLayout.transitionToState(motionLayout.currentState)
 
@@ -127,9 +129,8 @@ class RepresentativeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-//        val motionLayoutState = binding.motionLayout.transitionState
-//        outState.putBundle("bundle",motionLayoutState)
-        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
+        outState.putBundle("bundle",binding.motionLayout.transitionState)
+//        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
     }
 
 

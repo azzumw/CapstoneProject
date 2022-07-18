@@ -91,7 +91,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
         if(address.value!=null){
             updateAddressFields()
-            findMyRepresentatives()
+//            findMyRepresentatives()
         }
 
     }
