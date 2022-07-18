@@ -27,11 +27,13 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
                               private val repository: TheRepository) :
     ViewModel() {
     private val KEY = "saved_data"
+    private val KEY_LIST = "list_data"
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 
-    private val _representatives = MutableLiveData<List<Representative>>()
+    private val _representatives : MutableLiveData<List<Representative>> = savedStateHandle.getLiveData(KEY_LIST,
+        emptyList())
     val representatives: LiveData<List<Representative>> get() = _representatives
 
     val textViewVisbility = Transformations.map(representatives){
@@ -118,6 +120,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
                 }
 
                 _representatives.value = rList
+                savedStateHandle.set(KEY_LIST,_representatives.value)
 
                 Log.e("RepresentativesViewModel: ", result.officials[0].name)
                 Log.e("RepresentativesViewModel: Officials: ", result.officials.size.toString())
