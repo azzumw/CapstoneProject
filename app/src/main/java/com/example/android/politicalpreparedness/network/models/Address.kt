@@ -1,17 +1,20 @@
 package com.example.android.politicalpreparedness.network.models
 
+import android.os.Parcelable
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Address(
     var line1: String,
     var line2: String? = null,
     var city: String,
     var state: String,
     var zip: String
-){
+):Parcelable{
 
 
 

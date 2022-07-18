@@ -21,8 +21,8 @@ import java.lang.IllegalArgumentException
 import java.util.*
 
 
-class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
-                                val app: Application,
+class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
+                              val app: Application,
                               private val repository: TheRepository) :
     ViewModel() {
     private val KEY = "saved_data"
@@ -42,6 +42,7 @@ class RepresentativeViewModel( val savedStateHandle: SavedStateHandle,
     }
 
     private val _address : MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
+    val address = savedStateHandle.getLiveData<Address>(KEY)
 //    private val _savedStateAddress:LiveData<Address> = savedStateHandle.getLiveData<Address>(KEY)
 
     val selectedItem = MutableLiveData<Int>()
