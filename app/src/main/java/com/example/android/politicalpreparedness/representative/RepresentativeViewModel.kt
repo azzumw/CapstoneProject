@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.election.ApiStatus
@@ -42,8 +43,15 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
     }
 
     private val _address : MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
-    val address = savedStateHandle.getLiveData<Address>(KEY)
-//    private val _savedStateAddress:LiveData<Address> = savedStateHandle.getLiveData<Address>(KEY)
+    val address: LiveData<Address>
+        get() = _address
+
+    private val addressObserver = Observer<Address> { address ->
+        _address.value = address
+        updateAddressFields()
+        findMyRepresentatives()
+    }
+
 
     val selectedItem = MutableLiveData<Int>()
     val line1 = MutableLiveData<String>("")
@@ -73,6 +81,10 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
         }
          _status.value = ApiStatus.DONE
         _representatives.value = emptyList()
+
+        savedStateHandle
+            .getLiveData<Address>(KEY)
+            .observeForever(addressObserver)
     }
 
 
@@ -126,6 +138,8 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
             .first()
 
 
+        // Save the Address once available
+        savedStateHandle[KEY] = _address.value
 
         updateAddressFields()
     }
@@ -182,6 +196,13 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
     fun doneShowingSnackBar() {
         _showSnackBarEvent.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        savedStateHandle
+            .getLiveData<Address>(KEY)
+            .removeObserver(addressObserver)
     }
 }
 
