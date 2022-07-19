@@ -26,14 +26,15 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
                               val app: Application,
                               private val repository: TheRepository) :
     ViewModel() {
-    private val KEY = "saved_data"
-    private val KEY_LIST = "list_data"
+    companion object{
+        private const val KEY = "saved_data"
+        private const val KEY_LIST = "list_data"
+    }
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 
-    private val _representatives : MutableLiveData<List<Representative>> = savedStateHandle.getLiveData(KEY_LIST,
-        emptyList())
+    private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>> get() = _representatives
 
     val textViewVisbility = Transformations.map(representatives){
@@ -44,6 +45,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
         }
     }
 
+//    private val _address =  MutableLiveData<Address>()
     private val _address: MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
         val address: LiveData<Address>
         get() = _address
@@ -83,7 +85,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
             state.value = app.resources.getStringArray(R.array.states)[it]
         }
          _status.value = ApiStatus.DONE
-        _representatives.value = emptyList()
+//        _representatives.value = emptyList()
 
 //        _address.value = savedStateHandle
 //            .getLiveData<Address>(KEY).value
@@ -91,6 +93,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
         if(address.value!=null){
             updateAddressFields()
+            _representatives.value = savedStateHandle.getLiveData<List<Representative>>(KEY_LIST).value
 //            findMyRepresentatives()
         }
 
@@ -199,12 +202,6 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
         _showSnackBarEvent.value = false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-//        savedStateHandle
-//            .getLiveData<Address>(KEY)
-//            .removeObserver(addressObserver)
-    }
 }
 
 class RepresentativeViewModelFactory(
@@ -223,3 +220,15 @@ class RepresentativeViewModelFactory(
         throw IllegalArgumentException("Not a viewmodel")
     }
 }
+
+//class RepresentativeViewModelFactory(
+//    val app: Application, val repository: TheRepository
+//):ViewModelProvider.Factory {
+//    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//        if(modelClass.isAssignableFrom(RepresentativeViewModel::class.java)){
+//            return RepresentativeViewModel(app, repository) as T
+//        }
+//        throw IllegalArgumentException("Cannot find viewmodel")
+//    }
+//
+//}

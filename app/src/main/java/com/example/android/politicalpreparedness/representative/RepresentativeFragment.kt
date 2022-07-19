@@ -5,9 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -16,7 +14,6 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -28,15 +25,11 @@ import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
-import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
-import com.example.android.politicalpreparedness.representative.model.Representative
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import java.util.Locale
 import androidx.lifecycle.Observer
 
 class RepresentativeFragment : Fragment() {
@@ -50,10 +43,17 @@ class RepresentativeFragment : Fragment() {
         private const val COARSE_LOCATION_KEY = "android.permission.ACCESS_COARSE_LOCATION"
     }
 
-//    private lateinit var motionLayout: MotionLayout
+    private lateinit var motionLayout: MotionLayout
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
+//    private val viewModel: RepresentativeViewModel by viewModels() {
+//        RepresentativeViewModelFactory(activity!!.application, TheRepository(
+//            LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
+//            RemoteDataSource
+//        )
+//        )
+//    }
 
     private val viewModel: RepresentativeViewModel by viewModels() {
         RepresentativeViewModelFactory(activity!!.application, TheRepository(
@@ -80,10 +80,9 @@ class RepresentativeFragment : Fragment() {
             false
         )
 
+        motionLayout = binding.motionLayout
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -95,31 +94,27 @@ class RepresentativeFragment : Fragment() {
             viewModel.createAddressFromFields()
         }
 
-        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Snackbar.make(binding.root, "Invalid entry", Snackbar.LENGTH_SHORT).show()
                 viewModel.doneShowingSnackBar()
             }
         })
 
-        viewModel.representatives.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            binding.motionLayout.isInteractionEnabled = it.isNotEmpty()
+        binding.representativeRecycler.adapter = RepresentativeListAdapter()
+
+        viewModel.representatives.observe(viewLifecycleOwner, Observer {
+                motionLayout.isInteractionEnabled = it.isNotEmpty()
         })
 
-        binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
         if(savedInstanceState!=null){
             val transitionState = savedInstanceState.getBundle("bundle")
-
-            binding.motionLayout.transitionState = transitionState
+//            motionLayout.transitionState = transitionState
 //            binding.motionLayout.transitionToState(binding.motionLayout.currentState)
-
-//            val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
-
-//            binding.motionLayout.transitionToState(state)
-
-
-//            motionLayout.transitionToState(motionLayout.currentState)
+            val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
+            binding.motionLayout.transitionToState(state)
+//            motionLayout.transitionToState(state)
 
         }
 
@@ -129,8 +124,8 @@ class RepresentativeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBundle("bundle",binding.motionLayout.transitionState)
-//        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
+//        outState.putBundle("bundle",motionLayout.transitionState)
+        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
     }
 
 
