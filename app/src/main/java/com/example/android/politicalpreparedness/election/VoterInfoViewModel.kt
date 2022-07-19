@@ -17,10 +17,6 @@ class VoterInfoViewModel(
 ) :
     ViewModel() {
 
-    //TODO: Add live data to hold voter info
-
-
-    //TODO: Add var and methods to populate voter info
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 

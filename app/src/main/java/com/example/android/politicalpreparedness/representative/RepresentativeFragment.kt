@@ -5,9 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -15,31 +13,29 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.poliiicalpreparedness.representative.RepresentativeViewModelFactory
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
-import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
-import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.database.LocalDataSource
+import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
-import com.example.android.politicalpreparedness.representative.model.Representative
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import java.util.Locale
+import androidx.lifecycle.Observer
+import com.example.android.politicalpreparedness.databinding.FragmentRep2Binding
 
 class RepresentativeFragment : Fragment() {
 
     companion object {
-
+        private const val MOTION_LAYOUT_STATE = "Motion_Layout_State"
         private const val TAG = "Representative_Fragment:"
         private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
         private const val REQUEST_PERMISSION_LOCATION = 1
@@ -47,14 +43,20 @@ class RepresentativeFragment : Fragment() {
         private const val COARSE_LOCATION_KEY = "android.permission.ACCESS_COARSE_LOCATION"
     }
 
+    private lateinit var motionLayout: MotionLayout
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
     private val viewModel: RepresentativeViewModel by viewModels() {
-        RepresentativeViewModelFactory(activity!!.application, TheRepository(ElectionDatabase.getInstance(requireContext()).electionDao))
+        RepresentativeViewModelFactory(
+            activity!!.application, TheRepository(
+                LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
+                RemoteDataSource
+            ), this, Bundle()
+        )
     }
 
-    private var _binding: FragmentRepresentativeBinding? = null
+    private var _binding: FragmentRep2Binding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -63,16 +65,13 @@ class RepresentativeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.fragment_representative,
-            container,
-            false
-        )
+        _binding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_rep_2, container, false)
+
+        motionLayout = binding.motionLayout
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -86,19 +85,35 @@ class RepresentativeFragment : Fragment() {
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
-                Snackbar.make(binding.root, "Invalid entry", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    "Please ensure all address fields are filled.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 viewModel.doneShowingSnackBar()
             }
         })
 
+        binding.representativeRecycler.adapter = RepresentativeListAdapter()
+
+        viewModel.representatives.observe(viewLifecycleOwner, Observer {
+            motionLayout.isInteractionEnabled = it.isNotEmpty()
+        })
+
+
+        if (savedInstanceState != null) {
+            motionLayout.transitionState = savedInstanceState.getBundle(MOTION_LAYOUT_STATE)
+        }
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        binding.representativeRecycler.adapter = RepresentativeListAdapter()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBundle(MOTION_LAYOUT_STATE, motionLayout.transitionState)
     }
+
 
     @SuppressLint("MissingPermission")
     private fun getLocation(locationRequest: LocationRequest) {
@@ -130,48 +145,7 @@ class RepresentativeFragment : Fragment() {
             locationCallback,
             Looper.myLooper()
         )
-
-//        fusedLocationClient.lastLocation
-//            .addOnSuccessListener { pLocation ->
-//                if (pLocation != null) {
-//                    mCurrentLocation = pLocation
-//                    Toast.makeText(
-//                        context,
-//                        "Location: Lat: ${mCurrentLocation!!.latitude}, Long:${mCurrentLocation!!.longitude}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//
-//                   viewModel.useMyLocation(mCurrentLocation!!)
-////                    Log.e("Address:","${address.city}")
-//
-//
-//                } else {
-//                    //force to get new location
-//                    fusedLocationClient.requestLocationUpdates(
-//                        locationRequest,
-//                        locationCallback,
-//                        Looper.getMainLooper()
-//                    )
-//                }
-//            }
-
     }
-
-
-//    private fun geoCodeLocation(location: Location): Address {
-//        val geocoder = Geocoder(context, Locale.getDefault())
-//        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//            .map { address ->
-//                Address(
-//                    address.thoroughfare,
-//                    address.subThoroughfare,
-//                    address.locality,
-//                    address.adminArea,
-//                    address.postalCode
-//                )
-//            }
-//            .first()
-//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

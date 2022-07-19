@@ -61,9 +61,8 @@ interface CivicsApiService {
         @Query("returnAllAvailableData") available: Boolean = true
     ): VoterInfoResponse
 
-    //TODO: Add representatives API Call
     @GET("representatives")
-    suspend fun getRepresentativesInfo(@Query("address") address: Address):RepresentativeResponse
+    suspend fun getRepresentativesInfo(@Query("address") address: Address): RepresentativeResponse
 }
 
 object CivicsApi {

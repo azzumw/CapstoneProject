@@ -16,6 +16,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        buildConfigField 'String','MAPS_API_KEY',myApiKey
+        manifestPlaceholders = [ myMapApiKey:  myApiKey]
     }
     buildTypes {
         release {
@@ -47,11 +49,16 @@ dependencies {
 
 //    implementation 'com.google.android.material:material:1.6.1'
     // Constraint Layout
-    implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
+//    implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$version_lifecycle_extensions"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    // Kotlin
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$savedStateVersion"
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha02'
+
 
 
     // Navigation
@@ -84,4 +91,12 @@ dependencies {
 
     // Location
     implementation "com.google.android.gms:play-services-location:$version_play_services_location"
+
+
+    //testing
+    //roboelectric
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    //corourintes
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
 }

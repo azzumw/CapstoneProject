@@ -26,11 +26,12 @@
 
         <TextView
             android:id="@+id/election_date"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_padding"
             android:text="@{viewModel.election.electionDay.toString()}"
             app:layout_constraintTop_toBottomOf="@id/election_name"
+            app:layout_constraintStart_toStartOf="@id/election_name"
             tools:text="12 November 2055" />
 
         <TextView
@@ -48,7 +49,7 @@
         <Button
             android:id="@+id/state_locations"
             android:visibility="gone"
-            android:layout_width="0dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="@string/voting_location_btn_text"
             android:textColor="@color/colorPrimaryDark"
@@ -56,32 +57,32 @@
             android:outlineAmbientShadowColor="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/state_header"
-            app:layout_constraintStart_toStartOf="@id/election_date" />
+            app:layout_constraintStart_toEndOf="@id/election_date" />
 
         <!-- TODO: Add click binding to open web URL -->
         <TextView
             android:id="@+id/no_info_text_view"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:text="@string/no_information_available_msg"
+            app:layout_constraintStart_toEndOf="@id/state_header"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/state_header"/>
         <Button
             android:id="@+id/state_ballot"
             android:visibility="gone"
             android:layout_marginTop="8dp"
-            android:layout_width="0dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="@string/ballot_information_btn_text"
             android:textColor="@color/colorPrimaryDark"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/state_locations"
-            app:layout_constraintStart_toStartOf="@id/election_date" />
+            app:layout_constraintStart_toEndOf="@id/election_date" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/address_group"
@@ -98,7 +99,7 @@
             android:textSize="18sp"
             android:text="@string/correspondence_address_text"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/state_ballot"
+            app:layout_constraintTop_toBottomOf="@id/state_header"
             app:layout_constraintStart_toStartOf="@id/election_date" />
 
         <TextView
@@ -107,6 +108,7 @@
             android:layout_height="wrap_content"
             android:text="@{viewModel.correspondenceAddress.toFormattedString()}"
             app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
+            app:layout_constraintBottom_toTopOf="@id/saveElectionButton"
             app:layout_constraintStart_toStartOf="@id/election_date" />
 
         <Button
@@ -115,7 +117,6 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/white"
-            android:layout_marginBottom="@dimen/padding_16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:onClick="@{()->viewModel.followOrUnFollowElection()}"
