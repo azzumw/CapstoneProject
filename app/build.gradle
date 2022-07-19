@@ -16,6 +16,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        buildConfigField 'String','MAPS_API_KEY',myApiKey
+        manifestPlaceholders = [ myMapApiKey:  myApiKey]
     }
     buildTypes {
         release {

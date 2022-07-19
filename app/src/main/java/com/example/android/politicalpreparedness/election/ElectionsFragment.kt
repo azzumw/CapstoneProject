@@ -14,6 +14,7 @@ import com.example.android.politicalpreparedness.databinding.FragmentElectionBin
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.repository.TheRepository
+import com.google.android.material.snackbar.Snackbar
 
 class ElectionsFragment : Fragment() {
 
@@ -63,9 +64,18 @@ class ElectionsFragment : Fragment() {
 
         electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
+
                 binding.noDataInDbMsg.visibility = View.VISIBLE
             } else {
                 binding.noDataInDbMsg.visibility = View.GONE
+
+            }
+        })
+
+        electionsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+            if(it){
+                Snackbar.make(binding.root,"You are offline.",Snackbar.LENGTH_SHORT).show()
+                electionsViewModel.doneShowingSnackBar()
             }
         })
 

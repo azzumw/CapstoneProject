@@ -28,7 +28,7 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
                     }
                 }
             }
-            else-> {
+            else -> {
                 allElections
             }
         }
@@ -38,24 +38,33 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         filter.value = selectedFilter
     }
 
+    private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
+    val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
+
     private val _status = MutableLiveData<ApiStatus>()
     val status: LiveData<ApiStatus>
         get() = _status
 
     private val _statusMessage = MutableLiveData<String>()
-    val statusMessage : LiveData<String> get() = _statusMessage
+    val statusMessage: LiveData<String> get() = _statusMessage
 
     private val _showNoDataInDatabaseMessage = MutableLiveData<Boolean>(false)
-    val showNoDataInDatabaseMessage : LiveData<Boolean>  get() = _showNoDataInDatabaseMessage
+    val showNoDataInDatabaseMessage: LiveData<Boolean> get() = _showNoDataInDatabaseMessage
 
     private val _navToSingleElectionVoterInfo = MutableLiveData<Election?>()
     val navToSingleElectionVoterInfo: LiveData<Election?>
         get() = _navToSingleElectionVoterInfo
 
+    val mediatorLiveData = MediatorLiveData<Boolean>()
 
     init {
         getElectionsInfo()
         selectFilter(1)
+
+    }
+
+    fun combineListAndStatusApi() {
+
     }
 
 
@@ -68,7 +77,7 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
                 _status.value = ApiStatus.DONE
 
             } catch (e: Exception) {
-
+                _showSnackBarEvent.value = true
                 _status.value = ApiStatus.ERROR
                 _statusMessage.value = e.message
             }
@@ -84,5 +93,8 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         _navToSingleElectionVoterInfo.value = null
     }
 
+    fun doneShowingSnackBar() {
+        _showSnackBarEvent.value = false
+    }
 
 }
