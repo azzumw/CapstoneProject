@@ -23,7 +23,6 @@ import com.example.android.poliiicalpreparedness.representative.RepresentativeVi
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.database.LocalDataSource
-import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.repository.TheRepository
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
@@ -146,48 +145,7 @@ class RepresentativeFragment : Fragment() {
             locationCallback,
             Looper.myLooper()
         )
-
-//        fusedLocationClient.lastLocation
-//            .addOnSuccessListener { pLocation ->
-//                if (pLocation != null) {
-//                    mCurrentLocation = pLocation
-//                    Toast.makeText(
-//                        context,
-//                        "Location: Lat: ${mCurrentLocation!!.latitude}, Long:${mCurrentLocation!!.longitude}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//
-//                   viewModel.useMyLocation(mCurrentLocation!!)
-////                    Log.e("Address:","${address.city}")
-//
-//
-//                } else {
-//                    //force to get new location
-//                    fusedLocationClient.requestLocationUpdates(
-//                        locationRequest,
-//                        locationCallback,
-//                        Looper.getMainLooper()
-//                    )
-//                }
-//            }
-
     }
-
-
-//    private fun geoCodeLocation(location: Location): Address {
-//        val geocoder = Geocoder(context, Locale.getDefault())
-//        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//            .map { address ->
-//                Address(
-//                    address.thoroughfare,
-//                    address.subThoroughfare,
-//                    address.locality,
-//                    address.adminArea,
-//                    address.postalCode
-//                )
-//            }
-//            .first()
-//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

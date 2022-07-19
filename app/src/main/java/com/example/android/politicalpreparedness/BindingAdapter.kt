@@ -33,3 +33,4 @@ fun electionsApiStatus(imgView: ImageView, status: ApiStatus) {
         }
     }
 }
+
