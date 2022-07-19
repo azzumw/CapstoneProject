@@ -31,6 +31,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.lifecycle.Observer
+import com.example.android.politicalpreparedness.databinding.FragmentRep2Binding
 
 class RepresentativeFragment : Fragment() {
 
@@ -44,6 +45,7 @@ class RepresentativeFragment : Fragment() {
     }
 
 
+    private lateinit var motionLayout: MotionLayout
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
@@ -63,9 +65,11 @@ class RepresentativeFragment : Fragment() {
         )
     }
 
-    private var _binding: FragmentRepresentativeBinding? = null
+    private var _binding : FragmentRep2Binding? = null
     private val binding get() = _binding!!
 
+//    private var _binding: FragmentRepresentativeBinding? = null
+//    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,13 +77,15 @@ class RepresentativeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.fragment_representative,
-            container,
-            false
-        )
+        _binding = DataBindingUtil.inflate(layoutInflater,R.layout.fragment_rep_2,container,false)
 
+//        _binding = DataBindingUtil.inflate(
+//            layoutInflater,
+//            R.layout.fragment_rep_2,
+//            container,
+//            false
+//        )
+        motionLayout = binding.motionLayout
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -90,9 +96,9 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermissions()
         }
 
-        binding.buttonSearch.setOnClickListener {
-            viewModel.createAddressFromFields()
-        }
+//        binding.buttonSearch.setOnClickListener {
+//            viewModel.createAddressFromFields()
+//        }
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -103,13 +109,13 @@ class RepresentativeFragment : Fragment() {
 
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
-//        viewModel.representatives.observe(viewLifecycleOwner, Observer {
-//                motionLayout.isInteractionEnabled = it.isNotEmpty()
-//        })
+        viewModel.representatives.observe(viewLifecycleOwner, Observer {
+                motionLayout.isInteractionEnabled = it.isNotEmpty()
+        })
 
 
         if(savedInstanceState!=null){
-            binding.motionLayout.transitionState = savedInstanceState.getBundle("bundle")
+            motionLayout.transitionState = savedInstanceState.getBundle("key")
         }
 
         return binding.root
@@ -118,7 +124,7 @@ class RepresentativeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBundle("bundle",binding.motionLayout.transitionState)
+        outState.putBundle("key",motionLayout.transitionState)
 //        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
     }
 
