@@ -43,7 +43,7 @@ class RepresentativeFragment : Fragment() {
         private const val COARSE_LOCATION_KEY = "android.permission.ACCESS_COARSE_LOCATION"
     }
 
-    private lateinit var motionLayout: MotionLayout
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
@@ -80,7 +80,7 @@ class RepresentativeFragment : Fragment() {
             false
         )
 
-        motionLayout = binding.motionLayout
+
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -103,19 +103,13 @@ class RepresentativeFragment : Fragment() {
 
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
-        viewModel.representatives.observe(viewLifecycleOwner, Observer {
-                motionLayout.isInteractionEnabled = it.isNotEmpty()
-        })
+//        viewModel.representatives.observe(viewLifecycleOwner, Observer {
+//                motionLayout.isInteractionEnabled = it.isNotEmpty()
+//        })
 
 
         if(savedInstanceState!=null){
-            val transitionState = savedInstanceState.getBundle("bundle")
-//            motionLayout.transitionState = transitionState
-//            binding.motionLayout.transitionToState(binding.motionLayout.currentState)
-            val state = savedInstanceState.getInt(MOTION_LAYOUT_STATE)
-            binding.motionLayout.transitionToState(state)
-//            motionLayout.transitionToState(state)
-
+            binding.motionLayout.transitionState = savedInstanceState.getBundle("bundle")
         }
 
         return binding.root
@@ -124,8 +118,8 @@ class RepresentativeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-//        outState.putBundle("bundle",motionLayout.transitionState)
-        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
+        outState.putBundle("bundle",binding.motionLayout.transitionState)
+//        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
     }
 
 
