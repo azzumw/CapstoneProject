@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -46,8 +47,8 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="postalAddress"
                 android:hint="Address Line 1"
-                android:text="@={viewModel.line1}"
                 android:inputType="textPostalAddress"
+                android:text="@={viewModel.line1}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_title" />
 
@@ -58,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="postalAddress"
                 android:hint="Address Line 2"
-                android:text="@={viewModel.line2}"
                 android:inputType="textPostalAddress"
+                android:text="@={viewModel.line2}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
@@ -69,8 +70,8 @@
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:hint="City"
-                android:text="@={viewModel.city}"
                 android:inputType="textPostalAddress"
+                android:text="@={viewModel.city}"
                 app:layout_constraintEnd_toStartOf="@id/state_spinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_2" />
@@ -81,14 +82,14 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:autofillHints=""
-                android:selectedItemPosition="@={viewModel.selectedItem}"
-                app:stateValue="@{viewModel.state}"
                 android:entries="@array/states"
                 android:inputType="textPostalAddress"
+                android:selectedItemPosition="@={viewModel.selectedItem}"
                 app:layout_constraintBottom_toBottomOf="@id/city"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/city"
-                app:layout_constraintTop_toTopOf="@id/city" />
+                app:layout_constraintTop_toTopOf="@id/city"
+                app:stateValue="@{viewModel.state}" />
 
             <EditText
                 android:id="@+id/zip"
@@ -96,9 +97,9 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="postalCode"
                 android:hint="Zip Code"
-                android:text="@={viewModel.zip}"
                 android:inputType="number"
                 android:maxLength="5"
+                android:text="@={viewModel.zip}"
                 app:layout_constraintEnd_toEndOf="@id/city"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/city" />
@@ -161,9 +162,9 @@
             android:gravity="center"
             android:text="@string/no_data_available_msg"
             android:textAlignment="center"
+            android:visibility="@{viewModel.textViewVisbility}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/representative_title"
-            android:visibility="@{viewModel.textViewVisbility}" />
+            app:layout_constraintTop_toBottomOf="@id/representative_title" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

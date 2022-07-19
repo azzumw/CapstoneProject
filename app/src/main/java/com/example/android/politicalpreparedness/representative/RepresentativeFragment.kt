@@ -44,32 +44,21 @@ class RepresentativeFragment : Fragment() {
         private const val COARSE_LOCATION_KEY = "android.permission.ACCESS_COARSE_LOCATION"
     }
 
-
     private lateinit var motionLayout: MotionLayout
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mCurrentLocation: Location? = null
 
-//    private val viewModel: RepresentativeViewModel by viewModels() {
-//        RepresentativeViewModelFactory(activity!!.application, TheRepository(
-//            LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
-//            RemoteDataSource
-//        )
-//        )
-//    }
-
     private val viewModel: RepresentativeViewModel by viewModels() {
-        RepresentativeViewModelFactory(activity!!.application, TheRepository(
-            LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
-           RemoteDataSource
-        ),this, Bundle()
+        RepresentativeViewModelFactory(
+            activity!!.application, TheRepository(
+                LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
+                RemoteDataSource
+            ), this, Bundle()
         )
     }
 
-    private var _binding : FragmentRep2Binding? = null
+    private var _binding: FragmentRep2Binding? = null
     private val binding get() = _binding!!
-
-//    private var _binding: FragmentRepresentativeBinding? = null
-//    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,14 +66,9 @@ class RepresentativeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = DataBindingUtil.inflate(layoutInflater,R.layout.fragment_rep_2,container,false)
+        _binding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_rep_2, container, false)
 
-//        _binding = DataBindingUtil.inflate(
-//            layoutInflater,
-//            R.layout.fragment_rep_2,
-//            container,
-//            false
-//        )
         motionLayout = binding.motionLayout
 
         binding.viewModel = viewModel
@@ -102,7 +86,11 @@ class RepresentativeFragment : Fragment() {
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
-                Snackbar.make(binding.root, "Invalid entry", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    "Please ensure all address fields are filled.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 viewModel.doneShowingSnackBar()
             }
         })
@@ -110,12 +98,12 @@ class RepresentativeFragment : Fragment() {
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
         viewModel.representatives.observe(viewLifecycleOwner, Observer {
-                motionLayout.isInteractionEnabled = it.isNotEmpty()
+            motionLayout.isInteractionEnabled = it.isNotEmpty()
         })
 
 
-        if(savedInstanceState!=null){
-            motionLayout.transitionState = savedInstanceState.getBundle("key")
+        if (savedInstanceState != null) {
+            motionLayout.transitionState = savedInstanceState.getBundle(MOTION_LAYOUT_STATE)
         }
 
         return binding.root
@@ -124,8 +112,7 @@ class RepresentativeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBundle("key",motionLayout.transitionState)
-//        outState.putInt(MOTION_LAYOUT_STATE,binding.motionLayout.currentState)
+        outState.putBundle(MOTION_LAYOUT_STATE, motionLayout.transitionState)
     }
 
 
