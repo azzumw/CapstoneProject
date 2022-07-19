@@ -11,33 +11,38 @@ import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.ElectionAndSavedElection
 import com.example.android.politicalpreparedness.network.models.SavedElection
 
-//import com.example.android.politicalpreparedness.network.models.TheElection
-
-class ElectionListAdapter(private val clickListener: ElectionListener): ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
+class ElectionListAdapter(private val clickListener: ElectionListener) :
+    ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElectionViewHolder {
-    //to ensure card view width is match parent
-        return ElectionViewHolder(ListItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        //to ensure card view width is match parent
+        return ElectionViewHolder(
+            ListItemViewBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ElectionViewHolder, position: Int) {
         val election = getItem(position)
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             clickListener.onClick(election)
         }
         holder.bind(election)
     }
 
 
-
-    class ElectionViewHolder(val binding:ListItemViewBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(election: Election){
+    class ElectionViewHolder(val binding: ListItemViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(election: Election) {
             binding.election = election
             binding.executePendingBindings()
         }
     }
 
-    companion object ElectionDiffCallback : DiffUtil.ItemCallback<Election>(){
+    companion object ElectionDiffCallback : DiffUtil.ItemCallback<Election>() {
         //This method is called by DiffUtil to decide whether two objects represent the same Item.
         //DiffUtil uses this method to figure out if the new Election object is the same as the old Election object.
         override fun areItemsTheSame(oldItem: Election, newItem: Election): Boolean {
@@ -51,7 +56,7 @@ class ElectionListAdapter(private val clickListener: ElectionListener): ListAdap
 
     }
 
-    class ElectionListener(val clickListener:(election:Election) -> Unit){
+    class ElectionListener(val clickListener: (election: Election) -> Unit) {
         fun onClick(election: Election) = clickListener(election)
     }
 }

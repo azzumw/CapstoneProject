@@ -72,7 +72,6 @@ class VoterInfoViewModel(
                 val voterInfoFromApi = repository.callVoterInfoApi(address, electId.toString())
 
                 if (!voterInfoFromApi.state.isNullOrEmpty()) {
-//                    datasource.insertState(voterInfoFromApi.state)
                     _state.value = voterInfoFromApi.state
 
                     _voterLocationUrl.value =

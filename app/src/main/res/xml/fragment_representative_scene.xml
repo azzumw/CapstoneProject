@@ -53,8 +53,8 @@
         app:duration="2000"
         app:motionInterpolator="easeInOut">
         <OnSwipe
-            app:touchRegionId="@id/representative_recycler"
             app:dragDirection="dragUp"
-            app:touchAnchorId="@id/representative_recycler" />
+            app:touchAnchorId="@id/representative_recycler"
+            app:touchRegionId="@id/representative_recycler" />
     </Transition>
 </MotionScene>

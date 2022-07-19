@@ -22,11 +22,13 @@ import java.lang.IllegalArgumentException
 import java.util.*
 
 
-class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
-                              val app: Application,
-                              private val repository: TheRepository) :
+class RepresentativeViewModel(
+    private val savedStateHandle: SavedStateHandle,
+    val app: Application,
+    private val repository: TheRepository
+) :
     ViewModel() {
-    companion object{
+    companion object {
         private const val KEY = "saved_data"
         private const val KEY_LIST = "list_data"
     }
@@ -37,26 +39,17 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>> get() = _representatives
 
-    val textViewVisbility = Transformations.map(representatives){
-        if(it.isEmpty()){
+    val textViewVisbility = Transformations.map(representatives) {
+        if (it.isEmpty()) {
             View.VISIBLE
-        }else{
+        } else {
             View.GONE
         }
     }
 
-//    private val _address =  MutableLiveData<Address>()
     private val _address: MutableLiveData<Address> = savedStateHandle.getLiveData(KEY)
-        val address: LiveData<Address>
+    val address: LiveData<Address>
         get() = _address
-
-
-//    private val addressObserver = Observer<Address> { address ->
-//        _address.value = address
-//        updateAddressFields()
-//        findMyRepresentatives()
-//    }
-
 
     val selectedItem = MutableLiveData<Int>()
     val line1 = MutableLiveData<String>("")
@@ -66,7 +59,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
     val zip = MutableLiveData<String>("")
 
     private val _status = MutableLiveData<ApiStatus>()
-    val status : LiveData<ApiStatus> = _status
+    val status: LiveData<ApiStatus> = _status
 
 
     /**
@@ -84,17 +77,12 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
         state.addSource(selectedItem) {
             state.value = app.resources.getStringArray(R.array.states)[it]
         }
-         _status.value = ApiStatus.DONE
-//        _representatives.value = emptyList()
+        _status.value = ApiStatus.DONE
 
-//        _address.value = savedStateHandle
-//            .getLiveData<Address>(KEY).value
-        //            .observeForever(addressObserver)
-
-        if(address.value!=null){
+        if (address.value != null) {
             updateAddressFields()
-            _representatives.value = savedStateHandle.getLiveData<List<Representative>>(KEY_LIST).value
-//            findMyRepresentatives()
+            _representatives.value =
+                savedStateHandle.getLiveData<List<Representative>>(KEY_LIST).value
         }
 
     }
@@ -103,7 +91,7 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
     private fun getRepresentativesFromApi(address: Address) {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
         viewModelScope.launch {
-            try{
+            try {
 
                 _status.value = ApiStatus.LOADING
 
@@ -123,12 +111,12 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
                 }
 
                 _representatives.value = rList
-                savedStateHandle.set(KEY_LIST,_representatives.value)
+                savedStateHandle.set(KEY_LIST, _representatives.value)
 
                 Log.e("RepresentativesViewModel: ", result.officials[0].name)
                 Log.e("RepresentativesViewModel: Officials: ", result.officials.size.toString())
                 Log.e("RepresentativesViewModel: Offices: ", result.offices.size.toString())
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 _status.value = ApiStatus.ERROR
                 _representatives.value = emptyList()
             }
@@ -150,7 +138,6 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
             }
             .first()
 
-//        savedStateHandle[KEY] = _address.value
         updateAddressFields()
     }
 
@@ -169,9 +156,8 @@ class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle,
 
 
     fun findMyRepresentatives() {
-        savedStateHandle.set(KEY,_address.value)
+        savedStateHandle.set(KEY, _address.value)
         getRepresentativesFromApi(address.value!!)
-        // Save the Address once available
     }
 
 
@@ -221,14 +207,3 @@ class RepresentativeViewModelFactory(
     }
 }
 
-//class RepresentativeViewModelFactory(
-//    val app: Application, val repository: TheRepository
-//):ViewModelProvider.Factory {
-//    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//        if(modelClass.isAssignableFrom(RepresentativeViewModel::class.java)){
-//            return RepresentativeViewModel(app, repository) as T
-//        }
-//        throw IllegalArgumentException("Cannot find viewmodel")
-//    }
-//
-//}

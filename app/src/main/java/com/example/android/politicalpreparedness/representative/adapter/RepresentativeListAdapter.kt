@@ -104,5 +104,3 @@ class RepresentativeViewHolder(val binding: RepresentativeListItemBinding) :
         itemView.context.startActivity(intent)
     }
 }
-
-//TODO: Create RepresentativeListener

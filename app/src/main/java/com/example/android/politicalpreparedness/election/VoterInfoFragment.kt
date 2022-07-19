@@ -47,68 +47,6 @@ class VoterInfoFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
 
-//        viewModel.state.observe(viewLifecycleOwner, Observer {
-//            if (!it.isNullOrEmpty()){
-//                binding.stateLocations.visibility = View.VISIBLE
-//                binding.stateBallot.visibility = View.VISIBLE
-//
-//                val voterLocationUrl = it[0].electionAdministrationBody.votingLocationFinderUrl
-//                val ballotInfoUrl = it[0].electionAdministrationBody.ballotInfoUrl
-//
-//                if (voterLocationUrl.isNullOrEmpty()||ballotInfoUrl.isNullOrEmpty()){
-//                    if(voterLocationUrl.isNullOrEmpty() && ballotInfoUrl.isNullOrEmpty()){
-//                        binding.stateLocations.visibility = View.GONE
-//                        binding.stateBallot.visibility = View.GONE
-//                        binding.noInfoTextView.visibility = View.VISIBLE
-//
-//                    }else if (ballotInfoUrl.isNullOrEmpty()){
-//                        binding.stateBallot.visibility = View.GONE
-//                    }else{
-//                        binding.stateLocations.visibility = View.GONE
-//                    }
-//                }
-//
-//
-//
-//                binding.stateLocations.setOnClickListener{
-//                    startIntentForUrl(voterLocationUrl)
-//                }
-//
-//                binding.stateBallot.setOnClickListener{
-//                    startIntentForUrl(ballotInfoUrl)
-//                }
-//
-//            }else{
-//                binding.noInfoTextView.visibility = View.VISIBLE
-//            }
-//        })
-
-//        viewModel.state.observe(viewLifecycleOwner, Observer {
-//            if(!it.isNullOrEmpty()){
-//                binding.stateBallot.visibility = View.VISIBLE
-//                binding.stateLocations.visibility = View.VISIBLE
-//
-//            }else{
-//                binding.noInfoTextView.visibility = View.VISIBLE
-//            }
-//        })
-
-//        viewModel._state.observe(viewLifecycleOwner, Observer { currentState ->
-//           if(currentState!= null){
-//
-//               val url = currentState.electionAdministrationBody.votingLocationFinderUrl
-//
-//               if(url!=null){
-//                   binding.stateLocations.visibility = View.VISIBLE
-//                   binding.stateLocations.setOnClickListener {
-//                       startIntentForUrl(url)
-//                   }
-//               }
-//
-//           }
-//
-//        })
-
         viewModel.voterLocationUrl.observe(viewLifecycleOwner, Observer { url ->
             if (url != null) {
                 Log.e(this.javaClass.canonicalName, url)
@@ -137,7 +75,6 @@ class VoterInfoFragment : Fragment() {
             binding.stateLocations.visibility = View.GONE
             binding.stateBallot.visibility = View.GONE
         }
-//        else binding.noInfoTextView.visibility = View.GONE
 
         viewModel.correspondenceAddress.observe(viewLifecycleOwner, Observer {
             if (it != null) {

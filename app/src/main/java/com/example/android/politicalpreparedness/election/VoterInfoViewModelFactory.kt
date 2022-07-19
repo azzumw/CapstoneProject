@@ -17,7 +17,7 @@ class VoterInfoViewModelFactory(
             return VoterInfoViewModel(repository, electionId, division) as T
         }
 
-        throw IllegalArgumentException("?Unknown ViewModel")
+        throw IllegalArgumentException("Unknown ViewModel")
     }
 
 }

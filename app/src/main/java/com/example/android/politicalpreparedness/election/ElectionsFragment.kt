@@ -19,9 +19,12 @@ import com.google.android.material.snackbar.Snackbar
 class ElectionsFragment : Fragment() {
 
     private val electionsViewModel: ElectionsViewModel by viewModels {
-        ElectionsViewModelFactory(TheRepository(
-            LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao), RemoteDataSource
-        ))
+        ElectionsViewModelFactory(
+            TheRepository(
+                LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
+                RemoteDataSource
+            )
+        )
     }
 
     private var _binding: FragmentElectionBinding? = null
@@ -55,13 +58,6 @@ class ElectionsFragment : Fragment() {
             }
         })
 
-//        electionsViewModel.status.observe(viewLifecycleOwner, Observer {
-//            if (it == ApiStatus.ERROR) {
-//                binding.errorStatusMsg.visibility = View.VISIBLE
-//            }
-//        })
-
-
         electionsViewModel.filteredElections.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
 
@@ -73,8 +69,8 @@ class ElectionsFragment : Fragment() {
         })
 
         electionsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
-            if(it){
-                Snackbar.make(binding.root,"You are offline.",Snackbar.LENGTH_SHORT).show()
+            if (it) {
+                Snackbar.make(binding.root, "You are offline.", Snackbar.LENGTH_SHORT).show()
                 electionsViewModel.doneShowingSnackBar()
             }
         })

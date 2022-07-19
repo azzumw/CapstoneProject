@@ -55,15 +55,10 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
     val navToSingleElectionVoterInfo: LiveData<Election?>
         get() = _navToSingleElectionVoterInfo
 
-    val mediatorLiveData = MediatorLiveData<Boolean>()
 
     init {
         getElectionsInfo()
         selectFilter(1)
-
-    }
-
-    fun combineListAndStatusApi() {
 
     }
 
@@ -88,7 +83,6 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
         _navToSingleElectionVoterInfo.value = singleElectionInfo
     }
 
-    //done navigating
     fun onNavComplete() {
         _navToSingleElectionVoterInfo.value = null
     }
@@ -96,5 +90,4 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
     fun doneShowingSnackBar() {
         _showSnackBarEvent.value = false
     }
-
 }

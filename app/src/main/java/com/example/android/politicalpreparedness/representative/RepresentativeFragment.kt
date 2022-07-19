@@ -254,10 +254,8 @@ class RepresentativeFragment : Fragment() {
             settingsClient.checkLocationSettings(builder.build())
 
         locationSettingsResponseTask.addOnSuccessListener {
-            Toast.makeText(context, "Device Location ON!", Toast.LENGTH_SHORT).show()
             //continue
             getLocation(locationRequest)
-
         }
 
         locationSettingsResponseTask.addOnFailureListener { exception ->
