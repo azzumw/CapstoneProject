@@ -86,7 +86,6 @@ fun bindRepresentativePlaceholder(
     textView: TextView,
     representativeData: List<Representative>?
 ) {
-    textView.visibility = View.GONE
 
     if(representativeData.isNullOrEmpty()) {
         textView.visibility = View.VISIBLE

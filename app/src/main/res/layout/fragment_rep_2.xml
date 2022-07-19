@@ -158,8 +158,7 @@
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
-            app:listPlaceHolder="@{viewModel.representatives}"
-            app:visibilityMode="ignore"
+            android:visibility="@{viewModel.textViewVisbility}"
             />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

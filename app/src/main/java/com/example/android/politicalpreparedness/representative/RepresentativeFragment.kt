@@ -96,9 +96,9 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermissions()
         }
 
-//        binding.buttonSearch.setOnClickListener {
-//            viewModel.createAddressFromFields()
-//        }
+        binding.buttonSearch.setOnClickListener {
+            viewModel.createAddressFromFields()
+        }
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
