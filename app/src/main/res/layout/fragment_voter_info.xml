@@ -40,31 +40,29 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_16dp"
             android:text="@string/election_information_text"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            style="@style/subHeadStyle1"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/election_date" />
 
         <!-- TODO: Add click binding to open web URL -->
         <Button
             android:id="@+id/state_locations"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_height_0"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            style="@style/secondaryButtonStyle"
             android:outlineAmbientShadowColor="@color/colorPrimaryDark"
             android:text="@string/voting_location_btn_text"
-            android:textColor="@color/colorPrimaryDark"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_header" />
 
-        <!-- TODO: Add click binding to open web URL -->
+
         <TextView
             android:id="@+id/no_info_text_view"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_height_0"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/default_padding"
             android:text="@string/no_information_available_msg"
             android:textAlignment="center"
             android:visibility="gone"
@@ -74,12 +72,11 @@
 
         <Button
             android:id="@+id/state_ballot"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_height_0"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/white"
+            android:layout_marginTop="@dimen/default_padding"
             android:text="@string/ballot_information_btn_text"
-            android:textColor="@color/colorPrimaryDark"
+            style="@style/secondaryButtonStyle"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/election_date"
@@ -98,8 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_16dp"
             android:text="@string/correspondence_address_text"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            style="@style/subHeadStyle2"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_ballot" />
 
@@ -116,14 +112,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_16dp"
-            android:background="@color/colorPrimaryDark"
+            style="@style/primaryButtonStyle"
             android:onClick="@{()->viewModel.followOrUnFollowElection()}"
             android:text="@{viewModel.saveBtnTextState}"
-            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/save_election_button_text" />
+            tools:text="@string/follow_btn_txt" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

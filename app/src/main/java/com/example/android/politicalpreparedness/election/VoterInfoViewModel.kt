@@ -17,6 +17,11 @@ class VoterInfoViewModel(
 ) :
     ViewModel() {
 
+    companion object{
+        private const val FOLLOW_BUTTON_TEXT = "Follow"
+        private const val UNFOLLOW_BUTTON_TEXT = "Unfollow"
+    }
+
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 
@@ -41,9 +46,9 @@ class VoterInfoViewModel(
 
     val saveBtnTextState = Transformations.map(isElectionSaved) {
         if (it == null) {
-            "Follow"
+            FOLLOW_BUTTON_TEXT
         } else {
-            "Unfollow"
+            UNFOLLOW_BUTTON_TEXT
         }
     }
 

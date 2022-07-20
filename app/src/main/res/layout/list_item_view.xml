@@ -21,9 +21,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="@dimen/padding_16dp">
+            style="@style/cardStyle">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,11 +31,11 @@
                 <TextView
                     android:id="@+id/list_item_election_name"
                     android:layout_width="match_parent"
-                    android:layout_height="88dp"
-                    android:layout_margin="8dp"
+                    android:layout_height="@dimen/item_height"
+                    android:layout_margin="@dimen/default_padding"
                     android:gravity="center_vertical"
                     android:text="@{election.name}"
-                    android:textSize="24sp"
+                    style="@style/headStyle"
                     tools:text="Election 1" />
 
             </LinearLayout>

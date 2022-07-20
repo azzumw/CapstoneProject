@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="width_height_0">0dp</dimen>
+    <dimen name="padding_4dp">4dp</dimen>
+    <dimen name="padding_6dp">6dp</dimen>
+
     <dimen name="default_padding">8dp</dimen>
 
     <dimen name="padding_16dp">16dp</dimen>
+
+    <dimen name="space_32dp">32dp</dimen>
+
+    <dimen name="space_128dp">128dp</dimen>
+
+    <dimen name="item_height">88dp</dimen>
+
+    <dimen name="icon_size">40dp</dimen>
 
 </resources>
