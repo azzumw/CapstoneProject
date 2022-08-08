@@ -17,11 +17,11 @@ class LocalDataSource(val database:ElectionDao) : DataSourceInterface{
         database.insertAllElections(elections)
     }
 
-    fun getSavedElections():LiveData<List<ElectionAndSavedElection>>{
+    override fun getSavedElections():LiveData<List<ElectionAndSavedElection>>{
         return database.getElectionAndSavedElection().asLiveData()
     }
 
-    fun getElections():LiveData<List<Election>>{
+    override fun getElections():LiveData<List<Election>>{
         return database.getAllElections()
     }
 

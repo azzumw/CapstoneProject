@@ -7,6 +7,10 @@ interface DataSourceInterface {
 
     suspend fun insertElections(elections:List<Election>)
 
+    fun getElections():LiveData<List<Election>>
+
+    fun getSavedElections():LiveData<List<ElectionAndSavedElection>>
+
     fun getAnElection(electionId: Int): LiveData<Election>
 
     suspend fun saveThisElection(savedElection: SavedElection)

@@ -97,7 +97,7 @@ class RepresentativeFragment : Fragment() {
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
         viewModel.representatives.observe(viewLifecycleOwner, Observer {
-            motionLayout.isInteractionEnabled = it.isNotEmpty()
+            motionLayout.isInteractionEnabled = it.isNullOrEmpty()
         })
 
 

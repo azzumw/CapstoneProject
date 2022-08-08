@@ -15,7 +15,7 @@ class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
 
     private val savedElections = repository.savedElections
 
-    private var filter: MutableLiveData<Int> = MutableLiveData()
+    var filter: MutableLiveData<Int> = MutableLiveData()
     val filteredElections: LiveData<List<Election>> = filter.switchMap { filter ->
         when (filter) {
             1 -> {

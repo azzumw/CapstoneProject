@@ -1,16 +1,17 @@
-package com.example.android.politicalpreparedness.network.data
+package data
 
 import androidx.lifecycle.LiveData
-import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.DataSourceInterface
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import java.util.*
 
-object RemoteDataSource : DataSourceInterface {
+class FakeDataSource():DataSourceInterface {
+
+
+    val eList = mutableListOf<Election>()
 
     override suspend fun insertElections(elections: List<Election>) {
-        TODO("Not yet implemented")
+       eList.addAll(elections)
     }
 
     override fun getElections(): LiveData<List<Election>> {
@@ -42,18 +43,20 @@ object RemoteDataSource : DataSourceInterface {
     }
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-        return CivicsApi.retrofitService.getVoterInfo(address, electionId = electionId)
+        TODO("Not yet implemented")
     }
 
     override suspend fun callElectionsInfoApi(): ElectionResponse {
-        return withContext(Dispatchers.IO) {
-            CivicsApi.retrofitService.getElections()
+        //Implement this create a dummmy ElectionResponse
+        val electionsList = List<Election>(3) {
+            Election(it, "Election $it", Date("2022-07-26"),
+                Division("$it-division","USA","California")
+            )
         }
+        return ElectionResponse("someKind",electionsList)
     }
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
-        return withContext(Dispatchers.IO) {
-            CivicsApi.retrofitService.getRepresentativesInfo(address)
-        }
+        TODO("Not yet implemented")
     }
 }
