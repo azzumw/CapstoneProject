@@ -7,6 +7,10 @@
 Political Preparedness is an app that provides educational opportunities to US electorate using the data provided by Google Civic Informaiton API. The app allows users to track information on target representatives and voting initiatives where applicable.
 
 <br>
+
+https://user-images.githubusercontent.com/20320342/184512210-5e282042-8ad6-4de9-bee4-9bda6b468721.mp4
+
+
 <h2>The Project</h2>
 The app adheres to the Single Activity Architecture. The app consists of four screens (fragments): 
 
