@@ -68,8 +68,8 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun repository_getElections_hasCorrectItems() = runBlockingTest(){
-        //GIVEN -
+    fun repository_getElections_hasCorrectItems() = runBlockingTest{
+        //GIVEN - some Election instances
         val date = 1220227200L * 1000
         val election1 = Election(0,"Election 0", Date(date), Division("0-division","USA","California"))
         val election2 = Election(1,"Election 1", Date(date), Division("1-division","USA","California"))
@@ -79,7 +79,7 @@ class TheRepositoryTests {
         //WHEN - getElections() is called
         repository.getElections()
 
-        //THEN - elections LiveData property has correct list items
+        //THEN - elections LiveData property has correct list items matching given Election instances
         val electionsList = repository.elections.getOrAwaitValue()
 
         assertThat(electionsList, hasItems(election1,election2,election3))
