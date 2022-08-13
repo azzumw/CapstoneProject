@@ -1,25 +1,29 @@
 package data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.DataSourceInterface
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class FakeDataSource():DataSourceInterface {
 
 
-    val eList = mutableListOf<Election>()
+    private val _eList = MutableLiveData<List<Election>>()
+    val eList : LiveData<List<Election>> get() = _eList
 
     override suspend fun insertElections(elections: List<Election>) {
-       eList.addAll(elections)
+       _eList.value = elections
     }
 
     override fun getElections(): LiveData<List<Election>> {
-        TODO("Not yet implemented")
+        return eList
     }
 
     override fun getSavedElections(): LiveData<List<ElectionAndSavedElection>> {
-        TODO("Not yet implemented")
+
+        return MutableLiveData()
     }
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
@@ -49,7 +53,7 @@ class FakeDataSource():DataSourceInterface {
     override suspend fun callElectionsInfoApi(): ElectionResponse {
         //Implement this create a dummmy ElectionResponse
         val electionsList = List<Election>(3) {
-            Election(it, "Election $it", Date("2022-07-26"),
+            Election(it, "Election $it", Date(),
                 Division("$it-division","USA","California")
             )
         }

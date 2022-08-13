@@ -7,21 +7,22 @@ import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.network.models.*
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
 class TheRepository(
     private val localDataSource: DataSourceInterface,
-    private val remoteDataSource: DataSourceInterface
+    private val remoteDataSource: DataSourceInterface,
+    private val ioDispatcher: CoroutineDispatcher = IO
 )  {
 
-
-    val elections: LiveData<List<Election>> = (localDataSource as LocalDataSource).getElections()
+    val elections: LiveData<List<Election>> = localDataSource.getElections()
     val savedElections: LiveData<List<ElectionAndSavedElection>> =
-        (localDataSource as LocalDataSource).getSavedElections()
+        localDataSource.getSavedElections()
 
     suspend fun getElections() {
-        withContext(IO) {
+        withContext(ioDispatcher) {
             val electionsFromApi = callElectionsInfoApi().elections
             localDataSource.insertElections(electionsFromApi)
         }

@@ -5,11 +5,11 @@ import com.example.android.politicalpreparedness.network.models.*
 
 interface DataSourceInterface {
 
-    suspend fun insertElections(elections:List<Election>)
+    suspend fun insertElections(elections: List<Election>)
 
-    fun getElections():LiveData<List<Election>>
+    fun getElections(): LiveData<List<Election>>
 
-    fun getSavedElections():LiveData<List<ElectionAndSavedElection>>
+    fun getSavedElections(): LiveData<List<ElectionAndSavedElection>>
 
     fun getAnElection(electionId: Int): LiveData<Election>
 
@@ -25,7 +25,7 @@ interface DataSourceInterface {
     suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse
 
     //network call for elections
-    suspend fun callElectionsInfoApi():ElectionResponse
+    suspend fun callElectionsInfoApi(): ElectionResponse
 
     //network call for representatives
     suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse
