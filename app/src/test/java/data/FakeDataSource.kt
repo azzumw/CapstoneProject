@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.DataSourceInterface
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 import java.util.*
 
 class FakeDataSource():DataSourceInterface {
@@ -52,8 +53,9 @@ class FakeDataSource():DataSourceInterface {
 
     override suspend fun callElectionsInfoApi(): ElectionResponse {
         //Implement this create a dummmy ElectionResponse
+        val localDate = Date(1220227200L * 1000)
         val electionsList = List<Election>(3) {
-            Election(it, "Election $it", Date(),
+            Election(it, "Election $it", localDate,
                 Division("$it-division","USA","California")
             )
         }
