@@ -2,17 +2,25 @@ package data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.DataSourceInterface
-import kotlinx.coroutines.runBlocking
-import java.time.LocalDate
 import java.util.*
 
 class FakeDataSource():DataSourceInterface {
 
+    private val _savedElectionsList = MutableLiveData<List<ElectionAndSavedElection>>()
+    val savedElectionsList : LiveData<List<ElectionAndSavedElection>>
+        get() = _savedElectionsList
 
     private val _eList = MutableLiveData<List<Election>>()
     val eList : LiveData<List<Election>> get() = _eList
+
+
+    val savedElectionList = mutableListOf<SavedElection>()
+
+
+    val data = MutableLiveData<Election>()
 
     override suspend fun insertElections(elections: List<Election>) {
        _eList.value = elections
@@ -23,16 +31,20 @@ class FakeDataSource():DataSourceInterface {
     }
 
     override fun getSavedElections(): LiveData<List<ElectionAndSavedElection>> {
-
-        return MutableLiveData()
+        return savedElectionsList
     }
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
-        TODO("Not yet implemented")
+        data.value = eList.value?.get(electionId)
+        return data
     }
 
     override suspend fun saveThisElection(savedElection: SavedElection) {
-        TODO("Not yet implemented")
+
+//        savedElectionList.add(savedElection)
+
+        savedElectionsList.value =
+
     }
 
     override suspend fun removeThisElection(savedElection: SavedElection) {

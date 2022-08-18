@@ -1,6 +1,5 @@
 package com.example.android.politicalpreparedness.repository
 
-import android.os.SystemClock
 import data.FakeDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -17,7 +16,6 @@ import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
 import org.hamcrest.CoreMatchers.hasItems
-import java.time.LocalDate
 import java.util.*
 
 
@@ -57,7 +55,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun repositoryGetElections_hasCorrectItemAtPositionOne() = runBlockingTest{
+    fun getElections_hasCorrectItemAtPositionOne() = runBlockingTest{
         //WHEN - get elections is called
         repository.getElections()
 
@@ -68,13 +66,12 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun repository_getElections_hasCorrectItems() = runBlockingTest{
+    fun getElections_hasCorrectElectionItems() = runBlockingTest{
         //GIVEN - some Election instances
         val date = 1220227200L * 1000
         val election1 = Election(0,"Election 0", Date(date), Division("0-division","USA","California"))
         val election2 = Election(1,"Election 1", Date(date), Division("1-division","USA","California"))
         val election3 = Election(2,"Election 2", Date(date), Division("2-division","USA","California"))
-
 
         //WHEN - getElections() is called
         repository.getElections()
@@ -84,4 +81,24 @@ class TheRepositoryTests {
 
         assertThat(electionsList, hasItems(election1,election2,election3))
     }
+
+    @Test
+    fun getAnElection_returnsCorrectElection() = runBlockingTest{
+
+        //GIVEN - list of elections is present
+        repository.getElections()
+
+        //WHEN - an election is retrieved with id 0
+        val election = repository.getAnElection(0)
+
+        //THEN - correct election instance is returned with the correct name.
+        election.getOrAwaitValue()
+        assertThat(election.value?.name, `is`("Election 0"))
+    }
+
+    fun saveThisElection_returnsTheSavedElection(){
+        //not able to implement
+    }
+
+
 }
