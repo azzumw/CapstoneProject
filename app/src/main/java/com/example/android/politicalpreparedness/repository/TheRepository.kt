@@ -15,48 +15,56 @@ class TheRepository(
     private val localDataSource: DataSourceInterface,
     private val remoteDataSource: DataSourceInterface,
     private val ioDispatcher: CoroutineDispatcher = IO
-)  {
+) : RepositoryInterface {
 
-    val elections: LiveData<List<Election>> = localDataSource.getElections()
-    val savedElections: LiveData<List<ElectionAndSavedElection>> =
-        localDataSource.getSavedElections()
+//    val elections: LiveData<List<Election>> = localDataSource.getElections()
+//    val savedElections: LiveData<List<ElectionAndSavedElection>> =
+//        localDataSource.getSavedElections()
 
-    suspend fun getElections() {
+    override suspend fun getElections() {
         withContext(ioDispatcher) {
             val electionsFromApi = callElectionsInfoApi().elections
             localDataSource.insertElections(electionsFromApi)
         }
     }
 
-    fun getAnElection(electionId: Int): LiveData<Election> {
+
+
+    override fun getAnElection(electionId: Int): LiveData<Election> {
 
         return localDataSource.getAnElection(electionId)
     }
 
-    suspend fun saveThisElection(savedElection: SavedElection) {
+    override suspend fun saveThisElection(savedElection: SavedElection) {
         localDataSource.saveThisElection(savedElection)
     }
 
-    suspend fun removeThisElection(savedElection: SavedElection) {
+    override suspend fun removeThisElection(savedElection: SavedElection) {
         localDataSource.removeThisElection(savedElection)
     }
 
-    fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
+    override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
         return localDataSource.getElectionIdFromSavedElection(electionId)
     }
 
     //network call for elections
-    suspend fun callElectionsInfoApi(): ElectionResponse {
+    override suspend fun callElectionsInfoApi(): ElectionResponse {
         return remoteDataSource.callElectionsInfoApi()
     }
 
     //network call for voters
-    suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         return remoteDataSource.callVoterInfoApi(address, electionId)
     }
 
     //network call for representatives
-    suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
+    override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
         return remoteDataSource.callRepresentativeInfoApi(address)
     }
+
+    override fun getSavedElectionsFromLocalDataSource() = localDataSource.getSavedElections()
+
+    override fun getElectionsFromLocalDataBase() = localDataSource.getElections()
+
+
 }

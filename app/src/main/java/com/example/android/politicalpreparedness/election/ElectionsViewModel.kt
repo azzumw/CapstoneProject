@@ -2,20 +2,23 @@ package com.example.android.politicalpreparedness.election
 
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.repository.TheRepository
+import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import kotlinx.coroutines.launch
+
+
 
 enum class ApiStatus {
     LOADING, ERROR, DONE
 }
 
-class ElectionsViewModel(private val repository: TheRepository) : ViewModel() {
+class ElectionsViewModel(private val repository: RepositoryInterface) : ViewModel() {
 
-    private val allElections = repository.elections
+    private val allElections = repository.getElectionsFromLocalDataBase()
 
-    private val savedElections = repository.savedElections
+    private val savedElections = repository.getSavedElectionsFromLocalDataSource()
 
     var filter: MutableLiveData<Int> = MutableLiveData()
+
     val filteredElections: LiveData<List<Election>> = filter.switchMap { filter ->
         when (filter) {
             1 -> {

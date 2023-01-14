@@ -10,7 +10,7 @@ import java.util.*
 class FakeDataSource():DataSourceInterface {
 
     private val _savedElectionsList = MutableLiveData<List<ElectionAndSavedElection>>()
-    val savedElectionsList : LiveData<List<ElectionAndSavedElection>>
+    private val savedElectionsList : LiveData<List<ElectionAndSavedElection>>
         get() = _savedElectionsList
 
     private val _eList = MutableLiveData<List<Election>>()
@@ -43,7 +43,8 @@ class FakeDataSource():DataSourceInterface {
 
 //        savedElectionList.add(savedElection)
 
-        savedElectionsList.value =
+
+//        savedElectionsList.value =
 
     }
 
