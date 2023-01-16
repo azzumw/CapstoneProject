@@ -100,4 +100,20 @@ class ElectionsViewModelTest {
         assertThat(listSavedElections.first().name, `is`("Election 1"))
         assertThat(listSavedElections.first().id, `is`(1))
     }
+
+    @Test
+    fun setFilter_OptionElse_displaysElectionsList() {
+        //GIVEN - a fresh ViewModel
+        val electionsViewModel = ElectionsViewModel(FakeRepository())
+
+        //WHEN - filter option other than 1 and 2 is provided
+        val filterOption = 3
+        electionsViewModel.selectFilter(filterOption)
+
+        //THEN - election List displays the Elections
+        val resultElectionList = electionsViewModel.filteredElections.getOrAwaitValue()
+
+        assertThat(resultElectionList.size, `is`(3))
+        assertThat(resultElectionList.first().id, `is`(0))
+    }
 }

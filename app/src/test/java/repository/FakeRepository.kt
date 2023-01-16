@@ -11,7 +11,7 @@ import java.util.*
 class FakeRepository : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
-    private val elections: LiveData<List<Election>> get() = _elections
+    val elections: LiveData<List<Election>> get() = _elections
 
     private val _savedElections = MutableLiveData<List<ElectionAndSavedElection>>()
 
@@ -32,21 +32,27 @@ class FakeRepository : RepositoryInterface {
     }
 
     override suspend fun saveThisElection(savedElection: SavedElection) {
-        val e = elections.value?.filter {
+        _savedElections.value = elections.value?.filter {
             it.id == savedElection.savedElectionId
-        }
-
-        _savedElections.value = e?.map {
+        }?.map {
             ElectionAndSavedElection(it, SavedElection(it.id))
         }
     }
 
     override suspend fun removeThisElection(savedElection: SavedElection) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
-        TODO("Not yet implemented")
+        val se =  _savedElections.value?.filter {
+            it.savedElection.savedElectionId == electionId
+        }?.map { it.savedElection }?.take(1)
+
+        val liveSavedElection = MutableLiveData<SavedElection>()
+
+        liveSavedElection.value = se?.first()
+
+        return liveSavedElection
     }
 
     override suspend fun callElectionsInfoApi(): ElectionResponse {
