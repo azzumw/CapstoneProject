@@ -11,7 +11,7 @@ import java.util.*
 class FakeRepository : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
-    val elections: LiveData<List<Election>> get() = _elections
+    private val elections: LiveData<List<Election>> get() = _elections
 
     private val _savedElections = MutableLiveData<List<ElectionAndSavedElection>>()
 
@@ -56,7 +56,7 @@ class FakeRepository : RepositoryInterface {
     }
 
     override suspend fun callElectionsInfoApi(): ElectionResponse {
-        //Implement this
+
         val localDate = Date(1220227200L * 1000)
         val electionsList = List<Election>(3) {
             Election(

@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import repository.FakeRepository
@@ -22,35 +23,46 @@ class ElectionsViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
+    private lateinit var fakeRepository : FakeRepository
+
+    //Subject under test
+    private lateinit var electionsViewModel:ElectionsViewModel
+
+    @Before
+    fun setUp() {
+
+        //GIVEN: a fresh ViewModel
+        fakeRepository = FakeRepository()
+
+        electionsViewModel = ElectionsViewModel(fakeRepository)
+    }
 
     @Test
     fun setFilter_Option1_setsTheCorrectFilterOption1() {
-        //Given a fresh viewModel
-        val electionViewModel = ElectionsViewModel(FakeRepository())
-        //WHEN: a filter is set
-        val allElectionFilter = 1
-        electionViewModel.selectFilter(allElectionFilter)
 
-        //THEN: correct list livedata is shown/triggered
+        //WHEN: a filter is set to option 1
+        val allElectionFilter = 1
+        electionsViewModel.selectFilter(allElectionFilter)
+
         //remember to test live data
         //1. use InstantTaskExecutorRule: runs all architecture related background jobs in the same thread
         //this ensures test runs synchronously, and in repeatable order
         //add this dependency: testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
         //2. Live data is observed (add LiveDataUtil class)
-        val value = electionViewModel.filter.getOrAwaitValue()
-        assertThat(1, `is`(value))
+
+        //THEN - verify that the filter option is set to 1
+        val value = electionsViewModel.filter.getOrAwaitValue()
+        assertThat(value, `is`(1))
     }
 
     @Test
     fun setFilter_Option2_setsTheCorrectFilterOption2() {
-        //GIVEN - a fresh viewmodel
-        val electionsViewModel = ElectionsViewModel(FakeRepository())
 
-        //WHEN - correct filter is set = 2
+        //WHEN - filter is set to 2
         val savedElectionFilter = 2
         electionsViewModel.selectFilter(savedElectionFilter)
 
-        //THEN - correct filter option is set
+        //THEN - verify filter option is set to 2
         val value = electionsViewModel.filter.getOrAwaitValue()
         assertThat(value, `is`(2))
     }
@@ -58,9 +70,6 @@ class ElectionsViewModelTest {
 
     @Test
     fun setFilter_Option1_setsTheCorrectListOfElections()  {
-
-        //GIVEN a fresh viewmodel
-        val electionsViewModel = ElectionsViewModel(FakeRepository())
 
         //WHEN - filter option 1 is provided
         val filterOptionOne = 1
@@ -76,11 +85,7 @@ class ElectionsViewModelTest {
     @Test
     fun setFilter_Option2_setsTheCorrectListOfSavedElections() = runBlockingTest{
 
-        //GIVEN - a fresh ViewModel
-        val fakeRepository = FakeRepository()
-        val electionsViewModel = ElectionsViewModel(fakeRepository)
-
-        //and a saved election
+        //GIVEN: ...and a saved election
         fakeRepository.saveThisElection(SavedElection(1))
 
         //WHEN - filter option 2 is provided
@@ -96,8 +101,6 @@ class ElectionsViewModelTest {
 
     @Test
     fun setFilter_OptionElse_displaysElectionsList() {
-        //GIVEN - a fresh ViewModel
-        val electionsViewModel = ElectionsViewModel(FakeRepository())
 
         //WHEN - filter option other than 1 and 2 is provided
         val filterOption = 3
@@ -105,7 +108,6 @@ class ElectionsViewModelTest {
 
         //THEN - election List displays the Elections
         val resultElectionList = electionsViewModel.filteredElections.getOrAwaitValue()
-
         assertThat(resultElectionList.size, `is`(3))
         assertThat(resultElectionList.first().id, `is`(0))
     }
