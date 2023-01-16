@@ -62,7 +62,6 @@ class ElectionsViewModel(private val repository: RepositoryInterface) : ViewMode
     init {
         getElectionsInfo()
         selectFilter(1)
-
     }
 
 

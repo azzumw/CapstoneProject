@@ -1,24 +1,17 @@
 package viewmodels
 
-//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.politicalpreparedness.election.ElectionsViewModel
-import com.example.android.politicalpreparedness.network.models.Division
-import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.MainCoroutineRule
-import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import repository.FakeRepository
 import util.getOrAwaitValue
-import java.util.*
 
 @ExperimentalCoroutinesApi
 class ElectionsViewModelTest {
