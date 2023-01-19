@@ -6,12 +6,13 @@ import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.*
+import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class VoterInfoViewModel(
-    private val repository: TheRepository,
+    private val repository: RepositoryInterface,
     electionId: Int,
     private val division: Division
 ) :

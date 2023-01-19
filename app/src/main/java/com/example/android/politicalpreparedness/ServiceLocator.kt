@@ -2,6 +2,7 @@ package com.example.android.politicalpreparedness
 
 import android.content.Context
 import androidx.room.Room
+import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
@@ -11,33 +12,31 @@ import com.example.android.politicalpreparedness.repository.TheRepository
 
 object ServiceLocator {
 
-    private var database: ElectionDatabase? = null
+    //1. create a repository variable
     @Volatile
-    var tasksRepository: RepositoryInterface? = null
+    var repository : RepositoryInterface? = null
 
-    fun provideTasksRepository(context: Context): RepositoryInterface {
-        synchronized(this) {
-            return tasksRepository ?: createTasksRepository(context)
+    private var database:ElectionDao? = null
+
+    fun provideRepository(context: Context) : RepositoryInterface{
+        synchronized(this){
+            return repository ?: createRepository(context)
         }
     }
 
-    private fun createTasksRepository(context: Context): RepositoryInterface {
-        val newRepo = TheRepository(remoteDataSource = RemoteDataSource, localDataSource = createTaskLocalDataSource(context))
-        tasksRepository = newRepo
+    private fun createRepository(context: Context):RepositoryInterface{
+        val newRepo = TheRepository(createLocalDataSource(context),RemoteDataSource)
+        repository = newRepo
+
         return newRepo
     }
 
-    private fun createTaskLocalDataSource(context: Context): DataSourceInterface {
-        val database = database ?: createDataBase(context)
-        return LocalDataSource(database.electionDao)
+    private fun createLocalDataSource(context: Context):LocalDataSource{
+        val database = database ?: createDatabase(context).electionDao
+        return LocalDataSource(database)
     }
 
-    private fun createDataBase(context: Context): ElectionDatabase {
-        val result = Room.databaseBuilder(
-            context.applicationContext,
-            ElectionDatabase::class.java, "election_database"
-        ).build()
-        database = result
-        return result
+    private fun createDatabase(context: Context):ElectionDatabase{
+        return ElectionDatabase.getInstance(context)
     }
 }

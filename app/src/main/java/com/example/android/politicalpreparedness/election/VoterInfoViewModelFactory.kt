@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.models.Division
+import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import com.example.android.politicalpreparedness.repository.TheRepository
 import java.lang.IllegalArgumentException
 
 class VoterInfoViewModelFactory(
-    private val repository: TheRepository,
+    private val repository: RepositoryInterface,
     private val electionId: Int,
     private val division: Division
 ) : ViewModelProvider.Factory {

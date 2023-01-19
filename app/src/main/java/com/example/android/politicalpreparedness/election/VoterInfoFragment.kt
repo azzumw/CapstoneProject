@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.politicalpreparedness.MyApplication
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.database.LocalDataSource
@@ -35,8 +36,7 @@ class VoterInfoFragment : Fragment() {
 
         val arguments = VoterInfoFragmentArgs.fromBundle(arguments!!)
 
-        val database = ElectionDatabase.getInstance(requireContext()).electionDao
-        val repository = TheRepository(LocalDataSource(database), RemoteDataSource)
+        val repository = (requireActivity().application as MyApplication).repository
         val viewModelFactory =
             VoterInfoViewModelFactory(repository, arguments.argElectionId, arguments.argDivision)
 
