@@ -7,13 +7,17 @@ import com.example.android.politicalpreparedness.repository.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.*
+import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import repository.FakeRepository
 import util.getOrAwaitValue
 
+/*
+* Since we are not using AndroidX test library here
+* this means its a win for speed.
+* */
 @ExperimentalCoroutinesApi
 class ElectionsViewModelTest {
 
@@ -52,7 +56,7 @@ class ElectionsViewModelTest {
 
         //THEN - verify that the filter option is set to 1
         val value = electionsViewModel.filter.getOrAwaitValue()
-        assertThat(value, `is`(1))
+        MatcherAssert.assertThat(value, `is`(1))
     }
 
     @Test
@@ -64,7 +68,7 @@ class ElectionsViewModelTest {
 
         //THEN - verify filter option is set to 2
         val value = electionsViewModel.filter.getOrAwaitValue()
-        assertThat(value, `is`(2))
+        MatcherAssert.assertThat(value, `is`(2))
     }
 
 
@@ -77,8 +81,8 @@ class ElectionsViewModelTest {
 
         //THEN - electionList is displayed
         val listElectionValue = electionsViewModel.filteredElections.getOrAwaitValue()
-        assertThat(listElectionValue.size, `is`(3))
-        assertThat(listElectionValue.first().name, `is`("Election 0"))
+        MatcherAssert.assertThat(listElectionValue.size, `is`(3))
+        MatcherAssert.assertThat(listElectionValue.first().name, `is`("Election 0"))
 
     }
 
@@ -94,9 +98,9 @@ class ElectionsViewModelTest {
 
         //THEN - electionList displays the saved election
         val listSavedElections = electionsViewModel.filteredElections.getOrAwaitValue()
-        assertThat(listSavedElections.size, `is`(1))
-        assertThat(listSavedElections.first().name, `is`("Election 1"))
-        assertThat(listSavedElections.first().id, `is`(1))
+        MatcherAssert.assertThat(listSavedElections.size, `is`(1))
+        MatcherAssert.assertThat(listSavedElections.first().name, `is`("Election 1"))
+        MatcherAssert.assertThat(listSavedElections.first().id, `is`(1))
     }
 
     @Test
@@ -108,7 +112,7 @@ class ElectionsViewModelTest {
 
         //THEN - election List displays the Elections
         val resultElectionList = electionsViewModel.filteredElections.getOrAwaitValue()
-        assertThat(resultElectionList.size, `is`(3))
-        assertThat(resultElectionList.first().id, `is`(0))
+        MatcherAssert.assertThat(resultElectionList.size, `is`(3))
+        MatcherAssert.assertThat(resultElectionList.first().id, `is`(0))
     }
 }
