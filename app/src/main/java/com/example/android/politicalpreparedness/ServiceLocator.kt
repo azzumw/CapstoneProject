@@ -1,12 +1,10 @@
 package com.example.android.politicalpreparedness
 
 import android.content.Context
-import androidx.room.Room
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
-import com.example.android.politicalpreparedness.repository.DataSourceInterface
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import com.example.android.politicalpreparedness.repository.TheRepository
 

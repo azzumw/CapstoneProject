@@ -16,8 +16,9 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        buildConfigField 'String','MAPS_API_KEY',myApiKey
-        manifestPlaceholders = [ myMapApiKey:  myApiKey]
+        buildConfigField 'String', 'MAPS_API_KEY', myApiKey
+        manifestPlaceholders = [myMapApiKey: myApiKey]
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -35,6 +36,19 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+
+//    sourceSets {
+//        String sharedTestDir = 'src/sharedTest/java'
+//        test {
+//            java.srcDirs += sharedTestDir
+//            resources.srcDirs += 'src/sharedTest/resources'
+//        }
+//        androidTest {
+//            java.srcDirs += sharedTestDir
+//        }
+//    }
+
 
 }
 
@@ -58,7 +72,6 @@ dependencies {
     // Kotlin
 //    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$savedStateVersion"
 //    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha02'
-
 
 
     // Navigation
@@ -87,6 +100,15 @@ dependencies {
     //Room
     implementation "androidx.room:room-runtime:$version_room"
     testImplementation project(path: ':app')
+    testImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
     kapt "androidx.room:room-compiler:$version_room"
     implementation "androidx.room:room-ktx:$version_room"
 
@@ -128,8 +150,10 @@ dependencies {
     // FragmentScenario relies on is accessible by the test target process.
 //    debugImplementation('androidx.fragment:fragment-testing-manifest:1.6.0-alpha04')
 
-    //Contemporary Issue: https://issuetracker.google.com/issues/128612536#comment22
+
 //    debugImplementation "androidx.fragment:fragment-testing-manifest:1.6.0-alpha04"
-//    androidTestImplementation "androidx.fragment:fragment-testing:1.6.0-alpha04"
-    implementation "androidx.test:core:$androidXTestCoreVersion"
+    androidTestImplementation "androidx.fragment:fragment-testing:1.6.0-alpha04"
+    debugImplementation "androidx.test:core:$androidXTestCoreVersion"
+
+    debugImplementation "androidx.test:monitor:1.6.1"
 }
