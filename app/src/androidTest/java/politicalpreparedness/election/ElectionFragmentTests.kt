@@ -1,15 +1,10 @@
 package politicalpreparedness.election
 
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.politicalpreparedness.MainActivity
-import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.ServiceLocator
-import com.example.android.politicalpreparedness.election.ElectionsFragment
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import repository.FakeRepository
@@ -24,14 +19,12 @@ class ElectionFragmentTests {
     private lateinit var repository : RepositoryInterface
 
 
-
     @Before
     fun setUp() {
         //https://stackoverflow.com/questions/72218645/shared-srcdirs-between-test-and-androidtest-unresolved-references-after-upgrade?noredirect=1&lq=1
         repository = FakeRepository()
         ServiceLocator.repository = repository
     }
-
 
 
     @Test
