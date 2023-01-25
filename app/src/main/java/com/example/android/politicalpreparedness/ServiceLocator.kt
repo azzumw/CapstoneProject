@@ -1,7 +1,6 @@
 package com.example.android.politicalpreparedness
 
 import android.content.Context
-import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
@@ -14,7 +13,7 @@ object ServiceLocator {
     @Volatile
     var repository : RepositoryInterface? = null
 
-    private var database:ElectionDao? = null
+    private var database:ElectionDatabase? = null
 
     fun provideRepository(context: Context) : RepositoryInterface{
         synchronized(this){
@@ -30,11 +29,15 @@ object ServiceLocator {
     }
 
     private fun createLocalDataSource(context: Context):LocalDataSource{
-        val database = database ?: createDatabase(context).electionDao
-        return LocalDataSource(database)
+        val db = database ?: createDatabase(context)
+
+        return LocalDataSource(db.electionDao)
     }
 
     private fun createDatabase(context: Context):ElectionDatabase{
-        return ElectionDatabase.getInstance(context)
+        val result = ElectionDatabase.getInstance(context)
+        database = result
+        return result
+
     }
 }

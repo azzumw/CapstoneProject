@@ -4,7 +4,7 @@ import android.os.Parcelable
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
-
+//import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Office (
     val name: String,

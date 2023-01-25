@@ -8,7 +8,7 @@ import com.example.android.politicalpreparedness.repository.TheRepository
 import java.lang.IllegalArgumentException
 
 class ElectionsViewModelFactory(private val repository: RepositoryInterface): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(ElectionsViewModel::class.java)){
             return ElectionsViewModel(repository) as T
         }

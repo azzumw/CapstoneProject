@@ -6,7 +6,7 @@ import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import java.util.*
 
-class FakeRepository : RepositoryInterface {
+class FakeRepository(private val mElectionList : List<Election>) : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
     private val elections: LiveData<List<Election>> get() = _elections
@@ -16,6 +16,9 @@ class FakeRepository : RepositoryInterface {
     override suspend fun getElections() {
         _elections.value = callElectionsInfoApi().elections
     }
+
+    override suspend fun callElectionsInfoApi(): ElectionResponse = ElectionResponse("someKind", mElectionList)
+
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
         val election = MutableLiveData<Election>()
@@ -53,17 +56,7 @@ class FakeRepository : RepositoryInterface {
         return liveSavedElection
     }
 
-    override suspend fun callElectionsInfoApi(): ElectionResponse {
 
-        val localDate = Date(1220227200L * 1000)
-        val electionsList = List<Election>(3) {
-            Election(
-                it, "Election $it", localDate,
-                Division("$it-division", "USA", "California")
-            )
-        }
-        return ElectionResponse("someKind", electionsList)
-    }
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         TODO("Not yet implemented")

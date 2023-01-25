@@ -17,7 +17,7 @@ import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.representative.model.Representative
-import kotlinx.android.synthetic.*
+//import kotlinx.android.synthetic.*
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {

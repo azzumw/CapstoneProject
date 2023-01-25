@@ -1,5 +1,6 @@
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -22,6 +23,6 @@ class MainActivityTests {
     fun launchActivity() {
        launch(MainActivity::class.java)
 
-//        onView(withId(R.id.upComingElectionsButton)).check(matches(isDisplayed()))
-    }
-}
+//        onView(withId(R.id.upComingElectionsButton))
+//            .perform(click())
+    }}
