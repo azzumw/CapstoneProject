@@ -1,14 +1,15 @@
 package politicalpreparedness.election
 
 
-import android.util.Log
+import android.os.SystemClock
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.ServiceLocator
+import com.example.android.politicalpreparedness.election.ElectionsFragment
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import repository.FakeRepository
@@ -35,8 +36,10 @@ class ElectionFragmentTests {
 
 
     @Test
-    fun launchFragment() = runBlockingTest{
+    fun launchFragment() {
 
+        launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
+        SystemClock.sleep(2000)
 
     }
 }
