@@ -15,7 +15,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.hasItems
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
 import java.util.*
 
 
@@ -44,7 +47,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun repositoryGetElections_returnsTheCorrectSize() = runBlockingTest {
+    fun repositoryGetElections_returnsTheCorrectSize() = runTest {
         //WHEN - get elections is called
         repository.getElections()
 
@@ -55,7 +58,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun getElections_hasCorrectItemAtPositionOne() = runBlockingTest{
+    fun getElections_hasCorrectItemAtPositionOne() = runTest{
         //WHEN - get elections is called
         repository.getElections()
 
@@ -66,7 +69,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun getElections_hasCorrectElectionItems() = runBlockingTest{
+    fun getElections_hasCorrectElectionItems() = runTest{
         //GIVEN - some Election instances
         val date = 1220227200L * 1000
         val election1 = Election(0,"Election 0", Date(date), Division("0-division","USA","California"))
@@ -83,7 +86,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun getAnElection_returnsCorrectElection() = runBlockingTest{
+    fun getAnElection_returnsCorrectElection() = runTest{
 
         //GIVEN - list of elections is present
         repository.getElections()
@@ -93,7 +96,7 @@ class TheRepositoryTests {
 
         //THEN - correct election instance is returned with the correct name.
         election.getOrAwaitValue()
-        assertThat(election.value?.name, `is`("Election 0"))
+        MatcherAssert.assertThat(election.value?.name, `is`("Election 0"))
     }
 
     fun saveThisElection_returnsTheSavedElection(){

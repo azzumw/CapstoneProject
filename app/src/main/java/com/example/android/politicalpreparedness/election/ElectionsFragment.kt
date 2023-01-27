@@ -1,6 +1,5 @@
 package com.example.android.politicalpreparedness.election
 
-import android.app.Application
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -10,15 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.MyApplication
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.ServiceLocator
-import com.example.android.politicalpreparedness.database.ElectionDatabase
-import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
-import com.example.android.politicalpreparedness.network.data.RemoteDataSource
-import com.example.android.politicalpreparedness.repository.TheRepository
 import com.google.android.material.snackbar.Snackbar
 
+private const val ALL_ELECTIONS  = 1
+private const val SAVED_ELECTIONS  = 2
 class ElectionsFragment : Fragment() {
 
     private val electionsViewModel: ElectionsViewModel by viewModels {
@@ -45,6 +41,7 @@ class ElectionsFragment : Fragment() {
             ElectionListAdapter(ElectionListAdapter.ElectionListener {
                 electionsViewModel.displayElectionVoterInfo(it)
             })
+
 
         electionsViewModel.navToSingleElectionVoterInfo.observe(viewLifecycleOwner, Observer {
             if (it != null) {
@@ -87,11 +84,12 @@ class ElectionsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.all_elections -> {
-                electionsViewModel.selectFilter(1)
+
+                electionsViewModel.selectFilter(ALL_ELECTIONS)
             }
 
             R.id.saved_elections -> {
-                electionsViewModel.selectFilter(2)
+                electionsViewModel.selectFilter(SAVED_ELECTIONS)
             }
         }
         return super.onOptionsItemSelected(item)

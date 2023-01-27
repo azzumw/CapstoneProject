@@ -2,11 +2,12 @@ package repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android.politicalpreparedness.network.data.RemoteDataSource.callElectionsInfoApi
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import java.util.*
 
-class FakeRepository : RepositoryInterface {
+class FakeRepository(private val mElectionList: List<Election> = emptyList()) : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
     private val elections: LiveData<List<Election>> get() = _elections
@@ -53,17 +54,8 @@ class FakeRepository : RepositoryInterface {
         return liveSavedElection
     }
 
-    override suspend fun callElectionsInfoApi(): ElectionResponse {
+    override suspend fun callElectionsInfoApi(): ElectionResponse =  ElectionResponse("someKind", mElectionList )
 
-        val localDate = Date(1220227200L * 1000)
-        val electionsList = List<Election>(3) {
-            Election(
-                it, "Election $it", localDate,
-                Division("$it-division", "USA", "California")
-            )
-        }
-        return ElectionResponse("someKind", electionsList)
-    }
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         TODO("Not yet implemented")
@@ -79,4 +71,10 @@ class FakeRepository : RepositoryInterface {
 
     override fun getElectionsFromLocalDataBase(): LiveData<List<Election>> = elections
 
+    fun cleanRepository(){
+        if(elections.value!!.isNotEmpty()){
+            _elections.value = emptyList()
+        }
+
+    }
 }

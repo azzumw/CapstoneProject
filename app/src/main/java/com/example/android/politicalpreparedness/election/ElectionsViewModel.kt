@@ -37,9 +37,6 @@ class ElectionsViewModel(private val repository: RepositoryInterface) : ViewMode
         }
     }
 
-    fun selectFilter(selectedFilter: Int) {
-        filter.value = selectedFilter
-    }
 
     private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
@@ -51,9 +48,6 @@ class ElectionsViewModel(private val repository: RepositoryInterface) : ViewMode
     private val _statusMessage = MutableLiveData<String>()
     val statusMessage: LiveData<String> get() = _statusMessage
 
-    private val _showNoDataInDatabaseMessage = MutableLiveData<Boolean>(false)
-    val showNoDataInDatabaseMessage: LiveData<Boolean> get() = _showNoDataInDatabaseMessage
-
     private val _navToSingleElectionVoterInfo = MutableLiveData<Election?>()
     val navToSingleElectionVoterInfo: LiveData<Election?>
         get() = _navToSingleElectionVoterInfo
@@ -61,7 +55,11 @@ class ElectionsViewModel(private val repository: RepositoryInterface) : ViewMode
 
     init {
         getElectionsInfo()
-        selectFilter(1)
+        selectFilter()
+    }
+
+    fun selectFilter(selectedFilter: Int = 1) {
+        filter.value = selectedFilter
     }
 
 

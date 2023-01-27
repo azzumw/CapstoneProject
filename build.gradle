@@ -32,6 +32,7 @@ buildscript {
         archLifecycleVersion = '2.2.0'
         archTestingVersion = '2.1.0'
         fragmentVersion ='1.5.5'
+        version_mockito ="5.0.0"
     }
 
     repositories {

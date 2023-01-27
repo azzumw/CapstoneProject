@@ -45,6 +45,7 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+//        https://stackoverflow.com/questions/72218645/shared-srcdirs-between-test-and-androidtest-unresolved-references-after-upgrade?noredirect=1&lq=1
 
 //    sourceSets {
 //        String sharedTestDir = 'src/sharedTest/java'
@@ -149,12 +150,20 @@ dependencies {
 
     testImplementation("org.hamcrest:hamcrest-all:$hamcrestVersion")
 
+    //livedata
+    androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
 
     // Dependencies for Android instrumented unit tests
     androidTestImplementation "junit:junit:$junitVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
+    //Mockito
+    androidTestImplementation "org.mockito:mockito-core:$version_mockito"
+    androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.28.3'
 
     // Testing code should not be included in the main code.
     // Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
