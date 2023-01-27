@@ -23,8 +23,7 @@ import java.util.*
 * this means its a win for speed.
 * */
 
-private const val ALL_ELECTIONS = 1
-private const val SAVED_ELECTIONS = 2
+
 
 @ExperimentalCoroutinesApi
 class ElectionsViewModelTest {
@@ -49,20 +48,14 @@ class ElectionsViewModelTest {
     fun setUp() {
 
         //creating dummy elections lists
-        val localDate = Date(1220227200L * 1000)
-
-        val electionsList = List<Election>(3) {
-            Election(
-                it, "Election $it", localDate,
-                Division("$it-division", "USA", "California")
-            )
-        }
+        val electionsList = createSomeElections()
 
         //setting up the fake repository
         fakeRepository = FakeRepository(electionsList)
 
         electionsViewModel = ElectionsViewModel(fakeRepository)
     }
+
 
     @Test
     fun selectFilter_when_input_is_all_elections_saves_the_given_filter() {
@@ -128,5 +121,35 @@ class ElectionsViewModelTest {
         val resultElectionList = electionsViewModel.filteredElections.getOrAwaitValue()
         MatcherAssert.assertThat(resultElectionList.size, `is`(3))
         MatcherAssert.assertThat(resultElectionList.first().id, `is`(0))
+    }
+
+    @Test
+    fun selectFilter_no_option_provided_displays_all_elections() {
+
+        // WHEN - no filter option is provided
+        electionsViewModel.selectFilter()
+
+        // THEN - verify all elections are displayed by default
+        val resultElectionList = electionsViewModel.filteredElections.getOrAwaitValue()
+
+        MatcherAssert.assertThat(resultElectionList, `is`(not(emptyList())))
+        MatcherAssert.assertThat(resultElectionList.size, `is`(3))
+    }
+
+    companion object{
+        private const val ALL_ELECTIONS = 1
+        private const val SAVED_ELECTIONS = 2
+
+        private fun createSomeElections(): List<Election> {
+            val localDate = Date(1220227200L * 1000)
+
+            return List(3) {
+                Election(
+                    it, "Election $it", localDate,
+                    Division("$it-division", "USA", "California")
+                )
+            }
+
+        }
     }
 }
