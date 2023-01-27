@@ -7,7 +7,7 @@ import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import java.util.*
 
-class FakeRepository(private val mElectionList: List<Election> = emptyList()) : RepositoryInterface {
+class FakeRepository() : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
     private val elections: LiveData<List<Election>> get() = _elections
@@ -16,6 +16,10 @@ class FakeRepository(private val mElectionList: List<Election> = emptyList()) : 
 
     override suspend fun getElections() {
         _elections.value = callElectionsInfoApi().elections
+    }
+
+    fun addElections(electionsList : List<Election>){
+        _elections.value = electionsList
     }
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
@@ -54,7 +58,7 @@ class FakeRepository(private val mElectionList: List<Election> = emptyList()) : 
         return liveSavedElection
     }
 
-    override suspend fun callElectionsInfoApi(): ElectionResponse =  ElectionResponse("someKind", mElectionList )
+    override suspend fun callElectionsInfoApi(): ElectionResponse =  ElectionResponse("someKind", elections.value!! )
 
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
@@ -71,10 +75,8 @@ class FakeRepository(private val mElectionList: List<Election> = emptyList()) : 
 
     override fun getElectionsFromLocalDataBase(): LiveData<List<Election>> = elections
 
-    fun cleanRepository(){
-        if(elections.value!!.isNotEmpty()){
-            _elections.value = emptyList()
-        }
-
-    }
+//    fun cleanRepository(){
+//        _elections.value = null
+//
+//    }
 }

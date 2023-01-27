@@ -1,9 +1,7 @@
 package politicalpreparedness.election
 
-
+import android.app.Notification.Action
 import android.os.SystemClock
-import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.appcompat.view.menu.ActionMenuItem
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
@@ -13,25 +11,29 @@ import androidx.test.filters.MediumTest
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.ServiceLocator
 import com.example.android.politicalpreparedness.election.ElectionsFragment
-import com.example.android.politicalpreparedness.election.ElectionsViewModel
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import repository.FakeRepository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.android.politicalpreparedness.election.ElectionsFragmentDirections
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Ignore
+import org.mockito.Mockito.*
 import java.util.*
 
 /*
@@ -46,6 +48,15 @@ class ElectionFragmentTests {
 
     private lateinit var repository: RepositoryInterface
 
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    @Before
+    fun setUp() {
+        repository = FakeRepository()
+        ServiceLocator.repository = repository
+    }
+
     @After
     fun tearDown() {
         ServiceLocator.resetRepository()
@@ -54,8 +65,7 @@ class ElectionFragmentTests {
     @Test
     fun allElections_DisplayedInUi() {
         // GIVEN - some elections in the repository
-        repository = FakeRepository(createSomeElections())
-        ServiceLocator.repository = repository
+        (repository as FakeRepository).addElections(createSomeElections())
 
         // WHEN - Elections fragment launched to display elections
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
@@ -66,41 +76,76 @@ class ElectionFragmentTests {
         onView(withText("Election 2")).check(matches(isDisplayed()))
     }
 
-
     @Test
-    @Ignore
-    fun savedElections_DisplayedInUi() = runTest {
+    fun savedElection0_is_displayedInUi() = runTest {
 
-        repository = FakeRepository(createSomeElections())
-        ServiceLocator.repository = repository
-        // GIVEN - add saved election to the database
+        // GIVEN - some elections
+        (repository as FakeRepository).addElections(createSomeElections())
+
+        //save election with Election ID 0 to the database
         repository.saveThisElection(SavedElection(0))
 
-        // WHEN - Elections fragment launched to display elections
+        //mocking ActionMenu Item to return saved_elections item.id
+        val mockedMenuOption = mock(ActionMenuItem::class.java)
+        `when`(mockedMenuOption.itemId).thenReturn(R.id.saved_elections)
 
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val addMenuItem = ActionMenuItem(context, 0, R.id.saved_elections, 0, 0, "Saved Elections")
-        val f = launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
-
-        f.onFragment {
-
-            it.onOptionsItemSelected(addMenuItem)
-
+        // WHEN - Elections fragment launched to display elections with menu option 2 (savedElections)
+        launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme).onFragment {
+            it.onOptionsItemSelected(mockedMenuOption)
         }
+
+        // THEN - it only shows Saved Elections: Election 0
+        onView(withText("Election 0")).check(matches(isDisplayed()))
     }
 
     @Test
     fun emptyListOfElections_displaysNoDataMessage() {
 
         // GIVEN - an empty list of elections
-        repository = FakeRepository()
-        ServiceLocator.repository = repository
+        (repository as FakeRepository).addElections(emptyList())
 
         // WHEN - ElectionFragment launches to display elections
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
 
+        // THEN - No Data Shown error message is displayed
         onView(withId(R.id.no_data_in_db_msg)).check(matches(isDisplayed()))
         onView(withText(R.string.no_data_available_msg)).check(matches(isDisplayed()))
+
+    }
+
+    @Test
+    fun noElectionResponseFromApi_displays_noNetworkStatusImage_and_Message() {
+        // GIVEN - when there is no list assigned to the Election
+        // or there is no ElectionResponse
+
+        // WHEN - Elections fragment is launched
+        launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
+
+        // THEN - verify No Network Status Image (cloud) is displayed
+        onView(withId(R.id.statusImage)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun click_election_zero_navigate_to_corresponding_voterInfoFragment() {
+        // GIVEN - some elections in the repository
+        (repository as FakeRepository).addElections(createSomeElections())
+
+
+        val scenario = launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
+
+        val mockedNavController = mock(NavController::class.java)
+
+        scenario.onFragment {
+            Navigation.setViewNavController(it.view!!,mockedNavController)
+        }
+
+        // WHEN - we click on the first election
+        onView(withId(R.id.upComingElectionsRecyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(0,click())
+        )
+
+        // THEN - Verify that we navigate to the first election's VoterInfo screen
+        verify(mockedNavController).navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(0,Division("0-division","USA", "California")))
 
     }
 
