@@ -1,7 +1,5 @@
 package politicalpreparedness.election
 
-import android.app.Notification.Action
-import android.os.SystemClock
 import androidx.appcompat.view.menu.ActionMenuItem
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
@@ -32,7 +30,6 @@ import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.test.runTest
 import org.junit.After
-import org.junit.Ignore
 import org.mockito.Mockito.*
 import java.util.*
 
