@@ -1,5 +1,6 @@
 package politicalpreparedness.election
 
+import android.os.SystemClock
 import androidx.appcompat.view.menu.ActionMenuItem
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.example.android.politicalpreparedness.election.ElectionsFragmentDirections
@@ -59,26 +61,26 @@ class ElectionFragmentTests {
     }
 
     @Test
-    fun allElections_DisplayedInUi() {
+    fun allElections_displayedInUi() {
         // GIVEN - some elections in the repository
         (repository as FakeRepository).addElections(createSomeElections())
 
         // WHEN - Elections fragment launched to display elections
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
 
-        // THEN - All three elections are shown on the screen
+        // THEN - all three elections are shown on the screen
         onView(withText("Election 0")).check(matches(isDisplayed()))
         onView(withText("Election 1")).check(matches(isDisplayed()))
         onView(withText("Election 2")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun savedElection0_is_displayedInUi() = runTest {
+    fun savedElectionWithId_0_is_displayedInUi() = runTest {
 
         // GIVEN - some elections
         (repository as FakeRepository).addElections(createSomeElections())
 
-        //save election with Election ID 0 to the database
+        // save election with Election ID 0 to the database
         repository.saveThisElection(SavedElection(0))
 
         //mocking ActionMenu Item to return saved_elections item.id
@@ -90,8 +92,12 @@ class ElectionFragmentTests {
             it.onOptionsItemSelected(mockedMenuOption)
         }
 
+        SystemClock.sleep(1000)
+
         // THEN - it only shows Saved Elections: Election 0
         onView(withText("Election 0")).check(matches(isDisplayed()))
+        onView(withText("Election 1")).check(doesNotExist())
+        onView(withText("Election 2")).check(doesNotExist())
     }
 
     @Test
@@ -110,9 +116,9 @@ class ElectionFragmentTests {
     }
 
     @Test
-    fun noElectionResponseFromApi_displays_noNetworkStatusImage_and_Message() {
+    fun noElectionResponseFromApi_displays_noNetworkStatusImage() {
         // GIVEN - when there is no list assigned to the Election
-        // or there is no ElectionResponse
+        // or there is no ElectionResponse from the api
 
         // WHEN - Elections fragment is launched
         launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
@@ -122,15 +128,17 @@ class ElectionFragmentTests {
     }
 
     @Test
-    fun click_election_zero_navigate_to_corresponding_voterInfoFragment() {
+    fun click_election_zero_navigates_to_corresponding_voterInfoFragment() {
         // GIVEN - some elections in the repository
         (repository as FakeRepository).addElections(createSomeElections())
 
-
-        val scenario = launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
-
+        // Navigation is mocked
         val mockedNavController = mock(NavController::class.java)
 
+        // and Election fragment is launched
+        val scenario = launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
+
+        // nav controller is set
         scenario.onFragment {
             Navigation.setViewNavController(it.view!!,mockedNavController)
         }
@@ -141,7 +149,10 @@ class ElectionFragmentTests {
         )
 
         // THEN - Verify that we navigate to the first election's VoterInfo screen
-        verify(mockedNavController).navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(0,Division("0-division","USA", "California")))
+        verify(mockedNavController)
+            .navigate(
+                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(0,Division("0-division","USA", "California"))
+            )
 
     }
 

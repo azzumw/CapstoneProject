@@ -2,10 +2,8 @@ package repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android.politicalpreparedness.network.data.RemoteDataSource.callElectionsInfoApi
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
-import java.util.*
 
 class FakeRepository() : RepositoryInterface {
 
@@ -75,8 +73,4 @@ class FakeRepository() : RepositoryInterface {
 
     override fun getElectionsFromLocalDataBase(): LiveData<List<Election>> = elections
 
-//    fun cleanRepository(){
-//        _elections.value = null
-//
-//    }
 }
