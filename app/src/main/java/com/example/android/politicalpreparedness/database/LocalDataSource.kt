@@ -26,7 +26,7 @@ class LocalDataSource(val database:ElectionDao) : DataSourceInterface{
     }
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
-        return database.getAnElection(electionId).asLiveData()
+        return database.getAnElection(electionId)
     }
 
     override suspend fun saveThisElection(savedElection: SavedElection) {

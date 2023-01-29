@@ -21,7 +21,7 @@ interface ElectionDao {
 
     // Add select single election query
     @Query("select * from election_table where id = :id")
-    fun getAnElection(id: Int): Flow<Election>
+    fun getAnElection(id: Int): LiveData<Election>
 
 
     // Add clear query
