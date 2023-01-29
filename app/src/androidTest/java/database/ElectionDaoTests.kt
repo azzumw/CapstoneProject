@@ -79,7 +79,7 @@ class ElectionDaoTests {
     }
 
     @Test
-    fun clear() = runTest{
+    fun clearElectionsFromElectionsTable() = runTest{
         // GIVEN - some elections in the database
         val elections = createSomeElections()
         database.electionDao.insertAllElections(elections)
@@ -87,9 +87,8 @@ class ElectionDaoTests {
         // WHEN - database is cleared
         database.electionDao.clear()
 
-        // THEN - verify no election_table is empty
+        // THEN - verify election_table is empty
         val result = database.electionDao.getAllElections().getOrAwaitValue()
-
         MatcherAssert.assertThat(result, `is`(emptyList()))
     }
 
@@ -99,7 +98,7 @@ class ElectionDaoTests {
         val elections = createSomeElections()
         database.electionDao.insertAllElections(elections)
 
-        // WHEN - an election is saved
+        // WHEN - an election with ID 0 is saved
         val savedElection = SavedElection(elections[0].id)
         database.electionDao.saveElection(savedElection)
 
