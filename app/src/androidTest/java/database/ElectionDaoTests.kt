@@ -2,7 +2,6 @@ package database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,16 +9,15 @@ import androidx.test.filters.SmallTest
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import util.MainCoroutineRule
 import util.createSomeElections
 import util.getOrAwaitValue
 
@@ -30,6 +28,9 @@ class ElectionDaoTests {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var database : ElectionDatabase
 
@@ -129,7 +130,7 @@ class ElectionDaoTests {
         MatcherAssert.assertThat(r, `is`(nullValue()))
     }
 
-    @Test @Ignore("error - Cannot invoke database on the main thread")
+    @Test
     fun getSavedElections() = runTest {
         // GIVEN - some elections in the database
         val elections = createSomeElections()
@@ -140,19 +141,14 @@ class ElectionDaoTests {
         database.electionDao.saveElection(SavedElection(elections[2].id))
 
         // THEN - verify saved Elections list consist of elections 1 and 2
-        val result = runBlocking{
-            database.electionDao.getElectionAndSavedElection().asLiveData()
-        }
+        val result =
+            database.electionDao.getElectionAndSavedElection().asLiveData().getOrAwaitValue()
 
-
-//        val resultSavedElection = runBlocking { result.getOrAwaitValue() }
          val r = result.map {
-             it.map { element ->
-                 element.savedElection
-             }
+             it.election
          }
-        MatcherAssert.assertThat(r.getOrAwaitValue(), hasItems(elections[1],elections[2]))
-
+        MatcherAssert.assertThat(r, hasItems(elections[1],elections[2]))
+        MatcherAssert.assertThat(r.size, `is`(2))
 
     }
 }
