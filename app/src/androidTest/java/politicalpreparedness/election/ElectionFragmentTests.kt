@@ -32,6 +32,7 @@ import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.mockito.Mockito.*
+import util.createSomeElections
 import java.util.*
 
 /*
@@ -156,14 +157,5 @@ class ElectionFragmentTests {
 
     }
 
-    private fun createSomeElections(): List<Election> {
-        val localDate = Date(1220227200L * 1000)
 
-        return List(3) {
-            Election(
-                it, "Election $it", localDate,
-                Division("$it-division", "USA", "California")
-            )
-        }
-    }
 }

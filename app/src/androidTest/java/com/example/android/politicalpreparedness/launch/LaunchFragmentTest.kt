@@ -8,22 +8,12 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.MediumTest
 import com.example.android.politicalpreparedness.R
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
 @MediumTest
 class LaunchFragmentTest {
-
-    @Before
-    fun setUp() {
-    }
-
-    @After
-    fun tearDown() {
-    }
 
     @Test
     fun navigate_to_elections_fragment() {
