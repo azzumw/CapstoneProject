@@ -20,5 +20,6 @@ class MainActivityTests {
 
         onView(withId(R.id.upComingElectionsButton))
             .perform(click())
+
     }
 }

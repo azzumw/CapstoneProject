@@ -155,6 +155,9 @@ dependencies {
     // optional - Test helpers
     androidTestImplementation("androidx.room:room-testing:$version_room")
 
+    // Use to implement UIAutomator tests
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0-alpha02")
+
     debugImplementation("androidx.fragment:fragment-testing:1.3.0-alpha08")
     debugImplementation "androidx.test:core:$androidXTestCoreVersion"
 

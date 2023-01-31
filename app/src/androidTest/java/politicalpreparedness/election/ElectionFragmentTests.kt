@@ -1,5 +1,6 @@
 package politicalpreparedness.election
 
+import android.app.Instrumentation
 import android.os.SystemClock
 import androidx.appcompat.view.menu.ActionMenuItem
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -26,6 +27,11 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.BySelector
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import com.example.android.politicalpreparedness.election.ElectionsFragmentDirections
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
@@ -46,6 +52,7 @@ import java.util.*
 class ElectionFragmentTests {
 
     private lateinit var repository: RepositoryInterface
+    private lateinit var uiDevice: UiDevice
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -54,6 +61,8 @@ class ElectionFragmentTests {
     fun setUp() {
         repository = FakeRepository()
         ServiceLocator.repository = repository
+
+        uiDevice = UiDevice.getInstance(getInstrumentation())
     }
 
     @After
@@ -93,7 +102,8 @@ class ElectionFragmentTests {
             it.onOptionsItemSelected(mockedMenuOption)
         }
 
-        SystemClock.sleep(1000)
+        uiDevice.wait(Until.gone(By.text("Election 1")),1000)
+//        uiDevice.waitForIdle()
 
         // THEN - it only shows Saved Elections: Election 0
         onView(withText("Election 0")).check(matches(isDisplayed()))

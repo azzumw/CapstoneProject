@@ -2,7 +2,6 @@ package com.example.android.politicalpreparedness.repository
 
 import data.FakeDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
 import org.junit.Before
@@ -16,9 +15,8 @@ import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.hasItems
 import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import util.MainCoroutineRule
 import java.util.*
 
 
