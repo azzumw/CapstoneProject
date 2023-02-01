@@ -22,7 +22,10 @@
     <string name="hint_add_line_1">Address Line 1</string>
     <string name="hint_add_line_2">Address Line 2</string>
     <string name="hint_city">City</string>
-    <string name="hint_zip">Zip Code</string>>
+    <string name="hint_zip">Zip Code</string>
+    <string name="test_data_election_0">Election 0</string>
+    <string name="test_data_election_1">Election 1</string>
+    <string name="test_data_election_2">Election 2</string>>
 
 
 </resources>

@@ -17,7 +17,7 @@ interface DataSourceInterface {
 
     suspend fun removeThisElection(savedElection: SavedElection)
 
-    fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection>
+    fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection>
 
     suspend fun clear()
 

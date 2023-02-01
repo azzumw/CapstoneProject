@@ -1,7 +1,6 @@
 package politicalpreparedness.election
 
-import android.app.Instrumentation
-import android.os.SystemClock
+import android.content.Context
 import androidx.appcompat.view.menu.ActionMenuItem
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
@@ -29,16 +28,17 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.example.android.politicalpreparedness.election.ElectionsFragmentDirections
 import com.example.android.politicalpreparedness.network.models.Division
-import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.mockito.Mockito.*
-import util.createSomeElections
+import util.TXT_ELECTION_0
+import util.TXT_ELECTION_1
+import util.TXT_ELECTION_2
+import util.createThreeElectionInstances
 import java.util.*
 
 /*
@@ -53,6 +53,7 @@ class ElectionFragmentTests {
 
     private lateinit var repository: RepositoryInterface
     private lateinit var uiDevice: UiDevice
+    private lateinit var context: Context
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -61,6 +62,8 @@ class ElectionFragmentTests {
     fun setUp() {
         repository = FakeRepository()
         ServiceLocator.repository = repository
+
+        context = getInstrumentation().context
 
         uiDevice = UiDevice.getInstance(getInstrumentation())
     }
@@ -73,22 +76,22 @@ class ElectionFragmentTests {
     @Test
     fun allElections_displayedInUi() {
         // GIVEN - some elections in the repository
-        (repository as FakeRepository).addElections(createSomeElections())
+        (repository as FakeRepository).addElections(createThreeElectionInstances())
 
         // WHEN - Elections fragment launched to display elections
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
 
         // THEN - all three elections are shown on the screen
-        onView(withText("Election 0")).check(matches(isDisplayed()))
-        onView(withText("Election 1")).check(matches(isDisplayed()))
-        onView(withText("Election 2")).check(matches(isDisplayed()))
+        onView(withText(TXT_ELECTION_0)).check(matches(isDisplayed()))
+        onView(withText(TXT_ELECTION_1)).check(matches(isDisplayed()))
+        onView(withText(TXT_ELECTION_2)).check(matches(isDisplayed()))
     }
 
     @Test
     fun savedElectionWithId_0_is_displayedInUi() = runTest {
 
         // GIVEN - some elections
-        (repository as FakeRepository).addElections(createSomeElections())
+        (repository as FakeRepository).addElections(createThreeElectionInstances())
 
         // save election with Election ID 0 to the database
         repository.saveThisElection(SavedElection(0))
@@ -102,13 +105,13 @@ class ElectionFragmentTests {
             it.onOptionsItemSelected(mockedMenuOption)
         }
 
-        uiDevice.wait(Until.gone(By.text("Election 1")),1000)
+        uiDevice.wait(Until.gone(By.text(TXT_ELECTION_1)),1000)
 //        uiDevice.waitForIdle()
 
         // THEN - it only shows Saved Elections: Election 0
-        onView(withText("Election 0")).check(matches(isDisplayed()))
-        onView(withText("Election 1")).check(doesNotExist())
-        onView(withText("Election 2")).check(doesNotExist())
+        onView(withText(TXT_ELECTION_0)).check(matches(isDisplayed()))
+        onView(withText(TXT_ELECTION_1)).check(doesNotExist())
+        onView(withText(TXT_ELECTION_2)).check(doesNotExist())
     }
 
     @Test
@@ -141,7 +144,7 @@ class ElectionFragmentTests {
     @Test
     fun click_election_zero_navigates_to_corresponding_voterInfoFragment() {
         // GIVEN - some elections in the repository
-        (repository as FakeRepository).addElections(createSomeElections())
+        (repository as FakeRepository).addElections(createThreeElectionInstances())
 
         // Navigation is mocked
         val mockedNavController = mock(NavController::class.java)
@@ -164,7 +167,6 @@ class ElectionFragmentTests {
             .navigate(
                 ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(0,Division("0-division","USA", "California"))
             )
-
     }
 
 

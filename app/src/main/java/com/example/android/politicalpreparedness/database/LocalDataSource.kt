@@ -41,8 +41,8 @@ class LocalDataSource(val database:ElectionDao) : DataSourceInterface{
         }
     }
 
-    override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
-        return database.getElectionIdFromSavedElection(electionId)
+    override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
+        return database.getSavedElectionByElectionID(electionId)
     }
 
     override suspend fun clear() {

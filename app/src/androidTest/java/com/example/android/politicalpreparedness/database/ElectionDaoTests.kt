@@ -1,4 +1,4 @@
-package database
+package com.example.android.politicalpreparedness.database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -18,7 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import util.MainCoroutineRule
-import util.createSomeElections
+import util.createThreeElectionInstances
 import util.getOrAwaitValue
 
 @ExperimentalCoroutinesApi
@@ -50,7 +49,7 @@ class ElectionDaoTests {
     @Test
     fun getAllElections() = runTest{
         // GIVEN - some elections in the database
-        val elections = createSomeElections()
+        val elections = createThreeElectionInstances()
 
         database.electionDao.insertAllElections(elections)
 
@@ -66,7 +65,7 @@ class ElectionDaoTests {
     @Test
     fun getAnElection() = runTest {
         // GIVEN - some elections in the database
-        val elections = createSomeElections()
+        val elections = createThreeElectionInstances()
         database.electionDao.insertAllElections(elections)
 
         // WHEN - getAnElection is called
@@ -82,7 +81,7 @@ class ElectionDaoTests {
     @Test
     fun clearElectionsFromElectionsTable() = runTest{
         // GIVEN - some elections in the database
-        val elections = createSomeElections()
+        val elections = createThreeElectionInstances()
         database.electionDao.insertAllElections(elections)
 
         // WHEN - database is cleared
@@ -96,7 +95,7 @@ class ElectionDaoTests {
     @Test
     fun saveAnElection() = runTest {
         // GIVEN - some elections in the database
-        val elections = createSomeElections()
+        val elections = createThreeElectionInstances()
         database.electionDao.insertAllElections(elections)
 
         // WHEN - an election with ID 0 is saved
@@ -104,14 +103,14 @@ class ElectionDaoTests {
         database.electionDao.saveElection(savedElection)
 
         // THEN - verify that the saved election is saved in the database
-        val result = database.electionDao.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        val result = database.electionDao.getSavedElectionByElectionID(savedElection.savedElectionId).getOrAwaitValue()
         MatcherAssert.assertThat(result.savedElectionId, `is`(0))
     }
 
     @Test
     fun deleteSavedElection() = runTest{
         // GIVEN - some elections
-        val elections = createSomeElections()
+        val elections = createThreeElectionInstances()
         database.electionDao.insertAllElections(elections)
 
        // save the election 1
@@ -119,21 +118,21 @@ class ElectionDaoTests {
         database.electionDao.saveElection(savedElection)
 
         //  - verify it is in the database
-        val savedElectionResult = database.electionDao.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        val savedElectionResult = database.electionDao.getSavedElectionByElectionID(savedElection.savedElectionId).getOrAwaitValue()
         MatcherAssert.assertThat(savedElectionResult, `is`(savedElection))
 
         // WHEN - delete election is called
         database.electionDao.deleteElection(savedElection)
 
         // TH£N - verify saved election is not present in the database
-        val r = database.electionDao.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        val r = database.electionDao.getSavedElectionByElectionID(savedElection.savedElectionId).getOrAwaitValue()
         MatcherAssert.assertThat(r, `is`(nullValue()))
     }
 
     @Test
     fun getSavedElections() = runTest {
         // GIVEN - some elections in the database
-        val elections = createSomeElections()
+        val elections = createThreeElectionInstances()
         database.electionDao.insertAllElections(elections)
 
         // WHEN - election 1 and 2 are saved

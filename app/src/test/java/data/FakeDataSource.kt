@@ -52,7 +52,7 @@ class FakeDataSource():DataSourceInterface {
         TODO("Not yet implemented")
     }
 
-    override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
+    override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
         TODO("Not yet implemented")
     }
 

@@ -1,11 +1,6 @@
 package com.example.android.politicalpreparedness.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import com.example.android.politicalpreparedness.database.ElectionDao
-import com.example.android.politicalpreparedness.database.LocalDataSource
-import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.network.models.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
@@ -44,7 +39,7 @@ class TheRepository(
     }
 
     override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
-        return localDataSource.getElectionIdFromSavedElection(electionId)
+        return localDataSource.getSavedElectionByElectionID(electionId)
     }
 
     //network call for elections
