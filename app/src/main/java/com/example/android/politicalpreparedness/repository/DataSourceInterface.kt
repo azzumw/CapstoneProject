@@ -19,8 +19,6 @@ interface DataSourceInterface {
 
     fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection>
 
-    suspend fun clear()
-
     //network call for voters
     suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse
 

@@ -45,13 +45,7 @@ class LocalDataSource(val database:ElectionDao) : DataSourceInterface{
         return database.getSavedElectionByElectionID(electionId)
     }
 
-    override suspend fun clear() {
-        withContext(Dispatchers.IO) {
-            database.clear()
-        }
-    }
-
-    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         TODO("Not yet implemented")
     }
 
