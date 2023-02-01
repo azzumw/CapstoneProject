@@ -68,7 +68,7 @@ class LocalDataSourceTest {
     }
 
     @Test
-    fun getSavedElections() = runTest {
+    fun getSavedElections_retrievesAllSavedElections() = runTest {
         // GIVEN -  some elections
         val elections = createThreeElectionInstances()
         localDataSource.insertElections(elections)
@@ -96,7 +96,7 @@ class LocalDataSourceTest {
     }
 
     @Test
-    fun getElections() = runTest {
+    fun getElections_retrievesAllElections() = runTest {
         // GIVEN - some elections
         val elections = createThreeElectionInstances()
 
@@ -111,7 +111,7 @@ class LocalDataSourceTest {
     }
 
     @Test
-    fun getAnElection() = runTest {
+    fun getAnElection_retrievesTheGivenElection() = runTest {
         // GIVEN - some elections
         val elections = createThreeElectionInstances()
         localDataSource.insertElections(elections)
@@ -125,7 +125,7 @@ class LocalDataSourceTest {
     }
 
     @Test
-    fun saveThisElection() = runTest {
+    fun saveThisElection_savesTheGivenElection() = runTest {
         // GIVEN - an election
         val election = createThreeElectionInstances()[0]
 
@@ -193,7 +193,7 @@ class LocalDataSourceTest {
     }
 
     @Test
-    fun getSavedElectionByElectionID() = runTest {
+    fun getSavedElectionByElectionID_retrievesTheGivenSavedElection() = runTest {
         // GIVEN - an election in the database
         val election = createThreeElectionInstances()
         localDataSource.insertElections(election)
