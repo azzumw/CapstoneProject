@@ -1,4 +1,4 @@
-package politicalpreparedness.election
+package com.example.android.politicalpreparedness.election
 
 import android.content.Context
 import androidx.appcompat.view.menu.ActionMenuItem
@@ -9,7 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.ServiceLocator
-import com.example.android.politicalpreparedness.election.ElectionsFragment
 import com.example.android.politicalpreparedness.network.models.SavedElection
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +16,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import repository.FakeRepository
+import com.example.android.politicalpreparedness.repository.FakeRepository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -30,15 +29,14 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
-import com.example.android.politicalpreparedness.election.ElectionsFragmentDirections
 import com.example.android.politicalpreparedness.network.models.Division
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.mockito.Mockito.*
-import util.TXT_ELECTION_0
-import util.TXT_ELECTION_1
-import util.TXT_ELECTION_2
-import util.createThreeElectionInstances
+import com.example.android.politicalpreparedness.util.TXT_ELECTION_0
+import com.example.android.politicalpreparedness.util.TXT_ELECTION_1
+import com.example.android.politicalpreparedness.util.TXT_ELECTION_2
+import com.example.android.politicalpreparedness.util.createThreeElectionInstances
 import java.util.*
 
 /*

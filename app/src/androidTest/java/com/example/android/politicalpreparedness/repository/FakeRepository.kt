@@ -1,10 +1,8 @@
-package repository
+package com.example.android.politicalpreparedness.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
-import com.example.android.politicalpreparedness.repository.RepositoryInterface
-
 class FakeRepository() : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()

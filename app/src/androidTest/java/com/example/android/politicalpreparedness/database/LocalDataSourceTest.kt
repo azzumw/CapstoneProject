@@ -17,8 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import util.createThreeElectionInstances
-import util.getOrAwaitValue
+import com.example.android.politicalpreparedness.util.createThreeElectionInstances
+import com.example.android.politicalpreparedness.util.getOrAwaitValue
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)

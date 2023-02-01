@@ -1,4 +1,4 @@
-package util
+package com.example.android.politicalpreparedness.util
 
 import android.content.Context
 import com.example.android.politicalpreparedness.R

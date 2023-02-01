@@ -1,4 +1,4 @@
-package util
+package com.example.android.politicalpreparedness.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

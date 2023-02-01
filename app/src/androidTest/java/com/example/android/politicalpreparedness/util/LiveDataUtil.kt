@@ -1,4 +1,4 @@
-package util
+package com.example.android.politicalpreparedness.util
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
