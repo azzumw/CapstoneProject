@@ -85,7 +85,7 @@ class ElectionDaoTests {
         database.electionDao.insertAllElections(elections)
 
         // WHEN - database is cleared
-        database.electionDao.clear()
+        database.electionDao.clearAllElectionsFromElectionsTable()
 
         // THEN - verify election_table is empty
         val result = database.electionDao.getAllElections().getOrAwaitValue()

@@ -30,7 +30,7 @@ class ElectionsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_election, container, false)
 
@@ -67,7 +67,7 @@ class ElectionsFragment : Fragment() {
 
         electionsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
-                Snackbar.make(binding.root, "You are offline.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.offline_msg), Snackbar.LENGTH_SHORT).show()
                 electionsViewModel.doneShowingSnackBar()
             }
         })

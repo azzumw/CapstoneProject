@@ -11,11 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.MyApplication
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.database.ElectionDatabase
-import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
-import com.example.android.politicalpreparedness.network.data.RemoteDataSource
-import com.example.android.politicalpreparedness.repository.TheRepository
 import com.google.android.material.snackbar.Snackbar
 
 class VoterInfoFragment : Fragment() {
@@ -34,7 +30,7 @@ class VoterInfoFragment : Fragment() {
         Hint: You will need to ensure proper data is provided from previous fragment.
          */
 
-        val arguments = VoterInfoFragmentArgs.fromBundle(arguments!!)
+        val arguments = VoterInfoFragmentArgs.fromBundle(requireArguments())
 
         val repository = (requireActivity().application as MyApplication).repository
         val viewModelFactory =

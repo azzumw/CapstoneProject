@@ -57,6 +57,7 @@ android {
 //            java.srcDirs += sharedTestDir
 //        }
 //    }
+    //https://blog.danlew.net/2022/08/16/sharing-code-between-test-modules/
 
 
 }
@@ -122,22 +123,19 @@ dependencies {
     // To use Kotlin Symbol Processing (KSP)
 //    ksp("androidx.room:room-compiler:$version_room")
 
+
 //    testImplementation project(path: ':app')
-//    testImplementation project(path: ':app')
 //    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
+
+    implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
+    implementation("androidx.test.espresso.idling:idling-concurrent:3.5.1")
 
     //dependencies for Android Instrumentation tests
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+
 
     //livedata
     androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"

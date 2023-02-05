@@ -78,7 +78,6 @@ class ElectionFragmentTests {
 
         // WHEN - Elections fragment launched to display elections
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
-
         // THEN - all three elections are shown on the screen
         onView(withText(TXT_ELECTION_0)).check(matches(isDisplayed()))
         onView(withText(TXT_ELECTION_1)).check(matches(isDisplayed()))
@@ -86,12 +85,12 @@ class ElectionFragmentTests {
     }
 
     @Test
-    fun savedElectionWithId_0_is_displayedInUi() = runTest {
+    fun savedElectionWithIdZero_displayedInUi() = runTest {
 
         // GIVEN - some elections
         (repository as FakeRepository).addElections(createThreeElectionInstances())
 
-        // save election with Election ID 0 to the database
+        // save election with Election ID 0 in the database
         repository.saveThisElection(SavedElection(0))
 
         //mocking ActionMenu Item to return saved_elections item.id
@@ -101,9 +100,10 @@ class ElectionFragmentTests {
         // WHEN - Elections fragment launched to display elections with menu option 2 (savedElections)
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme).onFragment {
             it.onOptionsItemSelected(mockedMenuOption)
+
         }
 
-        uiDevice.wait(Until.gone(By.text(TXT_ELECTION_1)),1000)
+        uiDevice.wait(Until.gone(By.text(TXT_ELECTION_1)), 1000)
 //        uiDevice.waitForIdle()
 
         // THEN - it only shows Saved Elections: Election 0
@@ -113,7 +113,7 @@ class ElectionFragmentTests {
     }
 
     @Test
-    fun emptyListOfElections_displaysNoDataMessage() {
+    fun emptyListOfElections_displays_NoDataMessage() {
 
         // GIVEN - an empty list of elections
         (repository as FakeRepository).addElections(emptyList())
@@ -131,12 +131,15 @@ class ElectionFragmentTests {
     fun noElectionResponseFromApi_displays_noNetworkStatusImage() {
         // GIVEN - when there is no list assigned to the Election
         // or there is no ElectionResponse from the api
+        val offlineMessage = getInstrumentation().targetContext.getString(R.string.offline_msg)
 
         // WHEN - Elections fragment is launched
-        launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
+        launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
 
         // THEN - verify No Network Status Image (cloud) is displayed
         onView(withId(R.id.statusImage)).check(matches(isDisplayed()))
+
+        uiDevice.wait(Until.gone(By.text(offlineMessage)),200)
     }
 
     @Test
@@ -148,22 +151,25 @@ class ElectionFragmentTests {
         val mockedNavController = mock(NavController::class.java)
 
         // and Election fragment is launched
-        val scenario = launchFragmentInContainer<ElectionsFragment>(null,R.style.AppTheme)
+        val scenario = launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
 
         // nav controller is set
         scenario.onFragment {
-            Navigation.setViewNavController(it.view!!,mockedNavController)
+            Navigation.setViewNavController(it.view!!, mockedNavController)
         }
 
         // WHEN - we click on the first election
         onView(withId(R.id.upComingElectionsRecyclerView)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(0,click())
+            RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(0, click())
         )
 
         // THEN - Verify that we navigate to the first election's VoterInfo screen
         verify(mockedNavController)
             .navigate(
-                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(0,Division("0-division","USA", "California"))
+                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                    0,
+                    Division("0-division", "USA", "California")
+                )
             )
     }
 

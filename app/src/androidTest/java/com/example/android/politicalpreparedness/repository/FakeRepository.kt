@@ -58,7 +58,8 @@ class FakeRepository() : RepositoryInterface {
 
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-        TODO("Not yet implemented")
+        val election = getAnElection(electionId.toInt()).value
+        return VoterInfoResponse(election!!)
     }
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {

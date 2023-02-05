@@ -2,6 +2,7 @@ package com.example.android.politicalpreparedness.repository
 
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.network.models.*
+import com.example.android.politicalpreparedness.wrapEspressoIdlingResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
@@ -12,54 +13,65 @@ class TheRepository(
     private val ioDispatcher: CoroutineDispatcher = IO
 ) : RepositoryInterface {
 
-//    val elections: LiveData<List<Election>> = localDataSource.getElections()
-//    val savedElections: LiveData<List<ElectionAndSavedElection>> =
-//        localDataSource.getSavedElections()
-
     override suspend fun getElections() {
-        withContext(ioDispatcher) {
-            val electionsFromApi = callElectionsInfoApi().elections
-            localDataSource.insertElections(electionsFromApi)
+        wrapEspressoIdlingResource {
+            withContext(ioDispatcher) {
+                val electionsFromApi = callElectionsInfoApi().elections
+                localDataSource.insertElections(electionsFromApi)
+            }
         }
     }
 
 
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
-
-        return localDataSource.getAnElection(electionId)
+        wrapEspressoIdlingResource {
+            return localDataSource.getAnElection(electionId)
+        }
     }
 
     override suspend fun saveThisElection(savedElection: SavedElection) {
-        localDataSource.saveThisElection(savedElection)
+        wrapEspressoIdlingResource {
+            localDataSource.saveThisElection(savedElection)
+        }
     }
 
     override suspend fun removeThisElection(savedElection: SavedElection) {
-        localDataSource.removeThisElection(savedElection)
+        wrapEspressoIdlingResource {
+            localDataSource.removeThisElection(savedElection)
+        }
     }
 
     override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
-        return localDataSource.getSavedElectionByElectionID(electionId)
+        wrapEspressoIdlingResource {
+            return localDataSource.getSavedElectionByElectionID(electionId)
+        }
     }
 
     //network call for elections
     override suspend fun callElectionsInfoApi(): ElectionResponse {
-        return remoteDataSource.callElectionsInfoApi()
+        wrapEspressoIdlingResource {
+            return remoteDataSource.callElectionsInfoApi()
+        }
     }
 
     //network call for voters
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-        return remoteDataSource.callVoterInfoApi(address, electionId)
+        wrapEspressoIdlingResource {
+            return remoteDataSource.callVoterInfoApi(address, electionId)
+        }
     }
 
     //network call for representatives
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
-        return remoteDataSource.callRepresentativeInfoApi(address)
+        wrapEspressoIdlingResource {
+            return remoteDataSource.callRepresentativeInfoApi(address)
+        }
     }
 
-    override fun getSavedElectionsFromLocalDataSource() = localDataSource.getSavedElections()
+    override fun getSavedElectionsFromLocalDataSource() = wrapEspressoIdlingResource { localDataSource.getSavedElections() }
 
-    override fun getElectionsFromLocalDataBase() = localDataSource.getElections()
+    override fun getElectionsFromLocalDataBase() = wrapEspressoIdlingResource { localDataSource.getElections() }
 
 
 }
