@@ -17,9 +17,17 @@ class TheRepository(
         wrapEspressoIdlingResource {
             withContext(ioDispatcher) {
                 val electionsFromApi = callElectionsInfoApi().elections
-                localDataSource.insertElections(electionsFromApi)
+                insertElections(electionsFromApi)
             }
         }
+    }
+
+    suspend fun insertElections(list:List<Election>){
+       wrapEspressoIdlingResource {
+           withContext(ioDispatcher){
+               localDataSource.insertElections(list)
+           }
+       }
     }
 
 
@@ -72,6 +80,17 @@ class TheRepository(
     override fun getSavedElectionsFromLocalDataSource() = wrapEspressoIdlingResource { localDataSource.getSavedElections() }
 
     override fun getElectionsFromLocalDataBase() = wrapEspressoIdlingResource { localDataSource.getElections() }
+    override suspend fun deleteAllElections() {
+        withContext(ioDispatcher){
+            localDataSource.deleteAllElections()
+        }
+    }
+
+    override suspend fun deleteAllSavedElections() {
+        withContext(ioDispatcher){
+            localDataSource.deleteAllSavedElections()
+        }
+    }
 
 
 }

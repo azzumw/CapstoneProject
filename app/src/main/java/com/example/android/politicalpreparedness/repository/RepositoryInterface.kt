@@ -26,4 +26,7 @@ interface RepositoryInterface {
     fun getSavedElectionsFromLocalDataSource():LiveData<List<ElectionAndSavedElection>>
 
     fun getElectionsFromLocalDataBase():LiveData<List<Election>>
+    suspend fun deleteAllElections()
+
+    suspend fun deleteAllSavedElections()
 }

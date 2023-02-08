@@ -56,4 +56,17 @@ class LocalDataSource(val database:ElectionDao) : DataSourceInterface{
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
         TODO("Not yet implemented")
     }
+
+    override suspend fun deleteAllElections() {
+        withContext(Dispatchers.IO){
+            database.clearAllElectionsFromElectionsTable()
+        }
+
+    }
+
+    override suspend fun deleteAllSavedElections() {
+        withContext(Dispatchers.IO){
+            database.clearAllElectionsFromSavedElectionsTable()
+        }
+    }
 }

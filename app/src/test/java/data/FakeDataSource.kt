@@ -56,10 +56,6 @@ class FakeDataSource():DataSourceInterface {
         TODO("Not yet implemented")
     }
 
-    override suspend fun clear() {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
         TODO("Not yet implemented")
     }
@@ -76,6 +72,14 @@ class FakeDataSource():DataSourceInterface {
     }
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAllElections() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAllSavedElections() {
         TODO("Not yet implemented")
     }
 }

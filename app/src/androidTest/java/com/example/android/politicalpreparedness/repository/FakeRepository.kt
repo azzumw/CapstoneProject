@@ -71,5 +71,12 @@ class FakeRepository() : RepositoryInterface {
 
 
     override fun getElectionsFromLocalDataBase(): LiveData<List<Election>> = elections
+    override suspend fun deleteAllElections() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAllSavedElections() {
+        TODO("Not yet implemented")
+    }
 
 }

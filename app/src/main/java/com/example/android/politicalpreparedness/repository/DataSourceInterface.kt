@@ -27,4 +27,6 @@ interface DataSourceInterface {
 
     //network call for representatives
     suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse
+    suspend fun deleteAllElections()
+    suspend fun deleteAllSavedElections()
 }

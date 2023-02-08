@@ -17,6 +17,7 @@ object ServiceLocator {
     var repository: RepositoryInterface? = null
         @VisibleForTesting set
 
+    @Volatile
     private var database: ElectionDatabase? = null
 
     fun provideRepository(context: Context): RepositoryInterface {
@@ -49,17 +50,12 @@ object ServiceLocator {
     fun resetRepository() {
 
         synchronized(lock) {
-//            runBlocking {
-//                LocalDataSource().clear()
-//
-//            }
             // Clear all data to avoid test pollution.
             database?.apply {
                 clearAllTables()
-                close()
+//                close()
             }
             database = null
-
             repository = null
         }
     }

@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
@@ -16,10 +17,12 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.uiautomator.UiDevice
-import com.example.android.politicalpreparedness.repository.FakeRepository
+import androidx.test.uiautomator.*
+import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import com.example.android.politicalpreparedness.util.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -56,6 +59,8 @@ class MainActivityTests {
 
         //representative components
         private  val representativeTitle :ViewInteraction = onView(withText("Representative Search"))
+        private val useMyLocationButton: ViewInteraction = onView(withId(R.id.button_location))
+        private val representativesRecyclerView : ViewInteraction = onView(withId(R.id.representative_recycler))
 
         //functions
         private fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
@@ -78,10 +83,12 @@ class MainActivityTests {
     }
 
 
-    private lateinit var repository: FakeRepository
+    private lateinit var repository: RepositoryInterface
 
     // An idling resource that waits for Data Binding to have no pending bindings.
     private val dataBindingIdlingResource = DataBindingIdlingResource()
+
+    private val context = ApplicationProvider.getApplicationContext<Context>()
 
     /**
      * Idling resources tell Espresso that the app is idle or busy. This is needed when operations
@@ -89,6 +96,7 @@ class MainActivityTests {
      */
     @Before
     fun registerIdlingResource() {
+
         IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }
@@ -105,10 +113,13 @@ class MainActivityTests {
 
     @Before
     fun setUp() {
+        repository = ServiceLocator.provideRepository(ApplicationProvider.getApplicationContext())
 
-        ServiceLocator.provideRepository(ApplicationProvider.getApplicationContext())
-//        repository = FakeRepository()
-//        ServiceLocator.repository = repository
+        runBlocking {
+            repository.deleteAllElections()
+            repository.deleteAllSavedElections()
+
+        }
     }
 
     @After
@@ -122,7 +133,6 @@ class MainActivityTests {
         dataBindingIdlingResource.monitorActivity(scenario)
 
         onView(withId(R.id.upComingElectionsButton)).perform(click())
-
 
         electionsRecyclerView.isDisplayed()
 
@@ -142,13 +152,16 @@ class MainActivityTests {
     }
 
     @Test
-    fun saveAnElection_displaysInSavedElections() {
+    fun followAnElection() {
 
+        // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
+        //navigate to the Elections screen
         upComingElectionsButton.click()
 
+        // navigate to Item(election) at index 0 Details screen
         electionsRecyclerView
             .perform(
                 RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
@@ -159,22 +172,100 @@ class MainActivityTests {
 
         uiDevice.waitForWindowUpdate(voterInfoFragmentPackage, ONE_SEC)
 
+        // verify - we are on the correct election instance screen
         onView(withText("VIP Test Election")).isDisplayed()
 
+        // verify - follow button is displayed, and click it
         followOrUnFollowButton.isDisplayed()
         followOrUnFollowButton.click()
 
+        //return to elections screen
         pressBack()
-
         electionsRecyclerView.isDisplayed()
 
+        // open/show Saved Elections
         uiDevice.pressMenu()
-
         savedElectionsMenuItem.click()
 
+        // THEN - verify the election is saved/followed
         onView(withText("VIP Test Election")).isDisplayed()
 
         scenario.close()
+
+    }
+
+    @Test
+    fun unfollowAnElection() = runTest {
+
+//        val election = createThreeElectionInstances()[0]
+//        (repository as TheRepository).insertElections(listOf(election))
+
+        //follow/save this election
+//        repository.saveThisElection(SavedElection(election.id))
+
+        //GIVEN -  activity is launched, and...
+        val scenario = launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+
+        upComingElectionsButton.click()
+
+        //an election is followed
+        onView(withText("VIP Test Election")).click()
+        onView(withText(context.getString(R.string.follow_btn_txt))).click()
+
+        pressBack()
+        uiDevice.pressMenu()
+        savedElectionsMenuItem.click()
+
+        //WHEN - this election is unfollowed
+        onView(withText("VIP Test Election")).click()
+        onView(withText(context.getString(R.string.unfollow_btn_txt))).click()
+        pressBack()
+
+        // THEN - no election appears in the saved list
+        onView(withText(context.getString(R.string.no_data_available_msg))).isDisplayed()
+
+        scenario.close()
+    }
+
+    @Test
+    fun representativeScreen_useMyLocation() {
+        // GIVEN - activity is launched
+        val scenario = launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+
+        // navigate to representative screen
+        representativeButton.click()
+
+        // WHEN - useMyLocation button is clicked
+        useMyLocationButton.click()
+
+        // wait for data to appear
+        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))),1000)
+
+        // THEN - verify 'President of the United States' appears
+        onView(withText("President of the United States")).isDisplayed()
+    }
+
+    @Test
+    fun representativeScreen_useMyLocation_dragListUp() {
+        val scenario = launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+
+        representativeButton.click()
+
+        // WHEN - useMyLocation button is clicked
+        useMyLocationButton.click()
+
+        // wait for data to appear
+        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))),1000)
+
+        //verify 'President of the United States' appears
+        onView(withText("President of the United States")).isDisplayed()
+
+        // THEN -  we are able to drag the list up.
+        val o =uiDevice.findObject(UiSelector().text(context.getString(R.string.representative_search_text)))
+        uiDevice.findObject(UiSelector().description(context.getString(R.string.cd_representative_recyclerview))).dragTo(o,2)
 
     }
 }

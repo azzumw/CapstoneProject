@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/search_title"
+                android:id="@+id/representative_search_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/representative_search_text"
@@ -49,7 +49,7 @@
                 android:inputType="textPostalAddress"
                 android:text="@={viewModel.line1}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_title" />
+                app:layout_constraintTop_toBottomOf="@id/representative_search_title_text" />
 
 
             <EditText
