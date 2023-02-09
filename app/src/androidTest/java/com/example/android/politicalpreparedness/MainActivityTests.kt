@@ -1,8 +1,6 @@
 package com.example.android.politicalpreparedness
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
@@ -14,10 +12,6 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -305,11 +299,6 @@ class MainActivityTests {
             withId(R.id.web_img),
             hasSibling(withText("President of the United States"))
         )).perform(click())
-
-
-        //verify it sends an intent with the correct url
-//        intending(hasData(Uri.parse("https://www.whitehouse.gov/")) )
-//        intended(IntentMatchers.anyIntent())
     }
 
     @Test @Ignore
