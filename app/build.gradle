@@ -23,6 +23,7 @@ android {
         buildConfigField 'String', 'MAPS_API_KEY', myApiKey
         manifestPlaceholders = [myMapApiKey: myApiKey]
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {
@@ -45,6 +46,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
 //        https://stackoverflow.com/questions/72218645/shared-srcdirs-between-test-and-androidtest-unresolved-references-after-upgrade?noredirect=1&lq=1
 
 //    sourceSets {
@@ -63,6 +68,7 @@ android {
 }
 
 dependencies {
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin
@@ -135,6 +141,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
 
 
     //livedata
