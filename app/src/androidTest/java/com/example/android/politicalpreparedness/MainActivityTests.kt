@@ -1,6 +1,8 @@
 package com.example.android.politicalpreparedness
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
@@ -12,6 +14,10 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.matcher.UriMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -279,7 +285,7 @@ class MainActivityTests {
     }
 
 
-    @Test @Ignore
+    @Test
     fun representativeScreen_useMyLocation_visitWebsite() {
         // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
@@ -293,12 +299,17 @@ class MainActivityTests {
         // wait for data to appear
         uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
 
+        Intents.init()
 
         //verify it has imageview (web)
         onView(allOf(
             withId(R.id.web_img),
             hasSibling(withText("President of the United States"))
         )).perform(click())
+
+        intended(IntentMatchers.hasData(Uri.parse("https://www.whitehouse.gov/")))
+
+        Intents.release()
     }
 
     @Test @Ignore
