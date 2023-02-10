@@ -103,7 +103,7 @@
                 app:layout_constraintTop_toBottomOf="@id/city" />
 
             <Button
-                android:id="@+id/button_search"
+                android:id="@+id/find_my_representatives_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/primaryButtonStyle"
@@ -117,7 +117,7 @@
                 android:layout_marginTop="@dimen/default_padding"
                 style="@style/primaryButtonStyle"
                 android:text="@string/my_location_btn_text"
-                app:layout_constraintTop_toBottomOf="@id/button_search" />
+                app:layout_constraintTop_toBottomOf="@id/find_my_representatives_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

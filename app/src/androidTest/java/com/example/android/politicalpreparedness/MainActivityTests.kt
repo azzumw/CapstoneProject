@@ -70,6 +70,8 @@ class MainActivityTests {
 
         //representative components
         private val representativeTitle: ViewInteraction = onView(withText("Representative Search"))
+        private val findMyRepresentativesButton: ViewInteraction = onView(withId(R.id.find_my_representatives_button))
+
         private val useMyLocationButton: ViewInteraction = onView(withId(R.id.button_location))
         private val representativesRecyclerView: ViewInteraction =
             onView(withId(R.id.representative_recycler))
@@ -371,7 +373,24 @@ class MainActivityTests {
     }
 
     @Test
-    @Ignore("will implement later")
+    @Ignore("will implement later as it is similar to above two tests")
     fun representativeScreen_useMyLocation_visitFacebook() {
+    }
+
+    @Test
+    fun representativeScreen_noAddressProvided_findMyRepresentatives_showsSnackBarError() {
+        // GIVEN - acitvity is launched
+        val scenario = launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+
+        navToRepresentativeScreenButton.click()
+
+        // WHEN - findMyRepresentative button without address provided is clicked
+        findMyRepresentativesButton.click()
+
+        val error = context.applicationContext.getString(R.string.no_address_provided_error_text)
+
+        // THEN - verify snackbar is shown with the correct error text
+        uiDevice.wait(Until.hasObject(By.text(error)),1000)
     }
 }
