@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness
 
+import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -16,6 +17,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.UriMatchers
 import androidx.test.espresso.matcher.ViewMatchers
@@ -30,6 +32,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -299,20 +302,32 @@ class MainActivityTests {
         // wait for data to appear
         uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
 
+        // initialise intent for intent validation
         Intents.init()
+        intending(not(IntentMatchers.isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                0,
+                null
+            )
+        )
 
-        //verify it has imageview (web)
-        onView(allOf(
-            withId(R.id.web_img),
-            hasSibling(withText("President of the United States"))
-        )).perform(click())
 
+        // WHEN - web link is clicked for list item with text President of the United States)
+        onView(
+            allOf(
+                withId(R.id.web_img),
+                hasSibling(withText("President of the United States"))
+            )
+        ).perform(click())
+
+        // THEN - verify the correct url is captured in the intent.
         intended(IntentMatchers.hasData(Uri.parse("https://www.whitehouse.gov/")))
 
         Intents.release()
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun representativeScreen_useMyLocation_visitTwitter() {
 //        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"))
         val scenario = launch(MainActivity::class.java)
@@ -329,7 +344,8 @@ class MainActivityTests {
         onView(withText("President of the United States")).isDisplayed()
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun representativeScreen_useMyLocation_visitFacebook() {
     }
 }
