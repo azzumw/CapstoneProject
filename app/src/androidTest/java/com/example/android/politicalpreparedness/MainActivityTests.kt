@@ -2,7 +2,6 @@ package com.example.android.politicalpreparedness
 
 import android.app.Instrumentation
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario.launch
@@ -13,6 +12,7 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
@@ -111,7 +111,6 @@ class MainActivityTests {
      */
     @Before
     fun registerIdlingResource() {
-
         IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }
@@ -327,9 +326,16 @@ class MainActivityTests {
     }
 
     @Test
-    @Ignore
-    fun representativeScreen_useMyLocation_visitTwitter() {
-//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"))
+    fun representativeScreen_useMyLocation_pos20_visitTwitter() {
+
+        Intents.init()
+        intending(not(IntentMatchers.isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                0,
+                null
+            )
+        )
+
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
@@ -340,12 +346,32 @@ class MainActivityTests {
         // wait for data to appear
         uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
 
+        val o =
+            uiDevice.findObject(UiSelector().text(context.getString(R.string.representative_search_text)))
+        uiDevice.findObject(UiSelector().description(context.getString(R.string.cd_representative_recyclerview)))
+            .dragTo(o, 2)
+
         //verify 'President of the United States' appears
-        onView(withText("President of the United States")).isDisplayed()
+        representativesRecyclerView.perform(
+            RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
+                20, scrollTo()
+            )
+        )
+
+        onView(
+            allOf(
+                withId(R.id.twitter_img),
+                hasSibling(withText("Jeffrey F. Rosen"))
+            )
+        ).click()
+
+        intended(IntentMatchers.hasData(UriMatchers.hasHost("www.twitter.com")))
+
+        Intents.release()
     }
 
     @Test
-    @Ignore
+    @Ignore("will implement later")
     fun representativeScreen_useMyLocation_visitFacebook() {
     }
 }
