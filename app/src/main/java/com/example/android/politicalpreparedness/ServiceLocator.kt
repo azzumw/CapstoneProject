@@ -7,7 +7,6 @@ import com.example.android.politicalpreparedness.database.LocalDataSource
 import com.example.android.politicalpreparedness.network.data.RemoteDataSource
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import com.example.android.politicalpreparedness.repository.TheRepository
-import kotlinx.coroutines.runBlocking
 
 object ServiceLocator {
 
@@ -15,31 +14,32 @@ object ServiceLocator {
 
     //1. create a repository variable
     @Volatile
-    var repository : RepositoryInterface? = null
-    @VisibleForTesting set
+    var repository: RepositoryInterface? = null
+        @VisibleForTesting set
 
-    private var database:ElectionDatabase? = null
+    @Volatile
+    private var database: ElectionDatabase? = null
 
-    fun provideRepository(context: Context) : RepositoryInterface{
-        synchronized(this){
+    fun provideRepository(context: Context): RepositoryInterface {
+        synchronized(this) {
             return repository ?: createRepository(context)
         }
     }
 
-    private fun createRepository(context: Context):RepositoryInterface{
-        val newRepo = TheRepository(createLocalDataSource(context),RemoteDataSource)
+    private fun createRepository(context: Context): RepositoryInterface {
+        val newRepo = TheRepository(createLocalDataSource(context), RemoteDataSource)
         repository = newRepo
 
         return newRepo
     }
 
-    private fun createLocalDataSource(context: Context):LocalDataSource{
+    private fun createLocalDataSource(context: Context): LocalDataSource {
         val db = database ?: createDatabase(context)
 
         return LocalDataSource(db.electionDao)
     }
 
-    private fun createDatabase(context: Context):ElectionDatabase{
+    private fun createDatabase(context: Context): ElectionDatabase {
         val result = ElectionDatabase.getInstance(context)
         database = result
         return result
@@ -49,20 +49,14 @@ object ServiceLocator {
     @VisibleForTesting
     fun resetRepository() {
 
-//        synchronized(lock) {
-//            runBlocking {
-//                LocalDataSource().clear()
-//            }
-//            // Clear all data to avoid test pollution.
-//            database?.apply {
-//                clearAllTables()
+        synchronized(lock) {
+            // Clear all data to avoid test pollution.
+            database?.apply {
+                clearAllTables()
 //                close()
-//            }
-//            database = null
-
+            }
+            database = null
             repository = null
-//        }
-
-
+        }
     }
 }

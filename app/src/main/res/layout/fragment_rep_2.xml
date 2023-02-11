@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/search_title"
+                android:id="@+id/representative_search_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/representative_search_text"
@@ -48,7 +48,7 @@
                 android:inputType="textPostalAddress"
                 android:text="@={viewModel.line1}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_title" />
+                app:layout_constraintTop_toBottomOf="@id/representative_search_title_text" />
 
 
             <EditText
@@ -103,7 +103,7 @@
                 app:layout_constraintTop_toBottomOf="@id/city" />
 
             <Button
-                android:id="@+id/button_search"
+                android:id="@+id/find_my_representatives_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/primaryButtonStyle"
@@ -117,7 +117,7 @@
                 android:layout_marginTop="@dimen/default_padding"
                 style="@style/primaryButtonStyle"
                 android:text="@string/my_location_btn_text"
-                app:layout_constraintTop_toBottomOf="@id/button_search" />
+                app:layout_constraintTop_toBottomOf="@id/find_my_representatives_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -133,6 +133,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/representative_recycler"
+            android:contentDescription="@string/cd_representative_recyclerview"
             android:layout_width="@dimen/width_height_0"
             android:layout_height="@dimen/width_height_0"
             android:scrollbars="vertical"

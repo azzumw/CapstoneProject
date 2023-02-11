@@ -25,7 +25,10 @@ interface ElectionDao {
 
     // Add clear query
     @Query("delete from election_table")
-    suspend fun clear()
+    suspend fun clearAllElectionsFromElectionsTable()
+
+    @Query("delete from saved_election_table")
+    suspend fun clearAllElectionsFromSavedElectionsTable()
 
     //Queries for Saved_Election_Table
     // Add insert query

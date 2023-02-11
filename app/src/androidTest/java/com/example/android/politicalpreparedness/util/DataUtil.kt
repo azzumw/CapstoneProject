@@ -10,6 +10,12 @@ import java.util.*
 const val TXT_ELECTION_0 = "Election 0"
 const val TXT_ELECTION_1 = "Election 1"
 const val TXT_ELECTION_2 = "Election 2"
+
+
+
+const val ANIMATION_OFF = "settings put global animator_duration_scale 0.0"
+const val TRANS_ANIMATION_OFF = "settings put global transition_animation_scale 0.0"
+const val WIN_ANIMATION_OFF = "settings put global window_animation_scale 0.0"
 fun createThreeElectionInstances(): List<Election> {
     val localDate = Date(1220227200L * 1000)
 

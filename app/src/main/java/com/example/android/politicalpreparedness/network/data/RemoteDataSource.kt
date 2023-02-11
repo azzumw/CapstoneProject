@@ -52,4 +52,12 @@ object RemoteDataSource : DataSourceInterface {
             CivicsApi.retrofitService.getRepresentativesInfo(address)
         }
     }
+
+    override suspend fun deleteAllElections() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAllSavedElections() {
+        TODO("Not yet implemented")
+    }
 }

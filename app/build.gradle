@@ -23,6 +23,7 @@ android {
         buildConfigField 'String', 'MAPS_API_KEY', myApiKey
         manifestPlaceholders = [myMapApiKey: myApiKey]
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {
@@ -45,6 +46,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
 //        https://stackoverflow.com/questions/72218645/shared-srcdirs-between-test-and-androidtest-unresolved-references-after-upgrade?noredirect=1&lq=1
 
 //    sourceSets {
@@ -57,11 +62,13 @@ android {
 //            java.srcDirs += sharedTestDir
 //        }
 //    }
+    //https://blog.danlew.net/2022/08/16/sharing-code-between-test-modules/
 
 
 }
 
 dependencies {
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin
@@ -122,22 +129,20 @@ dependencies {
     // To use Kotlin Symbol Processing (KSP)
 //    ksp("androidx.room:room-compiler:$version_room")
 
+
 //    testImplementation project(path: ':app')
-//    testImplementation project(path: ':app')
 //    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
-//    androidTestImplementation project(path: ':app')
+
+    implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
+    implementation("androidx.test.espresso.idling:idling-concurrent:3.5.1")
 
     //dependencies for Android Instrumentation tests
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+
 
     //livedata
     androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"

@@ -49,7 +49,7 @@ class RepresentativeFragment : Fragment() {
 
     private val viewModel: RepresentativeViewModel by viewModels() {
         RepresentativeViewModelFactory(
-            activity!!.application, TheRepository(
+            requireActivity().application, TheRepository(
                 LocalDataSource(ElectionDatabase.getInstance(requireContext()).electionDao),
                 RemoteDataSource
             ), this, Bundle()
@@ -79,7 +79,7 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermissions()
         }
 
-        binding.buttonSearch.setOnClickListener {
+        binding.findMyRepresentativesButton.setOnClickListener {
             viewModel.createAddressFromFields()
         }
 
@@ -87,7 +87,7 @@ class RepresentativeFragment : Fragment() {
             if (it) {
                 Snackbar.make(
                     binding.root,
-                    "Please ensure all address fields are filled.",
+                    getString(R.string.no_address_provided_error_text),
                     Snackbar.LENGTH_SHORT
                 ).show()
                 viewModel.doneShowingSnackBar()
