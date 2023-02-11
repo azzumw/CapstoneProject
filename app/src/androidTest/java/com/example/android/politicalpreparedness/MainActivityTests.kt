@@ -70,13 +70,14 @@ class MainActivityTests {
 
         //representative components
         private val representativeTitle: ViewInteraction = onView(withText("Representative Search"))
-        private val findMyRepresentativesButton: ViewInteraction = onView(withId(R.id.find_my_representatives_button))
+        private val findMyRepresentativesButton: ViewInteraction =
+            onView(withId(R.id.find_my_representatives_button))
 
         private val useMyLocationButton: ViewInteraction = onView(withId(R.id.button_location))
         private val representativesRecyclerView: ViewInteraction =
             onView(withId(R.id.representative_recycler))
 
-        //functions
+        //dsl functions
         private fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
         private fun ViewInteraction.isDisplayed(): ViewInteraction =
             this.check(matches(ViewMatchers.isDisplayed()))
@@ -92,6 +93,7 @@ class MainActivityTests {
         @BeforeClass
         @JvmStatic
         fun setDevicePreferences() {
+            //set up animations settings = off
             uiDevice = UiDevice.getInstance(getInstrumentation())
             uiDevice.executeShellCommand(ANIMATION_OFF)
             uiDevice.executeShellCommand(TRANS_ANIMATION_OFF)
@@ -144,6 +146,7 @@ class MainActivityTests {
 
     @Test
     fun navigateToElectionsScreen() {
+
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
@@ -156,6 +159,7 @@ class MainActivityTests {
 
     @Test
     fun navigateToRepresentativesScreen() {
+
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
@@ -212,12 +216,6 @@ class MainActivityTests {
     @Test
     fun unfollowAnElection() = runTest {
 
-//        val election = createThreeElectionInstances()[0]
-//        (repository as TheRepository).insertElections(listOf(election))
-
-        //follow/save this election
-//        repository.saveThisElection(SavedElection(election.id))
-
         //GIVEN -  activity is launched, and...
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
@@ -245,6 +243,7 @@ class MainActivityTests {
 
     @Test
     fun representativeScreen_useMyLocation() = runTest {
+
         // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
@@ -260,10 +259,13 @@ class MainActivityTests {
 
         // THEN - verify 'President of the United States' appears
         onView(withText("President of the United States")).isDisplayed()
+
+        scenario.close()
     }
 
     @Test
     fun representativeScreen_useMyLocation_dragListUp() = runTest {
+
         // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
@@ -286,11 +288,24 @@ class MainActivityTests {
         uiDevice.findObject(UiSelector().description(context.getString(R.string.cd_representative_recyclerview)))
             .dragTo(o, 2)
 
+        scenario.close()
+
     }
 
 
     @Test
     fun representativeScreen_useMyLocation_visitWebsite() {
+
+        // initialise intent for intent validation
+        Intents.init()
+
+        intending(not(IntentMatchers.isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                0,
+                null
+            )
+        )
+
         // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
@@ -302,16 +317,6 @@ class MainActivityTests {
 
         // wait for data to appear
         uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
-
-        // initialise intent for intent validation
-        Intents.init()
-        intending(not(IntentMatchers.isInternal())).respondWith(
-            Instrumentation.ActivityResult(
-                0,
-                null
-            )
-        )
-
 
         // WHEN - web link is clicked for list item with text President of the United States)
         onView(
@@ -325,12 +330,16 @@ class MainActivityTests {
         intended(IntentMatchers.hasData(Uri.parse("https://www.whitehouse.gov/")))
 
         Intents.release()
+
+        scenario.close()
     }
 
     @Test
     fun representativeScreen_useMyLocation_pos20_visitTwitter() {
 
+        // initialise the intent for intent validation
         Intents.init()
+
         intending(not(IntentMatchers.isInternal())).respondWith(
             Instrumentation.ActivityResult(
                 0,
@@ -338,6 +347,7 @@ class MainActivityTests {
             )
         )
 
+        // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
@@ -348,18 +358,21 @@ class MainActivityTests {
         // wait for data to appear
         uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
 
+        // drag the list up
         val o =
             uiDevice.findObject(UiSelector().text(context.getString(R.string.representative_search_text)))
         uiDevice.findObject(UiSelector().description(context.getString(R.string.cd_representative_recyclerview)))
             .dragTo(o, 2)
 
-        //verify 'President of the United States' appears
+        // scroll to position 20 in the recycler view
         representativesRecyclerView.perform(
             RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
                 20, scrollTo()
             )
         )
 
+
+        // WHEN - the twitter icon of item at position 20 is clicked
         onView(
             allOf(
                 withId(R.id.twitter_img),
@@ -367,30 +380,37 @@ class MainActivityTests {
             )
         ).click()
 
+        // THEN - validate that the intent captured has url host twitter.com
         intended(IntentMatchers.hasData(UriMatchers.hasHost("www.twitter.com")))
 
         Intents.release()
+
+        scenario.close()
     }
 
     @Test
-    @Ignore("will implement later as it is similar to above two tests")
+    @Ignore("will implement later as it is similar to the above two tests")
     fun representativeScreen_useMyLocation_visitFacebook() {
     }
 
     @Test
     fun representativeScreen_noAddressProvided_findMyRepresentatives_showsSnackBarError() {
-        // GIVEN - acitvity is launched
+
+        // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
         navToRepresentativeScreenButton.click()
 
-        // WHEN - findMyRepresentative button without address provided is clicked
+        // WHEN - no address provided and findMyRepresentative button is clicked
         findMyRepresentativesButton.click()
 
-        val error = context.applicationContext.getString(R.string.no_address_provided_error_text)
+        val errorText =
+            context.applicationContext.getString(R.string.no_address_provided_error_text)
 
-        // THEN - verify snackbar is shown with the correct error text
-        uiDevice.wait(Until.hasObject(By.text(error)),1000)
+        // THEN - verify that the Snack-bar is shown with the correct error text
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(errorText)))
+
     }
 }
