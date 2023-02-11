@@ -11,8 +11,7 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
@@ -26,8 +25,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
+import com.example.android.politicalpreparedness.MainActivityTests.Companion.type
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import com.example.android.politicalpreparedness.util.*
+import com.squareup.javawriter.JavaWriter.type
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -69,10 +70,15 @@ class MainActivityTests {
         private val followOrUnFollowButton = onView(withId(R.id.saveElectionButton))
 
         //representative components
+        private val addressLine1 : ViewInteraction = onView(withId(R.id.address_line_1))
+        private val addressLine2 : ViewInteraction = onView(withId(R.id.address_line_2))
+        private val city : ViewInteraction = onView(withId(R.id.city))
+        private val states : ViewInteraction = onView(withId(R.id.state_spinner))
+        private val zip : ViewInteraction = onView(withId(R.id.zip))
+
         private val representativeTitle: ViewInteraction = onView(withText("Representative Search"))
         private val findMyRepresentativesButton: ViewInteraction =
             onView(withId(R.id.find_my_representatives_button))
-
         private val useMyLocationButton: ViewInteraction = onView(withId(R.id.button_location))
         private val representativesRecyclerView: ViewInteraction =
             onView(withId(R.id.representative_recycler))
@@ -81,6 +87,10 @@ class MainActivityTests {
         private fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
         private fun ViewInteraction.isDisplayed(): ViewInteraction =
             this.check(matches(ViewMatchers.isDisplayed()))
+
+        private fun ViewInteraction.type(string:String):ViewInteraction = this.perform(typeText(string),
+            closeSoftKeyboard()
+        )
 
         //packages for screens
         private const val voterInfoFragmentPackage =
@@ -255,7 +265,7 @@ class MainActivityTests {
         useMyLocationButton.click()
 
         // wait for data to appear
-        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
+        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), ONE_SEC)
 
         // THEN - verify 'President of the United States' appears
         onView(withText("President of the United States")).isDisplayed()
@@ -277,7 +287,7 @@ class MainActivityTests {
         useMyLocationButton.click()
 
         // wait for data to appear
-        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
+        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), ONE_SEC)
 
         //verify 'President of the United States' appears
         onView(withText("President of the United States")).isDisplayed()
@@ -316,9 +326,9 @@ class MainActivityTests {
         useMyLocationButton.click()
 
         // wait for data to appear
-        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
+        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), ONE_SEC)
 
-        // WHEN - web link is clicked for list item with text President of the United States)
+        // WHEN - web link is clicked for list item with text President of the United States
         onView(
             allOf(
                 withId(R.id.web_img),
@@ -356,7 +366,7 @@ class MainActivityTests {
         useMyLocationButton.click()
 
         // wait for data to appear
-        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), 1000)
+        uiDevice.wait(Until.gone(By.text(context.getString(R.string.no_data_available_msg))), ONE_SEC)
 
         // drag the list up
         val o =
@@ -412,5 +422,32 @@ class MainActivityTests {
         onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(errorText)))
 
+    }
+
+    @Test
+    fun representativeScreen_addressProvided_findMyRepresentatives() {
+        // GIVEN - activity is launched
+        val scenario = launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+
+        navToRepresentativeScreenButton.click()
+
+        // WHEN - address is provided, and findMyRepresentatives button is clicked
+        fillInTheAddress(addressLine1 = "Amphitheatre Parkway", addressLine2 = "2020", city = "Mountain View", state = "California", zip = "94043")
+        findMyRepresentativesButton.click()
+
+        // THEN - verify the list is not empty by checking a matching text appears
+        onView(withText("President of the United States")).isDisplayed()
+
+        scenario.close()
+    }
+
+    private fun fillInTheAddress(addressLine1:String,addressLine2:String,city:String,state:String,zip:String){
+        Companion.addressLine1.type(addressLine1)
+        Companion.addressLine2.type(addressLine2)
+        Companion.city.type(city)
+        states.click()
+        onView(withText(state)).click()
+        Companion.zip.type(zip)
     }
 }
