@@ -20,6 +20,7 @@ It leverages the following components from the Jetpack library:
 ### Testing
 
 #### Unit Testing
+[ElectionsViewModelTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/test/java/viewmodels/ElectionsViewModelTest.kt)
 
 #### Integration Testing
 
