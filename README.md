@@ -32,3 +32,5 @@ It leverages the following components from the Jetpack library:
 [LaunchFragmentTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/launch/LaunchFragmentTest.kt)
 
 #### Espresso UI Instrumentation Testing
+[MainActivityTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/MainActivityTests
+.kt)
