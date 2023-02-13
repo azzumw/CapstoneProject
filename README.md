@@ -17,3 +17,10 @@ It leverages the following components from the Jetpack library:
 * [Data Binding](https://developer.android.com/topic/libraries/data-binding/) with binding adapters
 * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) with the SafeArgs plugin for parameter passing between fragments
 
+### Testing
+
+#### Unit Testing
+
+#### Integration Testing
+
+#### Espresso UI Instrumentation Testing
