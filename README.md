@@ -22,6 +22,8 @@ It leverages the following components from the Jetpack library:
 #### Unit Testing
 [ElectionsViewModelTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/test/java/viewmodels/ElectionsViewModelTest.kt)
 
+[ElectionDaoTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/database/ElectionDaoTests.kt)
+
 #### Integration Testing
 
 #### Espresso UI Instrumentation Testing
