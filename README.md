@@ -28,4 +28,7 @@ It leverages the following components from the Jetpack library:
 [ElectionFragmentTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/election/ElectionFragmentTests.kt)
 
 [LocalDataSourceTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/database/LocalDataSourceTest.kt)
+
+[LaunchFragmentTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/launch/LaunchFragmentTest.kt)
+
 #### Espresso UI Instrumentation Testing
