@@ -24,6 +24,8 @@ It leverages the following components from the Jetpack library:
 
 [ElectionDaoTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/database/ElectionDaoTests.kt)
 
+[TheRepositoryTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/test/java/com/example/android/politicalpreparedness/repository/TheRepositoryTests.kt)
+
 #### Integration Testing
 [ElectionFragmentTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/election/ElectionFragmentTests.kt)
 
