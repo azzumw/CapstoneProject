@@ -42,7 +42,7 @@ class FakeRepository() : RepositoryInterface {
 
     }
 
-    override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
+    override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
         val se =  _savedElections.value?.filter {
             it.savedElection.savedElectionId == electionId
         }?.map { it.savedElection }?.take(1)

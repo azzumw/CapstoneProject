@@ -12,7 +12,7 @@ interface RepositoryInterface {
     suspend fun saveThisElection(savedElection: SavedElection)
 
     suspend fun removeThisElection(savedElection: SavedElection)
-    fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection>
+    fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection>
 
     //network call for elections
     suspend fun callElectionsInfoApi(): ElectionResponse

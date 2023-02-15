@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.repository
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.wrapEspressoIdlingResource
@@ -22,14 +23,13 @@ class TheRepository(
         }
     }
 
-    suspend fun insertElections(list:List<Election>){
-       wrapEspressoIdlingResource {
-           withContext(ioDispatcher){
-               localDataSource.insertElections(list)
-           }
-       }
+    private suspend fun insertElections(list: List<Election>) {
+        wrapEspressoIdlingResource {
+            withContext(ioDispatcher) {
+                localDataSource.insertElections(list)
+            }
+        }
     }
-
 
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
@@ -50,11 +50,17 @@ class TheRepository(
         }
     }
 
-    override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
+    override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
         wrapEspressoIdlingResource {
             return localDataSource.getSavedElectionByElectionID(electionId)
         }
     }
+
+    override fun getSavedElectionsFromLocalDataSource() =
+        wrapEspressoIdlingResource { localDataSource.getSavedElections() }
+
+    override fun getElectionsFromLocalDataBase() =
+        wrapEspressoIdlingResource { localDataSource.getElections() }
 
     //network call for elections
     override suspend fun callElectionsInfoApi(): ElectionResponse {
@@ -77,20 +83,17 @@ class TheRepository(
         }
     }
 
-    override fun getSavedElectionsFromLocalDataSource() = wrapEspressoIdlingResource { localDataSource.getSavedElections() }
-
-    override fun getElectionsFromLocalDataBase() = wrapEspressoIdlingResource { localDataSource.getElections() }
+    @VisibleForTesting
     override suspend fun deleteAllElections() {
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             localDataSource.deleteAllElections()
         }
     }
 
+    @VisibleForTesting
     override suspend fun deleteAllSavedElections() {
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             localDataSource.deleteAllSavedElections()
         }
     }
-
-
 }
