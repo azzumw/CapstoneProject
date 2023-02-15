@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
-import java.util.*
 
 class FakeRepository(private val mElectionList : List<Election>) : RepositoryInterface {
 
@@ -44,7 +43,7 @@ class FakeRepository(private val mElectionList : List<Election>) : RepositoryInt
 
     }
 
-    override fun getElectionIdFromSavedElection(electionId: Int): LiveData<SavedElection> {
+    override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
         val se =  _savedElections.value?.filter {
             it.savedElection.savedElectionId == electionId
         }?.map { it.savedElection }?.take(1)

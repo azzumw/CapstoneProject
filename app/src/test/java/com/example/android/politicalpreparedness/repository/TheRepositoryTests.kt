@@ -28,11 +28,12 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class TheRepositoryTests {
 
-    private lateinit var localDataSource: FakeDataSource
-    private lateinit var remoteDataSource: FakeDataSource
-
     //subject under test
     private lateinit var repository: TheRepository
+
+    //dependencies
+    private lateinit var localDataSource: FakeDataSource
+    private lateinit var remoteDataSource: FakeDataSource
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -55,11 +56,10 @@ class TheRepositoryTests {
             repository.deleteAllElections()
             repository.deleteAllSavedElections()
         }
-
     }
 
     @Test
-    fun getElections_returnsTheCorrectSize() = runTest {
+    fun getElections_insertsTheElections() = runTest {
         //WHEN - get elections is called
         repository.getElections()
 
@@ -87,14 +87,16 @@ class TheRepositoryTests {
 
     @Test
     fun saveThisElection_returnsTheSavedElection() = runTest {
+
         // GIVEN - an election to be saved
         repository.getElections()
         val savedElection = SavedElection(0)
+
         // WHEN - this election is saved
         repository.saveThisElection(savedElection)
 
         // THEN - verify it is in the savedElections
-        val value = repository.getElectionIdFromSavedElection(savedElection.savedElectionId)
+        val value = repository.getSavedElectionByElectionID(savedElection.savedElectionId)
             .getOrAwaitValue()
 
         MatcherAssert.assertThat(value.savedElectionId, `is`(0))
@@ -104,6 +106,7 @@ class TheRepositoryTests {
 
     @Test
     fun removeThisElection_twoSavedElections_removesElectionOne() = runTest {
+
         // GIVEN  - three elections, and two of the elections are saved
         repository.getElections()
         val savedElection = SavedElection(1)
@@ -113,10 +116,10 @@ class TheRepositoryTests {
 
         // verify they are stored in repository
         val savedElectionValue =
-            repository.getElectionIdFromSavedElection(savedElection.savedElectionId)
+            repository.getSavedElectionByElectionID(savedElection.savedElectionId)
                 .getOrAwaitValue()
         val savedElectionValue2 =
-            repository.getElectionIdFromSavedElection(savedElection2.savedElectionId)
+            repository.getSavedElectionByElectionID(savedElection2.savedElectionId)
                 .getOrAwaitValue()
         MatcherAssert.assertThat(savedElectionValue.savedElectionId, `is`(1))
         MatcherAssert.assertThat(savedElectionValue2.savedElectionId, `is`(2))
@@ -124,12 +127,13 @@ class TheRepositoryTests {
         // WHEN - savedElection with ID 1 is removed
         repository.removeThisElection(savedElection)
 
-        // THEN - verify only savedElection with ID 1 is removed
-        val result = repository.getElectionIdFromSavedElection(savedElection.savedElectionId)
+        // THEN - verify only savedElection with ID 1 is removed, and SavedElection with ID 2 is retained
+        val result = repository.getSavedElectionByElectionID(savedElection.savedElectionId)
             .getOrAwaitValue()
+        val result2 = repository.getSavedElectionByElectionID(savedElection2.savedElectionId)
+            .getOrAwaitValue()
+
         MatcherAssert.assertThat(result, nullValue())
-        val result2 = repository.getElectionIdFromSavedElection(savedElection2.savedElectionId)
-            .getOrAwaitValue()
         MatcherAssert.assertThat(result2, notNullValue())
     }
 
@@ -149,7 +153,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun callRepresentativeInfoApi() = runTest {
+    fun callRepresentativeInfoApi_returns_correctRepresentativeResponse() = runTest {
         // GIVEN - when an address is provided
         val address = Address("10 Downing St", city = "London", state = "London", zip = "10089")
 
@@ -160,6 +164,27 @@ class TheRepositoryTests {
         MatcherAssert.assertThat(response.offices[0].name, `is`("House Of Commons"))
         MatcherAssert.assertThat(response.officials[0].name, `is`("Rishi Sunak"))
 
+    }
+
+    @Test
+    fun getSavedElectionsFromLocalDatabase() = runTest {
+        // GIVEN  - three elections, and two of the elections are saved
+        repository.getElections()
+        val savedElection = SavedElection(1)
+        val savedElection2 = SavedElection(2)
+        repository.saveThisElection(savedElection)
+        repository.saveThisElection(savedElection2)
+
+        // WHEN - getSavedElectionsFromLocalDatabase is invoked
+        val savedElectionsResponse = repository.getSavedElectionsFromLocalDataSource().getOrAwaitValue()
+
+        // THEN - verify that the savedElections are stored in the SavedElection list
+        val savedElectionsList = savedElectionsResponse.map {
+            it.savedElection
+        }
+
+        MatcherAssert.assertThat(savedElectionsList, hasItems(savedElection,savedElection2))
+        MatcherAssert.assertThat(savedElectionsList, hasItems(not(SavedElection(0))))
     }
 
     private fun createThreeElectionInstances(): List<Election> {

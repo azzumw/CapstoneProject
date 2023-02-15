@@ -78,6 +78,7 @@ class FakeDataSource(private val mElectionList: MutableList<Election>) : DataSou
         _eList.value = null
     }
 
+
     override suspend fun deleteAllSavedElections() {
         savedElectionList.clear()
         _savedElectionsList.value = null

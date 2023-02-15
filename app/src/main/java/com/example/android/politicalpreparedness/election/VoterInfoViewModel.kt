@@ -1,13 +1,9 @@
 package com.example.android.politicalpreparedness.election
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.*
-import com.example.android.politicalpreparedness.database.ElectionDao
-import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
-import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -43,7 +39,7 @@ class VoterInfoViewModel(
 
     val election: LiveData<Election> = repository.getAnElection(electionId)
 
-    private val isElectionSaved = repository.getElectionIdFromSavedElection(electionId)
+    private val isElectionSaved = repository.getSavedElectionByElectionID(electionId)
 
     val saveBtnTextState = Transformations.map(isElectionSaved) {
         if (it == null) {
