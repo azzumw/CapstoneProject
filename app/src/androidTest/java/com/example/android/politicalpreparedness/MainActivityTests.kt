@@ -155,11 +155,14 @@ class MainActivityTests {
     @Test
     fun navigateToElectionsScreen() {
 
+        // GIVEN - activity is launched
         val scenario = launch(MainActivity::class.java)
         dataBindingIdlingResource.monitorActivity(scenario)
 
-        onView(withId(R.id.upComingElectionsButton)).perform(click())
+        // WHEN -
+        navToUpComingElectionsButton.click()
 
+        // THEN - verify election list is displayed
         electionsRecyclerView.isDisplayed()
 
         scenario.close()

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.DataSourceInterface
 
-class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSourceInterface {
+class FakeDataSource(private val mElectionList: MutableList<Election>) : DataSourceInterface {
 
     private val _savedElectionsList = MutableLiveData<List<ElectionAndSavedElection>>()
     private val savedElectionsList: LiveData<List<ElectionAndSavedElection>>
@@ -25,7 +25,7 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
     override fun getElections(): LiveData<List<Election>> = eList
 
 
-    override fun getSavedElections(): LiveData<List<ElectionAndSavedElection>> =  savedElectionsList
+    override fun getSavedElections(): LiveData<List<ElectionAndSavedElection>> = savedElectionsList
 
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
@@ -37,7 +37,7 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
         savedElectionList.add(savedElection)
 
         _savedElectionsList.value = savedElectionList.map {
-            ElectionAndSavedElection(getAnElection(it.savedElectionId).value!!,it)
+            ElectionAndSavedElection(getAnElection(it.savedElectionId).value!!, it)
         }
 
     }
@@ -46,7 +46,7 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
         savedElectionList.remove(savedElection)
 
         _savedElectionsList.value = savedElectionList.map {
-            ElectionAndSavedElection(getAnElection(it.savedElectionId).value!!,it)
+            ElectionAndSavedElection(getAnElection(it.savedElectionId).value!!, it)
         }
     }
 
@@ -59,15 +59,18 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
     }
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-       val election = getAnElection(electionId.toInt()).value!!
+        val election = getAnElection(electionId.toInt()).value!!
         return VoterInfoResponse(election)
     }
 
-    override suspend fun callElectionsInfoApi(): ElectionResponse = ElectionResponse("someKind", mElectionList)
+    override suspend fun callElectionsInfoApi(): ElectionResponse =
+        ElectionResponse("someKind", mElectionList)
 
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
-        TODO("Not yet implemented")
+        val official = Official("Rishi Sunak", listOf(address))
+        val office = Office("House Of Commons", Division("Tory","UK","London"), listOf(1))
+        return RepresentativeResponse(listOf(office), listOf(official))
     }
 
     override suspend fun deleteAllElections() {

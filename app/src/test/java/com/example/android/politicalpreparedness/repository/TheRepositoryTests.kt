@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import util.getOrAwaitValue
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
@@ -71,7 +72,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun getAnElection_returnsCorrectElection() = runTest{
+    fun getAnElection_returnsCorrectElection() = runTest {
 
         //GIVEN - list of elections is present
         repository.getElections()
@@ -85,7 +86,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun saveThisElection_returnsTheSavedElection()= runTest{
+    fun saveThisElection_returnsTheSavedElection() = runTest {
         // GIVEN - an election to be saved
         repository.getElections()
         val savedElection = SavedElection(0)
@@ -93,7 +94,8 @@ class TheRepositoryTests {
         repository.saveThisElection(savedElection)
 
         // THEN - verify it is in the savedElections
-        val value = repository.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        val value = repository.getElectionIdFromSavedElection(savedElection.savedElectionId)
+            .getOrAwaitValue()
 
         MatcherAssert.assertThat(value.savedElectionId, `is`(0))
         MatcherAssert.assertThat(value.savedElectionId, `is`(not(1)))
@@ -110,8 +112,12 @@ class TheRepositoryTests {
         repository.saveThisElection(savedElection2)
 
         // verify they are stored in repository
-        val savedElectionValue = repository.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
-        val savedElectionValue2 = repository.getElectionIdFromSavedElection(savedElection2.savedElectionId).getOrAwaitValue()
+        val savedElectionValue =
+            repository.getElectionIdFromSavedElection(savedElection.savedElectionId)
+                .getOrAwaitValue()
+        val savedElectionValue2 =
+            repository.getElectionIdFromSavedElection(savedElection2.savedElectionId)
+                .getOrAwaitValue()
         MatcherAssert.assertThat(savedElectionValue.savedElectionId, `is`(1))
         MatcherAssert.assertThat(savedElectionValue2.savedElectionId, `is`(2))
 
@@ -119,10 +125,41 @@ class TheRepositoryTests {
         repository.removeThisElection(savedElection)
 
         // THEN - verify only savedElection with ID 1 is removed
-        val result = repository.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        val result = repository.getElectionIdFromSavedElection(savedElection.savedElectionId)
+            .getOrAwaitValue()
         MatcherAssert.assertThat(result, nullValue())
-        val result2 = repository.getElectionIdFromSavedElection(savedElection2.savedElectionId).getOrAwaitValue ()
+        val result2 = repository.getElectionIdFromSavedElection(savedElection2.savedElectionId)
+            .getOrAwaitValue()
         MatcherAssert.assertThat(result2, notNullValue())
+    }
+
+    @Test
+    fun callVoterInfoApi_returns_voterInfoResponse() = runTest {
+
+        // GIVEN - some elections in the repository
+        localDataSource.insertElections(createThreeElectionInstances())
+
+        // WHEN - call to voterInfoApi is made with electionID = 1
+        val electionId = 1
+        val response = repository.callVoterInfoApi("address", electionId.toString())
+
+        // THEN - verify the response return as VoterInfoResponse contains the same Election instance
+        val resultElection = localDataSource.getAnElection(1).getOrAwaitValue()
+        MatcherAssert.assertThat(response.election, `is`(resultElection))
+    }
+
+    @Test
+    fun callRepresentativeInfoApi() = runTest {
+        // GIVEN - when an address is provided
+        val address = Address("10 Downing St", city = "London", state = "London", zip = "10089")
+
+        // WHEN - representativeInfoApi is called with the given address
+        val response = localDataSource.callRepresentativeInfoApi(address)
+
+        // THEN - verify it returns the expected official/office data
+        MatcherAssert.assertThat(response.offices[0].name, `is`("House Of Commons"))
+        MatcherAssert.assertThat(response.officials[0].name, `is`("Rishi Sunak"))
+
     }
 
     private fun createThreeElectionInstances(): List<Election> {
