@@ -101,7 +101,7 @@ class TheRepositoryTests {
     }
 
     @Test
-    fun removeThisElection_removeElectionFromSavedElections() = runTest {
+    fun removeThisElection_twoSavedElections_removesElectionOne() = runTest {
         // GIVEN  - three elections, and two of the elections are saved
         repository.getElections()
         val savedElection = SavedElection(1)

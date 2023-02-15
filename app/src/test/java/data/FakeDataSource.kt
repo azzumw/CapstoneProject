@@ -16,24 +16,17 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
 
     private val savedElectionList = mutableListOf<SavedElection>()
 
-
     private val data = MutableLiveData<Election>()
 
     override suspend fun insertElections(elections: List<Election>) {
         _eList.value = elections
     }
 
-    override fun getElections(): LiveData<List<Election>> {
-        return eList
-    }
+    override fun getElections(): LiveData<List<Election>> = eList
 
-    override fun getSavedElections(): LiveData<List<ElectionAndSavedElection>> {
-//        savedElectionList.map {
-//            ElectionAndSavedElection(getAnElection(it.savedElectionId).value!!,it)
-//        }
 
-        return savedElectionsList
-    }
+    override fun getSavedElections(): LiveData<List<ElectionAndSavedElection>> =  savedElectionsList
+
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
         data.value = eList.value?.get(electionId)
@@ -66,7 +59,8 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
     }
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-        TODO("Not yet implemented")
+       val election = getAnElection(electionId.toInt()).value!!
+        return VoterInfoResponse(election)
     }
 
     override suspend fun callElectionsInfoApi(): ElectionResponse = ElectionResponse("someKind", mElectionList)
@@ -78,9 +72,11 @@ class FakeDataSource(private val mElectionList :MutableList<Election> ) : DataSo
 
     override suspend fun deleteAllElections() {
         mElectionList.clear()
+        _eList.value = null
     }
 
     override suspend fun deleteAllSavedElections() {
-
+        savedElectionList.clear()
+        _savedElectionsList.value = null
     }
 }
