@@ -22,14 +22,13 @@ class TheRepository(
         }
     }
 
-    suspend fun insertElections(list:List<Election>){
-       wrapEspressoIdlingResource {
-           withContext(ioDispatcher){
-               localDataSource.insertElections(list)
-           }
-       }
+    private suspend fun insertElections(list: List<Election>) {
+        wrapEspressoIdlingResource {
+            withContext(ioDispatcher) {
+                localDataSource.insertElections(list)
+            }
+        }
     }
-
 
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
@@ -77,20 +76,21 @@ class TheRepository(
         }
     }
 
-    override fun getSavedElectionsFromLocalDataSource() = wrapEspressoIdlingResource { localDataSource.getSavedElections() }
+    override fun getSavedElectionsFromLocalDataSource() =
+        wrapEspressoIdlingResource { localDataSource.getSavedElections() }
 
-    override fun getElectionsFromLocalDataBase() = wrapEspressoIdlingResource { localDataSource.getElections() }
+    override fun getElectionsFromLocalDataBase() =
+        wrapEspressoIdlingResource { localDataSource.getElections() }
+
     override suspend fun deleteAllElections() {
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             localDataSource.deleteAllElections()
         }
     }
 
     override suspend fun deleteAllSavedElections() {
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             localDataSource.deleteAllSavedElections()
         }
     }
-
-
 }

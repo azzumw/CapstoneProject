@@ -2,7 +2,6 @@ package com.example.android.politicalpreparedness.repository
 
 import data.FakeDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -13,9 +12,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.SavedElection
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
+import org.junit.After
 import util.MainCoroutineRule
 import java.util.*
 
@@ -38,49 +41,33 @@ class TheRepositoryTests {
 
     @Before
     fun setup() {
-        localDataSource = FakeDataSource()
-        remoteDataSource = FakeDataSource()
+        val electionList = createThreeElectionInstances().toMutableList()
+        localDataSource = FakeDataSource(electionList)
+        remoteDataSource = localDataSource
 
         repository = TheRepository(localDataSource, remoteDataSource, Dispatchers.Unconfined)
     }
 
+    @After
+    fun tearDown() {
+        runBlocking {
+            repository.deleteAllElections()
+            repository.deleteAllSavedElections()
+        }
+
+    }
+
     @Test
-    fun repositoryGetElections_returnsTheCorrectSize() = runTest {
+    fun getElections_returnsTheCorrectSize() = runTest {
         //WHEN - get elections is called
         repository.getElections()
 
         //THEN - correct elections list size is returned
-//        val value = repository.elections.getOrAwaitValue()
-//        assertThat(value.size, `is`(3))
+        val value = repository.getElectionsFromLocalDataBase().getOrAwaitValue()
+        MatcherAssert.assertThat(value.size, `is`(3))
+        MatcherAssert.assertThat(value[0].id, `is`(0))
+        MatcherAssert.assertThat(value[0].name, `is`("Election 0"))
 
-    }
-
-    @Test
-    fun getElections_hasCorrectItemAtPositionOne() = runTest{
-        //WHEN - get elections is called
-        repository.getElections()
-
-        //THEN - correct Election item is retrieved at position 0
-//        val electionAtPositionZero = repository.elections.getOrAwaitValue()
-
-//        assertThat(electionAtPositionZero[0].name, `is`("Election 0"))
-    }
-
-    @Test
-    fun getElections_hasCorrectElectionItems() = runTest{
-        //GIVEN - some Election instances
-        val date = 1220227200L * 1000
-        val election1 = Election(0,"Election 0", Date(date), Division("0-division","USA","California"))
-        val election2 = Election(1,"Election 1", Date(date), Division("1-division","USA","California"))
-        val election3 = Election(2,"Election 2", Date(date), Division("2-division","USA","California"))
-
-        //WHEN - getElections() is called
-        repository.getElections()
-
-        //THEN - elections LiveData property has correct list items matching given Election instances
-//        val electionsList = repository.elections.getOrAwaitValue()
-
-//        assertThat(electionsList, hasItems(election1,election2,election3))
     }
 
     @Test
@@ -97,9 +84,55 @@ class TheRepositoryTests {
         MatcherAssert.assertThat(election.value?.name, `is`("Election 0"))
     }
 
-    fun saveThisElection_returnsTheSavedElection(){
-        //not able to implement
+    @Test
+    fun saveThisElection_returnsTheSavedElection()= runTest{
+        // GIVEN - an election to be saved
+        repository.getElections()
+        val savedElection = SavedElection(0)
+        // WHEN - this election is saved
+        repository.saveThisElection(savedElection)
+
+        // THEN - verify it is in the savedElections
+        val value = repository.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+
+        MatcherAssert.assertThat(value.savedElectionId, `is`(0))
+        MatcherAssert.assertThat(value.savedElectionId, `is`(not(1)))
+
     }
 
+    @Test
+    fun removeThisElection_removeElectionFromSavedElections() = runTest {
+        // GIVEN  - three elections, and two of the elections are saved
+        repository.getElections()
+        val savedElection = SavedElection(1)
+        val savedElection2 = SavedElection(2)
+        repository.saveThisElection(savedElection)
+        repository.saveThisElection(savedElection2)
 
+        // verify they are stored in repository
+        val savedElectionValue = repository.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        val savedElectionValue2 = repository.getElectionIdFromSavedElection(savedElection2.savedElectionId).getOrAwaitValue()
+        MatcherAssert.assertThat(savedElectionValue.savedElectionId, `is`(1))
+        MatcherAssert.assertThat(savedElectionValue2.savedElectionId, `is`(2))
+
+        // WHEN - savedElection with ID 1 is removed
+        repository.removeThisElection(savedElection)
+
+        // THEN - verify only savedElection with ID 1 is removed
+        val result = repository.getElectionIdFromSavedElection(savedElection.savedElectionId).getOrAwaitValue()
+        MatcherAssert.assertThat(result, nullValue())
+        val result2 = repository.getElectionIdFromSavedElection(savedElection2.savedElectionId).getOrAwaitValue ()
+        MatcherAssert.assertThat(result2, notNullValue())
+    }
+
+    private fun createThreeElectionInstances(): List<Election> {
+        val localDate = Date(1220227200L * 1000)
+
+        return List(3) {
+            Election(
+                it, "Election $it", localDate,
+                Division("$it-division", "USA", "California")
+            )
+        }
+    }
 }
