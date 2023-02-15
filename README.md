@@ -19,20 +19,20 @@ It leverages the following components from the Jetpack library:
 
 ### Testing
 
-#### Unit Testing
+#### Unit
 [ElectionsViewModelTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/test/java/viewmodels/ElectionsViewModelTest.kt)
 
 [ElectionDaoTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/database/ElectionDaoTests.kt)
 
 [TheRepositoryTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/test/java/com/example/android/politicalpreparedness/repository/TheRepositoryTests.kt)
 
-#### Integration Testing
+#### Integration
 [ElectionFragmentTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/election/ElectionFragmentTests.kt)
 
 [LocalDataSourceTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/database/LocalDataSourceTest.kt)
 
 [LaunchFragmentTest](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/launch/LaunchFragmentTest.kt)
 
-#### Espresso UI Instrumentation Testing
+#### Espresso UI Instrumentation
 
 [MainActivityTests](https://github.com/azzumw/CapstoneProject/blob/master/app/src/androidTest/java/com/example/android/politicalpreparedness/MainActivityTests.kt)
