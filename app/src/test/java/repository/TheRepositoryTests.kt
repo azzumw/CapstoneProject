@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.repository
+package repository
 
 import data.FakeDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,6 +14,7 @@ import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.SavedElection
+import com.example.android.politicalpreparedness.repository.TheRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
