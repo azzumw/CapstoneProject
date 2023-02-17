@@ -3,7 +3,7 @@ package com.example.android.politicalpreparedness.repository
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.network.models.*
 
-interface RepositoryInterface {
+interface  RepositoryInterface {
 
     suspend fun getElections()
 

@@ -1,11 +1,13 @@
 package repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
+import kotlinx.coroutines.runBlocking
 
-class FakeRepository(private val mElectionList : List<Election>) : RepositoryInterface {
+class FakeRepository(private val mElectionList: List<Election>) : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
     private val elections: LiveData<List<Election>> get() = _elections
@@ -16,7 +18,8 @@ class FakeRepository(private val mElectionList : List<Election>) : RepositoryInt
         _elections.value = callElectionsInfoApi().elections
     }
 
-    override suspend fun callElectionsInfoApi(): ElectionResponse = ElectionResponse("someKind", mElectionList)
+    override suspend fun callElectionsInfoApi(): ElectionResponse =
+        ElectionResponse("someKind", mElectionList)
 
 
     override fun getAnElection(electionId: Int): LiveData<Election> {
@@ -44,7 +47,7 @@ class FakeRepository(private val mElectionList : List<Election>) : RepositoryInt
     }
 
     override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
-        val se =  _savedElections.value?.filter {
+        val se = _savedElections.value?.filter {
             it.savedElection.savedElectionId == electionId
         }?.map { it.savedElection }?.take(1)
 
@@ -56,9 +59,30 @@ class FakeRepository(private val mElectionList : List<Election>) : RepositoryInt
     }
 
 
-
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-        TODO("Not yet implemented")
+        Log.e("Fakerepo-CallVoterInfoApi:",electionId)
+        val election = getAnElection(electionId.toInt()).value
+        return VoterInfoResponse(
+            election = election!!,
+            state = listOf(
+                State(
+                    name = "California",
+                    electionAdministrationBody = AdministrationBody(
+                        name = "AdminBodyName",
+                        electionInfoUrl = "http://www.${election.id}.com",
+                        votingLocationFinderUrl = "http://www.voting-info.com/${election.id}",
+                        ballotInfoUrl = "http://www.ballotinfo.com/${election.id}",
+                        correspondenceAddress = Address(
+                            "line1",
+                            "line2",
+                            "San Jose",
+                            "California",
+                            "10098"
+                        )
+                    )
+                )
+            )
+        )
     }
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {

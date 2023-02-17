@@ -45,7 +45,6 @@ class VoterInfoFragment : Fragment() {
 
         viewModel.voterLocationUrl.observe(viewLifecycleOwner, Observer { url ->
             if (url != null) {
-                Log.e(this.javaClass.canonicalName, url)
                 binding.stateLocations.visibility = View.VISIBLE
                 binding.noInfoTextView.visibility = View.GONE
                 binding.stateLocations.setOnClickListener {
@@ -56,7 +55,6 @@ class VoterInfoFragment : Fragment() {
 
         viewModel.ballotInfoUrl.observe(viewLifecycleOwner, Observer { url ->
             if (url != null) {
-                Log.e(this.javaClass.canonicalName, url)
                 binding.stateBallot.visibility = View.VISIBLE
                 binding.noInfoTextView.visibility = View.GONE
                 binding.stateBallot.setOnClickListener {
@@ -80,7 +78,7 @@ class VoterInfoFragment : Fragment() {
 
         viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
-                Snackbar.make(binding.root, "You are offline.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.offline_error_text_msg), Snackbar.LENGTH_SHORT).show()
                 viewModel.doneShowingSnackBar()
             }
         })

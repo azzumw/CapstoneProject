@@ -1,11 +1,16 @@
 package com.example.android.politicalpreparedness.election
 
-import android.util.Log
 import androidx.lifecycle.*
+import com.example.android.politicalpreparedness.ServiceLocator.repository
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import kotlin.coroutines.coroutineContext
+
+private const val FOLLOW_BUTTON_TEXT = "Follow"
+private const val UNFOLLOW_BUTTON_TEXT = "Unfollow"
 
 class VoterInfoViewModel(
     private val repository: RepositoryInterface,
@@ -14,32 +19,27 @@ class VoterInfoViewModel(
 ) :
     ViewModel() {
 
-    companion object{
-        private const val FOLLOW_BUTTON_TEXT = "Follow"
-        private const val UNFOLLOW_BUTTON_TEXT = "Unfollow"
-    }
-
-    private val _showSnackBarEvent = MutableLiveData<Boolean>(false)
+    private val _showSnackBarEvent = MutableLiveData(false)
     val showSnackBarEvent: LiveData<Boolean> = _showSnackBarEvent
 
-    private val _voterLocationUrl = MutableLiveData<String?>()
+    private val _voterLocationUrl = MutableLiveData<String?>(null)
     val voterLocationUrl: LiveData<String?> get() = _voterLocationUrl
 
-    private val _ballotInfoUrl = MutableLiveData<String?>()
+    private val _ballotInfoUrl = MutableLiveData<String?>(null)
     val ballotInfoUrl: LiveData<String?> get() = _ballotInfoUrl
 
     val isVoterAndBallotInfoNull: Boolean =
         (voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty())
 
-    private val _correspondenceAddress = MutableLiveData<Address?>()
+    private val _correspondenceAddress = MutableLiveData<Address?>(null)
     val correspondenceAddress: LiveData<Address?> get() = _correspondenceAddress
 
-    private val _state = MutableLiveData<List<State>?>()
+    private val _state = MutableLiveData<List<State>?>(null)
     val state: LiveData<List<State>?> get() = _state
 
-    val election: LiveData<Election> = repository.getAnElection(electionId)
+    val election: LiveData<Election> =   repository.getAnElection(electionId)
 
-    private val isElectionSaved = repository.getSavedElectionByElectionID(electionId)
+    private val isElectionSaved =  repository.getSavedElectionByElectionID(electionId)
 
     val saveBtnTextState = Transformations.map(isElectionSaved) {
         if (it == null) {
@@ -52,9 +52,7 @@ class VoterInfoViewModel(
     private var savedElection: SavedElection
 
     init {
-        Log.e("VoterInfoViewModel", electionId.toString())
         savedElection = SavedElection(electionId)
-
         getVoterInformation(electionId)
     }
 
@@ -63,10 +61,6 @@ class VoterInfoViewModel(
         val country = division.country
         val state = division.state
         val address = if (state.isEmpty()) country else "$country,$state"
-        //make api call to voters information
-        Log.e("VoterModel:", "country: $country")
-        Log.e("VoterModel:", "state: $state")
-        Log.e("VoterModel:", "address: $address")
 
         viewModelScope.launch {
 
@@ -78,30 +72,21 @@ class VoterInfoViewModel(
 
                     _voterLocationUrl.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl
+
                     _ballotInfoUrl.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
+
                     _correspondenceAddress.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
 
-                    Log.e("VoterModel", voterInfoFromApi.state.toString())
-                    Log.e(
-                        "VoterModel",
-                        voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl.toString()
-                    )
-                } else {
-                    Log.e("VoterModel", voterInfoFromApi.state.toString())
-//                    _state.value = emptyList()
                 }
 
             } catch (e: Exception) {
-                Log.e("VoterModel: ", "error: ${e.cause}")
-                Log.e("VoterModel: ", "error: ${e.message}")
-                Log.e("VoterModel: ", "error: ${e.localizedMessage}")
+
                 _showSnackBarEvent.value = true
             }
         }
     }
-
 
     fun followOrUnFollowElection() {
         viewModelScope.launch {
@@ -112,7 +97,6 @@ class VoterInfoViewModel(
             }
         }
     }
-
 
     fun doneShowingSnackBar() {
         _showSnackBarEvent.value = false

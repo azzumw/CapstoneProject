@@ -8,6 +8,7 @@ import com.example.android.politicalpreparedness.network.models.SavedElection
 import util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert
@@ -94,7 +95,7 @@ class ElectionsViewModelTest {
     }
 
     @Test
-    fun selectFilter_filter_with_option_two_displays_the_given_saved_election() = runBlockingTest {
+    fun selectFilter_filter_with_option_two_displays_the_given_saved_election() = runTest {
 
         //GIVEN: a saved election
         fakeRepository.saveThisElection(SavedElection(2))

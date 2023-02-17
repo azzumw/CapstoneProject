@@ -29,6 +29,7 @@
     <string name="test_data_election_2">Election 2</string>
     <string name="offline_msg">You are offline.</string>
     <string name="no_address_provided_error_text">Please ensure all address fields are filled.</string>
+    <string name="offline_error_text_msg">You are offline.</string>
 
 
 </resources>

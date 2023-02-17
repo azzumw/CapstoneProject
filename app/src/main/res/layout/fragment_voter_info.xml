@@ -44,7 +44,6 @@
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/election_date" />
 
-        <!-- TODO: Add click binding to open web URL -->
         <Button
             android:id="@+id/state_locations"
             android:layout_width="@dimen/width_height_0"
