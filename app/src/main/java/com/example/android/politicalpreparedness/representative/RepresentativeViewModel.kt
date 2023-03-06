@@ -4,7 +4,6 @@ import android.app.Application
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
@@ -91,15 +90,11 @@ class RepresentativeViewModel(
                 offices.forEach {
                     val representative = it.getRepresentatives(officials)
                     rList.addAll(representative)
-                    Log.e("REPVIEWM ", "${representative.size}")
                 }
 
                 _representatives.value = rList
                 savedStateHandle.set(KEY_LIST, _representatives.value)
 
-                Log.e("RepresentativesViewModel: ", result.officials[0].name)
-                Log.e("RepresentativesViewModel: Officials: ", result.officials.size.toString())
-                Log.e("RepresentativesViewModel: Offices: ", result.offices.size.toString())
             } catch (e: Exception) {
                 _status.value = ApiStatus.ERROR
                 _representatives.value = emptyList()
