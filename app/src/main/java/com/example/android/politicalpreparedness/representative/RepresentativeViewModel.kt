@@ -7,15 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.election.ApiStatus
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.repository.TheRepository
-import com.example.android.politicalpreparedness.representative.adapter.apiStatus
 import com.example.android.politicalpreparedness.representative.model.Representative
-import com.google.android.gms.common.api.Api
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.lang.IllegalArgumentException
@@ -59,19 +56,7 @@ class RepresentativeViewModel(
     val zip = MutableLiveData<String>("")
 
     private val _status = MutableLiveData<ApiStatus>()
-    val status: LiveData<ApiStatus> = _status
 
-
-    /**
-     *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
-
-    val (offices, officials) = getRepresentativesDeferred.await()
-    _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
-
-    Note: getRepresentatives in the above code represents the method used to fetch data from the API
-    Note: _representatives in the above code represents the established mutable live data housing representatives
-
-     */
     init {
 
         state.addSource(selectedItem) {
@@ -86,7 +71,6 @@ class RepresentativeViewModel(
         }
 
     }
-
 
     private fun getRepresentativesFromApi(address: Address) {
         //"Ampitheatre Parkway 1600 Mountain View California 94043"
