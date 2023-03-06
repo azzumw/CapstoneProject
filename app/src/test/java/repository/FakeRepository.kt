@@ -1,11 +1,9 @@
 package repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
-import kotlinx.coroutines.runBlocking
 
 class FakeRepository(private val mElectionList: List<Election>) : RepositoryInterface {
 
@@ -60,7 +58,7 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
 
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
-        Log.e("Fakerepo-CallVoterInfoApi:",electionId)
+        getElections()
         val election = getAnElection(electionId.toInt()).value
         return VoterInfoResponse(
             election = election!!,

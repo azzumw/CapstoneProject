@@ -8,7 +8,6 @@ import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import repository.FakeRepository
@@ -45,10 +44,11 @@ class VoterInfoViewModelTest{
 
     }
 
-    @Ignore("Not quite sure what the issue is, I suspect viewModescope Issue")
-    fun getVoterInformation_emptyStateInfo_setsLiveDataNull() = runTest {
+    @Test
+    fun getVoterInformation_emptyStateInfo_setsLiveDataNull() = mainCoroutineRule.runBlockingTest {
 
         // WHEN - getVoterInformation is called
+
 
         // THEN - verify ˚livedata values are empty
         val responseStateList = voterInfoViewModel.state.getOrAwaitValue()

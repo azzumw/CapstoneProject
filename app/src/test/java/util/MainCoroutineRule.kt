@@ -6,9 +6,24 @@ import kotlinx.coroutines.test.*
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+//@ExperimentalCoroutinesApi
+//class MainCoroutineRule(private val dispatcher : TestDispatcher = StandardTestDispatcher()):
+//    TestWatcher(){
+//    override fun starting(description: Description?) {
+//        super.starting(description)
+//        Dispatchers.setMain(dispatcher)
+//    }
+//
+//    override fun finished(description: Description?) {
+//        super.finished(description)
+////        cleanupTestCoroutines()
+//        Dispatchers.resetMain()
+//    }
+//}
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(private val dispatcher : TestDispatcher = StandardTestDispatcher()):
-    TestWatcher(){
+class MainCoroutineRule(val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()):
+    TestWatcher(),
+    TestCoroutineScope by TestCoroutineScope(dispatcher) {
     override fun starting(description: Description?) {
         super.starting(description)
         Dispatchers.setMain(dispatcher)
@@ -16,7 +31,7 @@ class MainCoroutineRule(private val dispatcher : TestDispatcher = StandardTestDi
 
     override fun finished(description: Description?) {
         super.finished(description)
-//        cleanupTestCoroutines()
+        cleanupTestCoroutines()
         Dispatchers.resetMain()
     }
 }
