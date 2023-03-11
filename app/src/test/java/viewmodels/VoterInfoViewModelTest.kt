@@ -5,7 +5,7 @@ import androidx.test.filters.SmallTest
 import com.example.android.politicalpreparedness.election.VoterInfoViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
-import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
@@ -19,7 +19,7 @@ import java.util.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @SmallTest
-class VoterInfoViewModelTest{
+class VoterInfoViewModelTest {
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -33,26 +33,75 @@ class VoterInfoViewModelTest{
 
     @Before
     fun setUp() {
+
+    }
+
+    @Test
+    fun `getVoterInformation emptyStateInfo setsLiveDataToNull`() = mainCoroutineRule.runBlockingTest {
+
+        // GIVEN - getVoterInformationViewModel is called
         //creating dummy elections lists
         val electionsList = createThreeElectionInstances()
 
         //setting up the fake repository
         fakeRepository = FakeRepository(electionsList)
 
-        voterInfoViewModel = VoterInfoViewModel(fakeRepository,electionsList[0].id,
-            electionsList[0].division)
+        //WHEN - state is set to null
+        fakeRepository.optionResult = 1
 
-    }
-
-    @Test
-    fun getVoterInformation_emptyStateInfo_setsLiveDataNull() = mainCoroutineRule.runBlockingTest {
-
-        // WHEN - getVoterInformation is called
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
 
 
         // THEN - verify ˚livedata values are empty
         val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
+        MatcherAssert.assertThat(responseStateList, `is`(nullValue()))
+    }
 
-          MatcherAssert.assertThat(responseStateList?.size, `is`(1))
+    @Test
+    fun `getVoterInformation nullStateInfo setsLiveDataToNull`() {
+        // GIVEN - getVoterInformationViewModel is called
+        //creating dummy elections lists
+        val electionsList = createThreeElectionInstances()
+
+        //setting up the fake repository
+        fakeRepository = FakeRepository(electionsList)
+
+        //WHEN - state is set to null
+        fakeRepository.optionResult = 0
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify ˚livedata values are empty
+        val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
+        MatcherAssert.assertThat(responseStateList, `is`(nullValue()))
+    }
+
+    @Test
+    fun `getVoterInformation withStateInfo updatesStatesListLiveData`() {
+        // GIVEN - getVoterInformationViewModel is called
+        //creating dummy elections lists
+        val electionsList = createThreeElectionInstances()
+
+        //setting up the fake repository
+        fakeRepository = FakeRepository(electionsList)
+
+        //WHEN - state is set to return results
+        fakeRepository.optionResult = 2
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify ˚livedata values have data
+        val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
+        MatcherAssert.assertThat(responseStateList, `is`(notNullValue()))
+        MatcherAssert.assertThat(responseStateList?.size, `is`(3))
     }
 }

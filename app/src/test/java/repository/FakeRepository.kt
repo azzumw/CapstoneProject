@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
+import util.createStates
+
+
 
 class FakeRepository(private val mElectionList: List<Election>) : RepositoryInterface {
 
@@ -11,6 +14,8 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
     private val elections: LiveData<List<Election>> get() = _elections
 
     private val _savedElections = MutableLiveData<List<ElectionAndSavedElection>>()
+
+    var optionResult:Int = 0
 
     override suspend fun getElections() {
         _elections.value = callElectionsInfoApi().elections
@@ -58,29 +63,14 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
 
 
     override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+
         getElections()
+
         val election = getAnElection(electionId.toInt()).value
-        return VoterInfoResponse(
-            election = election!!,
-            state = listOf(
-                State(
-                    name = "California",
-                    electionAdministrationBody = AdministrationBody(
-                        name = "AdminBodyName",
-                        electionInfoUrl = "http://www.${election.id}.com",
-                        votingLocationFinderUrl = "http://www.voting-info.com/${election.id}",
-                        ballotInfoUrl = "http://www.ballotinfo.com/${election.id}",
-                        correspondenceAddress = Address(
-                            "line1",
-                            "line2",
-                            "San Jose",
-                            "California",
-                            "10098"
-                        )
-                    )
-                )
-            )
-        )
+
+        val states =  createStates(electionId.toInt(),optionResult)
+
+        return VoterInfoResponse(election!!, state = states)
     }
 
     override suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse {
