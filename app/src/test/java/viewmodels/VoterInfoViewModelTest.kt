@@ -103,8 +103,8 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify voterLocationUrl livedata is null
-        val responseVoterVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
-        MatcherAssert.assertThat(responseVoterVoterLocationUrl, `is`(nullValue()))
+        val responseVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
+        MatcherAssert.assertThat(responseVoterLocationUrl, `is`(nullValue()))
 
     }
 
@@ -119,13 +119,13 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify voterLocationUrl livedata is null
-        val responseVoterVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
-        MatcherAssert.assertThat(responseVoterVoterLocationUrl, `is`(nullValue()))
+        val responseVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
+        MatcherAssert.assertThat(responseVoterLocationUrl, `is`(nullValue()))
     }
 
     @Test
     fun `getVoterInformation successfulNetworkCall withVoterInfoUrl updatesVoterInfoUrlLiveData`() {
-        //WHEN - state is set to return null
+        //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
         // and viewModel is instantiated
@@ -135,9 +135,57 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify voterLocationUrl livedata has data
-        val responseVoterVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
-        MatcherAssert.assertThat(responseVoterVoterLocationUrl, `is`(notNullValue()))
-        MatcherAssert.assertThat(responseVoterVoterLocationUrl, `is`("http://www.voting-info.com/${electionsList[0].id}"))
+        val responseVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
+        MatcherAssert.assertThat(responseVoterLocationUrl, `is`(notNullValue()))
+        MatcherAssert.assertThat(responseVoterLocationUrl, `is`("http://www.voting-info.com/${electionsList[0].id}"))
+
+    }
+
+    @Test
+    fun `getVoterInformation unSuccessfulNetworkCall nullBallotInfoUrl setsLiveDataToNull`() {
+        //WHEN - state is set to return null
+        fakeRepository.optionResult = 0
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify ballotLocationUrl livedata is null
+        val responseBallotInfoUrl = voterInfoViewModel.ballotInfoUrl.getOrAwaitValue()
+        MatcherAssert.assertThat(responseBallotInfoUrl, `is`(nullValue()))
+    }
+
+    @Test
+    fun `getVoterInformation successfulNetworkCall emptyBallotInfoUrl setsLiveDataToNull`() {
+        //WHEN - state is set to return empty
+        fakeRepository.optionResult = 1
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify ballotLocationUrl livedata is null
+        val responseBallotInfoUrl = voterInfoViewModel.ballotInfoUrl.getOrAwaitValue()
+        MatcherAssert.assertThat(responseBallotInfoUrl, `is`(nullValue()))
+    }
+
+    @Test
+    fun `getVoterInformation successfulNetworkCall withBallotInfoUrl updatesBallotInfoUrlLiveData`() {
+        //WHEN - state is set to return data
+        fakeRepository.optionResult = 2
+
+        // and viewModel is instantiated
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify voterLocationUrl livedata has data
+        val responseBallotInfoUrl = voterInfoViewModel.ballotInfoUrl.getOrAwaitValue()
+        MatcherAssert.assertThat(responseBallotInfoUrl, `is`(notNullValue()))
+        MatcherAssert.assertThat(responseBallotInfoUrl, `is`("http://www.ballotinfo.com/${electionsList[0].id}"))
 
     }
 }
