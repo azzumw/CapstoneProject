@@ -28,8 +28,10 @@ class VoterInfoViewModel(
     private val _ballotInfoUrl = MutableLiveData<String?>(null)
     val ballotInfoUrl: LiveData<String?> get() = _ballotInfoUrl
 
-    val isVoterAndBallotInfoNull: Boolean =
-        (voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty())
+//    private val _isVoterAndBallotInfoNull = MutableLiveData<Boolean>(true)
+//    val isVoterAndBallotInfoNull: LiveData<Boolean> get() = _isVoterAndBallotInfoNull
+
+    val isVoterAndBallotInfoNull = voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty()
 
     private val _correspondenceAddress = MutableLiveData<Address?>(null)
     val correspondenceAddress: LiveData<Address?> get() = _correspondenceAddress
@@ -37,9 +39,9 @@ class VoterInfoViewModel(
     private val _state = MutableLiveData<List<State>?>(null)
     val state: LiveData<List<State>?> get() = _state
 
-    val election: LiveData<Election> =   repository.getAnElection(electionId)
+    val election: LiveData<Election> = repository.getAnElection(electionId)
 
-    private val isElectionSaved =  repository.getSavedElectionByElectionID(electionId)
+    private val isElectionSaved = repository.getSavedElectionByElectionID(electionId)
 
     val saveBtnTextState = Transformations.map(isElectionSaved) {
         if (it == null) {
@@ -75,6 +77,10 @@ class VoterInfoViewModel(
 
                     _ballotInfoUrl.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
+
+//                    if (!voterLocationUrl.value.isNullOrEmpty() && !ballotInfoUrl.value.isNullOrEmpty() ){
+//                        _isVoterAndBallotInfoNull.value = false
+//                    }
 
                     _correspondenceAddress.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
