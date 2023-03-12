@@ -1,13 +1,10 @@
 package com.example.android.politicalpreparedness.election
 
 import androidx.lifecycle.*
-import com.example.android.politicalpreparedness.ServiceLocator.repository
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import kotlin.coroutines.coroutineContext
 
 private const val FOLLOW_BUTTON_TEXT = "Follow"
 private const val UNFOLLOW_BUTTON_TEXT = "Unfollow"
@@ -31,7 +28,8 @@ class VoterInfoViewModel(
 //    private val _isVoterAndBallotInfoNull = MutableLiveData<Boolean>(true)
 //    val isVoterAndBallotInfoNull: LiveData<Boolean> get() = _isVoterAndBallotInfoNull
 
-    val isVoterAndBallotInfoNull = voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty()
+    val isVoterAndBallotInfoNull =
+        voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty()
 
     private val _correspondenceAddress = MutableLiveData<Address?>(null)
     val correspondenceAddress: LiveData<Address?> get() = _correspondenceAddress
@@ -96,7 +94,7 @@ class VoterInfoViewModel(
 
     fun followOrUnFollowElection() {
         viewModelScope.launch {
-            if (saveBtnTextState.value == "Follow") {
+            if (saveBtnTextState.value == FOLLOW_BUTTON_TEXT) {
                 repository.saveThisElection(savedElection)
             } else {
                 repository.removeThisElection(savedElection)
