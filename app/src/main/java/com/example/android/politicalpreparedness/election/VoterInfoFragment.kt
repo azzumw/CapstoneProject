@@ -3,7 +3,6 @@ package com.example.android.politicalpreparedness.election
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -46,7 +45,6 @@ class VoterInfoFragment : Fragment() {
         viewModel.voterLocationUrl.observe(viewLifecycleOwner, Observer { url ->
             if (url != null) {
                 binding.stateLocations.visibility = View.VISIBLE
-                binding.noInfoTextView.visibility = View.GONE
                 binding.stateLocations.setOnClickListener {
                     startIntentForUrl(url)
                 }
@@ -56,19 +54,11 @@ class VoterInfoFragment : Fragment() {
         viewModel.ballotInfoUrl.observe(viewLifecycleOwner, Observer { url ->
             if (url != null) {
                 binding.stateBallot.visibility = View.VISIBLE
-                binding.noInfoTextView.visibility = View.GONE
                 binding.stateBallot.setOnClickListener {
                     startIntentForUrl(url)
                 }
             }
         })
-
-        if (viewModel.isVoterAndBallotInfoNull) {
-            binding.noInfoTextView.visibility = View.VISIBLE
-
-            binding.stateLocations.visibility = View.GONE
-            binding.stateBallot.visibility = View.GONE
-        }
 
         viewModel.correspondenceAddress.observe(viewLifecycleOwner, Observer {
             if (it != null) {

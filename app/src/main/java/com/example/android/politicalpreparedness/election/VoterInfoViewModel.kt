@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
@@ -25,11 +26,10 @@ class VoterInfoViewModel(
     private val _ballotInfoUrl = MutableLiveData<String?>(null)
     val ballotInfoUrl: LiveData<String?> get() = _ballotInfoUrl
 
-//    private val _isVoterAndBallotInfoNull = MutableLiveData<Boolean>(true)
-//    val isVoterAndBallotInfoNull: LiveData<Boolean> get() = _isVoterAndBallotInfoNull
+    val isVoterAndBallotInfoNull = MediatorLiveData<Boolean>()
 
-    val isVoterAndBallotInfoNull =
-        voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty()
+//    val isVoterAndBallotInfoNull =
+//        voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty()
 
     private val _correspondenceAddress = MutableLiveData<Address?>(null)
     val correspondenceAddress: LiveData<Address?> get() = _correspondenceAddress
@@ -52,8 +52,20 @@ class VoterInfoViewModel(
     private var savedElection: SavedElection
 
     init {
+
         savedElection = SavedElection(electionId)
         getVoterInformation(electionId)
+
+        isVoterAndBallotInfoNull.addSource(ballotInfoUrl) { ballot ->
+            isVoterAndBallotInfoNull.addSource(voterLocationUrl) { vote ->
+                isVoterAndBallotInfoNull.value = ballot.isNullOrEmpty() && vote.isNullOrEmpty()
+                isVoterAndBallotInfoNull.removeSource(voterLocationUrl)
+            }
+
+            isVoterAndBallotInfoNull.removeSource(ballotInfoUrl)
+        }
+
+
     }
 
 
@@ -76,17 +88,13 @@ class VoterInfoViewModel(
                     _ballotInfoUrl.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
 
-//                    if (!voterLocationUrl.value.isNullOrEmpty() && !ballotInfoUrl.value.isNullOrEmpty() ){
-//                        _isVoterAndBallotInfoNull.value = false
-//                    }
-
                     _correspondenceAddress.value =
                         voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
 
                 }
 
             } catch (e: Exception) {
-
+                Log.e("InfoViewModel", e.message.toString())
                 _showSnackBarEvent.value = true
             }
         }

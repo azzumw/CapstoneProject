@@ -9,7 +9,6 @@ import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import repository.FakeRepository
@@ -201,7 +200,7 @@ class VoterInfoViewModelTest {
         )
 
         //
-        val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull
+        val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(responseIsVoterAndBallotInfoNull, `is`(true))
     }
 
@@ -216,14 +215,14 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify isVoterAndBallotInfoNull is true
-        val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull
+        val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(responseIsVoterAndBallotInfoNull, `is`(true))
 
     }
 
     @Test
-    @Ignore("This prompts to change implementation details")
-    fun `getVoterInformation successfulNetworkCall withData updates isVoterAndBallotInfoNull toFalse`(){
+//    @Ignore("This prompts to change implementation details")
+    fun `getVoterInformation successfulNetworkCall hasData updates isVoterAndBallotInfoNull toFalse`(){
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -233,10 +232,7 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify isVoterAndBallotInfoNull is false
-        val voterinfoUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
-        val ballotInfoUrl = voterInfoViewModel.ballotInfoUrl.getOrAwaitValue()
-
-        val result = voterinfoUrl.isNullOrEmpty() && ballotInfoUrl.isNullOrEmpty()
+        val result = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(result, `is`(false))
     }
 
