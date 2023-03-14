@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import repository.FakeRepository
@@ -282,5 +283,17 @@ class VoterInfoViewModelTest {
         MatcherAssert.assertThat(result?.city, `is`("Tijuana"))
     }
 
+    @Test
+    @Ignore("work in progress...")
+    fun `getVoterInformation unsuccessfulNetworkCall  sets electionLiveData to Null`() {
+        //WHEN - state is set to return data
 
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        val electionResult = voterInfoViewModel.election.getOrAwaitValue()
+        MatcherAssert.assertThat(electionResult, `is`(notNullValue()))
+    }
 }
