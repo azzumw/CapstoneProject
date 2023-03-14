@@ -199,7 +199,7 @@ class VoterInfoViewModelTest {
             electionsList[0].division
         )
 
-        //
+        // THEN - verify isVoterAndBallotInfoNull is true
         val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(responseIsVoterAndBallotInfoNull, `is`(true))
     }
@@ -221,7 +221,6 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-//    @Ignore("This prompts to change implementation details")
     fun `getVoterInformation successfulNetworkCall hasData updates isVoterAndBallotInfoNull toFalse`(){
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
@@ -235,5 +234,53 @@ class VoterInfoViewModelTest {
         val result = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(result, `is`(false))
     }
+
+    @Test
+    fun `getVoterInformation unsuccessfulNetworkCall  sets correspondenceAddressLiveData to Null`() {
+        //WHEN - state is set to return null
+        fakeRepository.optionResult = 0
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify correspondenceAddress is null
+        val result = voterInfoViewModel.correspondenceAddress.getOrAwaitValue()
+        MatcherAssert.assertThat(result, `is`(nullValue()))
+    }
+
+    @Test
+    fun `getVoterInformation successfulNetworkCall  withEmptyData sets correspondenceAddressLiveData to Null`() {
+        //WHEN - state is set to return empty list
+        fakeRepository.optionResult = 1
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify correspondenceAddress is null
+        val result = voterInfoViewModel.correspondenceAddress.getOrAwaitValue()
+        MatcherAssert.assertThat(result, `is`(nullValue()))
+    }
+
+    @Test
+    fun `getVoterInformation successfulNetworkCall hasData updates correspondenceAddressLiveData`() {
+        //WHEN - state is set to return data
+        fakeRepository.optionResult = 2
+
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // THEN - verify correspondenceAddress has data
+        val result = voterInfoViewModel.correspondenceAddress.getOrAwaitValue()
+        MatcherAssert.assertThat(result, `is`(notNullValue()))
+        MatcherAssert.assertThat(result?.state, `is`("Baja California"))
+        MatcherAssert.assertThat(result?.city, `is`("Tijuana"))
+    }
+
 
 }

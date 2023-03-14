@@ -28,9 +28,6 @@ class VoterInfoViewModel(
 
     val isVoterAndBallotInfoNull = MediatorLiveData<Boolean>()
 
-//    val isVoterAndBallotInfoNull =
-//        voterLocationUrl.value.isNullOrEmpty() && ballotInfoUrl.value.isNullOrEmpty()
-
     private val _correspondenceAddress = MutableLiveData<Address?>(null)
     val correspondenceAddress: LiveData<Address?> get() = _correspondenceAddress
 
@@ -61,11 +58,8 @@ class VoterInfoViewModel(
                 isVoterAndBallotInfoNull.value = ballot.isNullOrEmpty() && vote.isNullOrEmpty()
                 isVoterAndBallotInfoNull.removeSource(voterLocationUrl)
             }
-
             isVoterAndBallotInfoNull.removeSource(ballotInfoUrl)
         }
-
-
     }
 
 
