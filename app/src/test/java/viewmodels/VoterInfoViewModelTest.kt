@@ -44,9 +44,9 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation emptyStateInfo setsLiveDataToNull`() = mainCoroutineRule.runBlockingTest {
+    fun `getVoterInformation with empty state data sets state liveData to null`() = mainCoroutineRule.runBlockingTest {
 
-        //WHEN - state is set to null
+        //WHEN - state returns an empty list
         fakeRepository.optionResult = 1
 
         voterInfoViewModel = VoterInfoViewModel(
@@ -54,13 +54,13 @@ class VoterInfoViewModelTest {
             electionsList[0].division
         )
 
-        // THEN - verify ˚livedata values are empty
+        // THEN - verify state livedata is null
         val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
         MatcherAssert.assertThat(responseStateList, `is`(nullValue()))
     }
 
     @Test
-    fun `getVoterInformation nullStateInfo setsLiveDataToNull`() {
+    fun `getVoterInformation null state sets state liveData to null`() {
 
         //WHEN - state is set to null
         fakeRepository.optionResult = 0
@@ -70,13 +70,13 @@ class VoterInfoViewModelTest {
             electionsList[0].division
         )
 
-        // THEN - verify ˚livedata values are empty
+        // THEN - verify ˚state livedata is null
         val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
         MatcherAssert.assertThat(responseStateList, `is`(nullValue()))
     }
 
     @Test
-    fun `getVoterInformation withStateInfo updatesStatesListLiveData`() {
+    fun `getVoterInformation with state data updates state liveData`() {
 
         //WHEN - state is set to return results
         fakeRepository.optionResult = 2
@@ -86,14 +86,14 @@ class VoterInfoViewModelTest {
             electionsList[0].division
         )
 
-        // THEN - verify ˚livedata values have data
+        // THEN - verify ˚state livedata has data
         val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
         MatcherAssert.assertThat(responseStateList, `is`(notNullValue()))
         MatcherAssert.assertThat(responseStateList?.size, `is`(3))
     }
 
     @Test
-    fun `getVoterInformation unSuccessfulNetworkCall nullVoterInfoUrl setsLiveDataToNull`() {
+    fun `getVoterInformation unsuccessfull networkCall sets voterLocationUrl liveData to null`() {
 
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
@@ -110,8 +110,8 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall emptyVoterInfoUrl setsLiveDataToNull`() {
-        //WHEN - state is set to return null
+    fun `getVoterInformation successfull networkCall with empty data sets voterLocationUrl liveData to null`() {
+        //WHEN - state is set to return empty list
         fakeRepository.optionResult = 1
 
         voterInfoViewModel = VoterInfoViewModel(
@@ -125,7 +125,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall withVoterInfoUrl updatesVoterInfoUrlLiveData`() {
+    fun `getVoterInformation successful networkCall with data updates voterInfoUrl liveData`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -139,11 +139,10 @@ class VoterInfoViewModelTest {
         val responseVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
         MatcherAssert.assertThat(responseVoterLocationUrl, `is`(notNullValue()))
         MatcherAssert.assertThat(responseVoterLocationUrl, `is`("http://www.voting-info.com/${electionsList[0].id}"))
-
     }
 
     @Test
-    fun `getVoterInformation unSuccessfulNetworkCall nullBallotInfoUrl setsLiveDataToNull`() {
+    fun `getVoterInformation unsuccessfull networkCall nullBallotInfoUrl sets ballotInfoUrl liveData to null`() {
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
 
@@ -158,7 +157,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall emptyBallotInfoUrl setsLiveDataToNull`() {
+    fun `getVoterInformation successfull networkCall with empty data sets ballotInfoUrl liveData to null`() {
         //WHEN - state is set to return empty
         fakeRepository.optionResult = 1
 
@@ -173,7 +172,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall withBallotInfoUrl updatesBallotInfoUrlLiveData`() {
+    fun `getVoterInformation successfull networkCall with data updates ballotInfoUrl liveData`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -191,7 +190,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation unSuccessfulNetworkCall updates isVoterAndBallotInfoNull toTrue`() {
+    fun `getVoterInformation unsuccessfull networkCall updates isVoterAndBallotInfoNull livedata to true`() {
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
 
@@ -206,7 +205,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall withEmptyData updates isVoterAndBallotInfoNull toTrue`() {
+    fun `getVoterInformation successfull networkCall with empty data updates isVoterAndBallotInfoNull livedata to true`() {
         //WHEN - state is set to return emptyList
         fakeRepository.optionResult = 1
 
@@ -222,7 +221,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall hasData updates isVoterAndBallotInfoNull toFalse`(){
+    fun `getVoterInformation successfull networkCall has data updates isVoterAndBallotInfoNull livedata to false`(){
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -237,7 +236,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation unsuccessfulNetworkCall  sets correspondenceAddressLiveData to Null`() {
+    fun `getVoterInformation unsuccessfull networkCall  sets correspondenceAddress livedata to null`() {
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
 
@@ -252,7 +251,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall  withEmptyData sets correspondenceAddressLiveData to Null`() {
+    fun `getVoterInformation successfulNetworkCall with empty data sets correspondenceAddress livedata to null`() {
         //WHEN - state is set to return empty list
         fakeRepository.optionResult = 1
 
@@ -267,7 +266,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall hasData updates correspondenceAddressLiveData`() {
+    fun `getVoterInformation successfull networkCall with data updates correspondenceAddress livedata`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -285,7 +284,7 @@ class VoterInfoViewModelTest {
 
     @Test
     @Ignore("work in progress...")
-    fun `getVoterInformation unsuccessfulNetworkCall  sets electionLiveData to Null`() {
+    fun `getVoterInformation unsuccessfull networkCall  sets election livedata to null`() {
         //WHEN - state is set to return data
 
         voterInfoViewModel = VoterInfoViewModel(
