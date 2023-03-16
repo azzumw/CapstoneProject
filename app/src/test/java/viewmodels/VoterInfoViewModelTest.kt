@@ -2,6 +2,7 @@ package viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
+import com.example.android.politicalpreparedness.election.ElectionsViewModel
 import com.example.android.politicalpreparedness.election.VoterInfoViewModel
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +34,7 @@ class VoterInfoViewModelTest {
     private lateinit var voterInfoViewModel: VoterInfoViewModel
     private lateinit var fakeRepository: FakeRepository
 
-    private lateinit var  electionsList:List<Election>
+    private lateinit var electionsList: List<Election>
 
     @Before
     fun setUp() {
@@ -44,20 +45,21 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation with empty state data sets state liveData to null`() = mainCoroutineRule.runBlockingTest {
+    fun `getVoterInformation with empty state data sets state liveData to null`() =
+        mainCoroutineRule.runBlockingTest {
 
-        //WHEN - state returns an empty list
-        fakeRepository.optionResult = 1
+            //WHEN - state returns an empty list
+            fakeRepository.optionResult = 1
 
-        voterInfoViewModel = VoterInfoViewModel(
-            fakeRepository, electionsList[0].id,
-            electionsList[0].division
-        )
+            voterInfoViewModel = VoterInfoViewModel(
+                fakeRepository, electionsList[0].id,
+                electionsList[0].division
+            )
 
-        // THEN - verify state livedata is null
-        val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
-        MatcherAssert.assertThat(responseStateList, `is`(nullValue()))
-    }
+            // THEN - verify state livedata is null
+            val responseStateList = voterInfoViewModel.state.getOrAwaitValue()
+            MatcherAssert.assertThat(responseStateList, `is`(nullValue()))
+        }
 
     @Test
     fun `getVoterInformation null state sets state liveData to null`() {
@@ -138,7 +140,10 @@ class VoterInfoViewModelTest {
         // THEN - verify voterLocationUrl livedata has data
         val responseVoterLocationUrl = voterInfoViewModel.voterLocationUrl.getOrAwaitValue()
         MatcherAssert.assertThat(responseVoterLocationUrl, `is`(notNullValue()))
-        MatcherAssert.assertThat(responseVoterLocationUrl, `is`("http://www.voting-info.com/${electionsList[0].id}"))
+        MatcherAssert.assertThat(
+            responseVoterLocationUrl,
+            `is`("http://www.voting-info.com/${electionsList[0].id}")
+        )
     }
 
     @Test
@@ -185,7 +190,10 @@ class VoterInfoViewModelTest {
         // THEN - verify voterLocationUrl livedata has data
         val responseBallotInfoUrl = voterInfoViewModel.ballotInfoUrl.getOrAwaitValue()
         MatcherAssert.assertThat(responseBallotInfoUrl, `is`(notNullValue()))
-        MatcherAssert.assertThat(responseBallotInfoUrl, `is`("http://www.ballotinfo.com/${electionsList[0].id}"))
+        MatcherAssert.assertThat(
+            responseBallotInfoUrl,
+            `is`("http://www.ballotinfo.com/${electionsList[0].id}")
+        )
 
     }
 
@@ -200,7 +208,8 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify isVoterAndBallotInfoNull is true
-        val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
+        val responseIsVoterAndBallotInfoNull =
+            voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(responseIsVoterAndBallotInfoNull, `is`(true))
     }
 
@@ -215,13 +224,14 @@ class VoterInfoViewModelTest {
         )
 
         // THEN - verify isVoterAndBallotInfoNull is true
-        val responseIsVoterAndBallotInfoNull = voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
+        val responseIsVoterAndBallotInfoNull =
+            voterInfoViewModel.isVoterAndBallotInfoNull.getOrAwaitValue()
         MatcherAssert.assertThat(responseIsVoterAndBallotInfoNull, `is`(true))
 
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall has data updates isVoterAndBallotInfoNull livedata to false`(){
+    fun `getVoterInformation successfull networkCall has data updates isVoterAndBallotInfoNull livedata to false`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -283,16 +293,20 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    @Ignore("work in progress...")
-    fun `getVoterInformation unsuccessfull networkCall  sets election livedata to null`() {
-        //WHEN - state is set to return data
+    fun `getVoterInformation successfull networkCall retrieves the correct election details`() {
+        // GIVEN - ElectionViewModel (needed to make a call to fill election list)
+        ElectionsViewModel(fakeRepository)
 
+        // VoterInfoViewModel
         voterInfoViewModel = VoterInfoViewModel(
             fakeRepository, electionsList[0].id,
             electionsList[0].division
         )
 
+        // THEN - verify election livedata has the correct election details as per the ID
         val electionResult = voterInfoViewModel.election.getOrAwaitValue()
         MatcherAssert.assertThat(electionResult, `is`(notNullValue()))
+        MatcherAssert.assertThat(electionResult.id, `is`(0))
+        MatcherAssert.assertThat(electionResult.name, `is`("Election 0"))
     }
 }
