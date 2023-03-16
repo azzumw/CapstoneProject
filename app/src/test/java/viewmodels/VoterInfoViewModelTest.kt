@@ -95,7 +95,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation unsuccessfull networkCall sets voterLocationUrl liveData to null`() {
+    fun `getVoterInformation unsuccessful networkCall sets voterLocationUrl liveData to null`() {
 
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
@@ -112,7 +112,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall with empty data sets voterLocationUrl liveData to null`() {
+    fun `getVoterInformation successful networkCall with empty data sets voterLocationUrl liveData to null`() {
         //WHEN - state is set to return empty list
         fakeRepository.optionResult = 1
 
@@ -147,7 +147,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation unsuccessfull networkCall nullBallotInfoUrl sets ballotInfoUrl liveData to null`() {
+    fun `getVoterInformation unsuccessful networkCall nullBallotInfoUrl sets ballotInfoUrl liveData to null`() {
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
 
@@ -162,7 +162,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall with empty data sets ballotInfoUrl liveData to null`() {
+    fun `getVoterInformation successful networkCall with empty data sets ballotInfoUrl liveData to null`() {
         //WHEN - state is set to return empty
         fakeRepository.optionResult = 1
 
@@ -177,7 +177,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall with data updates ballotInfoUrl liveData`() {
+    fun `getVoterInformation successful networkCall with data updates ballotInfoUrl liveData`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -198,7 +198,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation unsuccessfull networkCall updates isVoterAndBallotInfoNull livedata to true`() {
+    fun `getVoterInformation unsuccessful networkCall updates isVoterAndBallotInfoNull livedata to true`() {
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
 
@@ -214,7 +214,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall with empty data updates isVoterAndBallotInfoNull livedata to true`() {
+    fun `getVoterInformation successful networkCall with empty data updates isVoterAndBallotInfoNull livedata to true`() {
         //WHEN - state is set to return emptyList
         fakeRepository.optionResult = 1
 
@@ -231,7 +231,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall has data updates isVoterAndBallotInfoNull livedata to false`() {
+    fun `getVoterInformation successful networkCall has data updates isVoterAndBallotInfoNull livedata to false`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -246,7 +246,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation unsuccessfull networkCall  sets correspondenceAddress livedata to null`() {
+    fun `getVoterInformation unsuccessful networkCall  sets correspondenceAddress livedata to null`() {
         //WHEN - state is set to return null
         fakeRepository.optionResult = 0
 
@@ -276,7 +276,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall with data updates correspondenceAddress livedata`() {
+    fun `getVoterInformation successful networkCall with data updates correspondenceAddress livedata`() {
         //WHEN - state is set to return data
         fakeRepository.optionResult = 2
 
@@ -293,7 +293,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfull networkCall retrieves the correct election details`() {
+    fun `getVoterInformation successful networkCall retrieves the correct election details`() {
         // GIVEN - ElectionViewModel (needed to make a call to fill election list)
         ElectionsViewModel(fakeRepository)
 
