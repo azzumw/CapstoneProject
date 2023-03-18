@@ -36,7 +36,7 @@ class VoterInfoViewModel(
 
     val election: LiveData<Election> = repository.getAnElection(electionId)
 
-    private val isElectionSaved = repository.getSavedElectionByElectionID(electionId)
+    val isElectionSaved = repository.getSavedElectionByElectionID(electionId)
 
     val saveBtnTextState = Transformations.map(isElectionSaved) {
         if (it == null) {

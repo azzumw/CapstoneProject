@@ -14,6 +14,12 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
     private val elections: LiveData<List<Election>> get() = _elections
 
     private val _savedElections = MutableLiveData<List<ElectionAndSavedElection>>()
+    val savedElections : LiveData<List<ElectionAndSavedElection>>   = _savedElections
+
+    private val tempSavedElections = mutableListOf<SavedElection?>()
+
+    private val _liveSavedElection = MutableLiveData<SavedElection>()
+    private val liveSavedElection : LiveData<SavedElection> get() = _liveSavedElection
 
     var optionResult:Int = 0
 
@@ -41,22 +47,23 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
         _savedElections.value = elections.value?.filter {
             it.id == savedElection.savedElectionId
         }?.map {
-            ElectionAndSavedElection(it, SavedElection(it.id))
+            ElectionAndSavedElection(it, savedElection)
         }
+
+        //unsure why we need this?
+       getSavedElectionByElectionID(savedElection.savedElectionId)
     }
 
     override suspend fun removeThisElection(savedElection: SavedElection) {
-
+        _savedElections.value = _savedElections.value?.filterNot {
+            it.savedElection.savedElectionId == savedElection.savedElectionId
+        }
     }
 
     override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
-        val se = _savedElections.value?.filter {
+        _liveSavedElection.value  =  _savedElections.value?.filter {
             it.savedElection.savedElectionId == electionId
-        }?.map { it.savedElection }?.take(1)
-
-        val liveSavedElection = MutableLiveData<SavedElection>()
-
-        liveSavedElection.value = se?.first()
+        }?.map { it.savedElection }?.take(1)?.first()
 
         return liveSavedElection
     }
@@ -88,6 +95,12 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
 
     override suspend fun deleteAllSavedElections() {
         TODO("Not yet implemented")
+    }
+
+    fun clearRepo() {
+        _savedElections.value = emptyList()
+        _elections.value = emptyList()
+        tempSavedElections.clear()
     }
 
 }

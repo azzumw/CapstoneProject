@@ -9,10 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import repository.FakeRepository
 import util.MainCoroutineRule
 import util.createThreeElectionInstances
@@ -42,6 +39,12 @@ class VoterInfoViewModelTest {
 
         electionsList = createThreeElectionInstances()
         fakeRepository = FakeRepository(electionsList)
+
+    }
+
+    @After
+    fun tearDown() {
+        fakeRepository.clearRepo()
     }
 
     @Test
@@ -308,5 +311,45 @@ class VoterInfoViewModelTest {
         MatcherAssert.assertThat(electionResult, `is`(notNullValue()))
         MatcherAssert.assertThat(electionResult.id, `is`(0))
         MatcherAssert.assertThat(electionResult.name, `is`("Election 0"))
+    }
+
+    @Test
+    fun `getVoterInformation successful networkCall `() {
+        // VoterInfoViewModel
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[0].id,
+            electionsList[0].division
+        )
+
+        // verify this election[0] is not saved
+        val isElectionSavedResult = voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
+        MatcherAssert.assertThat(isElectionSavedResult, `is`("Follow"))
+    }
+
+    @Test
+    fun `followOrUnFollowElection unFollowed election is followed`() = runTest {
+        // GIVEN - a fresh ElectionViewModel
+        ElectionsViewModel(fakeRepository)
+
+        // ...and VoterInfoViewModel with Election ID 1
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[1].id,
+            electionsList[1].division
+        )
+
+        // check and observe this election is not already saved i.e. follow button text = Follow
+        voterInfoViewModel.isElectionSaved.getOrAwaitValue()
+        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
+
+        // WHEN - this election is followed/saved
+        voterInfoViewModel.followOrUnFollowElection()
+
+        //observe the changes to livedata
+        voterInfoViewModel.isElectionSaved.getOrAwaitValue()
+        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
+
+        // THEN - verify this election is saved, and the follow button text changes to 'Unfollow'
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Unfollow"))
     }
 }
