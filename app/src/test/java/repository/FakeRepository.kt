@@ -58,6 +58,8 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
         _savedElections.value = _savedElections.value?.filterNot {
             it.savedElection.savedElectionId == savedElection.savedElectionId
         }
+
+        getSavedElectionByElectionID(savedElection.savedElectionId)
     }
 
     override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
