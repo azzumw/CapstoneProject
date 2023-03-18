@@ -338,7 +338,6 @@ class VoterInfoViewModelTest {
         )
 
         // check and observe this election is not already saved i.e. follow button text = Follow
-        voterInfoViewModel.isElectionSaved.getOrAwaitValue()
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
         MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
 
@@ -346,7 +345,6 @@ class VoterInfoViewModelTest {
         voterInfoViewModel.followOrUnFollowElection()
 
         //observe the changes to livedata
-        voterInfoViewModel.isElectionSaved.getOrAwaitValue()
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
 
         // THEN - verify this election is saved, and the follow button text changes to 'Unfollow'
