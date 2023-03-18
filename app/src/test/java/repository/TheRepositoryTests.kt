@@ -152,7 +152,7 @@ class TheRepositoryTests {
 
         // THEN - verify the response return as VoterInfoResponse contains the same Election instance
         val resultElection = localDataSource.getAnElection(1).getOrAwaitValue()
-        MatcherAssert.assertThat(response.election, `is`(resultElection))
+        MatcherAssert.assertThat(response?.election, `is`(resultElection))
     }
 
     @Test
