@@ -3,6 +3,8 @@ package viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.politicalpreparedness.election.ElectionsViewModel
+import com.example.android.politicalpreparedness.election.FOLLOW_BUTTON_TEXT
+import com.example.android.politicalpreparedness.election.UNFOLLOW_BUTTON_TEXT
 import com.example.android.politicalpreparedness.election.VoterInfoViewModel
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -323,7 +325,7 @@ class VoterInfoViewModelTest {
 
         // verify this election[0] is not saved
         val isElectionSavedResult = voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
-        MatcherAssert.assertThat(isElectionSavedResult, `is`("Follow"))
+        MatcherAssert.assertThat(isElectionSavedResult, `is`(FOLLOW_BUTTON_TEXT))
     }
 
     @Test
@@ -339,7 +341,7 @@ class VoterInfoViewModelTest {
 
         // check and observe this election is not already saved i.e. follow button text = Follow
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
-        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`(FOLLOW_BUTTON_TEXT))
 
         // WHEN - this election is followed/saved
         voterInfoViewModel.followOrUnFollowElection()
@@ -348,7 +350,8 @@ class VoterInfoViewModelTest {
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
 
         // THEN - verify this election is saved, and the follow button text changes to 'Unfollow'
-        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Unfollow"))
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`(
+            UNFOLLOW_BUTTON_TEXT))
     }
 
     @Test
@@ -368,7 +371,11 @@ class VoterInfoViewModelTest {
 
         //observe the changes to livedata, check it is saved i.e. Save button text shows 'Unfollow'
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
-        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Unfollow"))
+        MatcherAssert.assertThat(
+            voterInfoViewModel.saveBtnTextState.value, `is`(
+                UNFOLLOW_BUTTON_TEXT
+            )
+        )
 
         // WHEN - this eleciton is unfollowed or removed
         voterInfoViewModel.followOrUnFollowElection()
@@ -377,7 +384,19 @@ class VoterInfoViewModelTest {
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
 
         // THEN - verify this election is removed and unfollowed
-        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`(FOLLOW_BUTTON_TEXT))
 
+    }
+
+    @Test
+    fun `unsuccessful network call shows offline snackbar`() {
+        //WHEN - does not return any data
+        fakeRepository.optionResult = 0
+
+        // ...and VoterInfoViewModel with Election ID 2
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[2].id,
+            electionsList[2].division
+        )
     }
 }

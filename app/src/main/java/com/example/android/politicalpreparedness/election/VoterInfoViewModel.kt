@@ -7,8 +7,8 @@ import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-private const val FOLLOW_BUTTON_TEXT = "Follow"
-private const val UNFOLLOW_BUTTON_TEXT = "Unfollow"
+const val FOLLOW_BUTTON_TEXT = "Follow"
+const val UNFOLLOW_BUTTON_TEXT = "Unfollow"
 
 class VoterInfoViewModel(
     private val repository: RepositoryInterface,
