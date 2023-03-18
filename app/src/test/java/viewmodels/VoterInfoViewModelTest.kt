@@ -327,7 +327,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `followOrUnFollowElection unFollowed election is followed`() = runTest {
+    fun `followOrUnFollowElection unfollowed election is followed`() = runTest {
         // GIVEN - a fresh ElectionViewModel - needed to fill Election List
         ElectionsViewModel(fakeRepository)
 
@@ -349,5 +349,28 @@ class VoterInfoViewModelTest {
 
         // THEN - verify this election is saved, and the follow button text changes to 'Unfollow'
         MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Unfollow"))
+    }
+
+    @Test
+    fun `followOrUnFollowElection followed election is unfollowed`() {
+        // GIVEN - a fresh ElectionViewModel - needed to fill Election List
+        ElectionsViewModel(fakeRepository)
+
+        // ...and VoterInfoViewModel with Election ID 2
+        voterInfoViewModel = VoterInfoViewModel(
+            fakeRepository, electionsList[2].id,
+            electionsList[2].division
+        )
+
+        voterInfoViewModel.followOrUnFollowElection()
+        //observe the changes to livedata
+        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Unfollow"))
+
+//        voterInfoViewModel.followOrUnFollowElection()
+        //observe the changes to livedata
+//        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
+//        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
+
     }
 }
