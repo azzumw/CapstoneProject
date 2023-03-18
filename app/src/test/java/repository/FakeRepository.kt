@@ -83,7 +83,7 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
     }
 
 
-    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse? {
 
         getElections()
 

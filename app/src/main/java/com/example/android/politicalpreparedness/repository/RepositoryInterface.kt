@@ -18,7 +18,7 @@ interface  RepositoryInterface {
     suspend fun callElectionsInfoApi(): ElectionResponse
 
     //network call for voters
-    suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse
+    suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse?
 
     //network call for representatives
     suspend fun callRepresentativeInfoApi(address: Address): RepresentativeResponse

@@ -58,7 +58,7 @@ class FakeDataSource(private val mElectionList: MutableList<Election>) : DataSou
         return MutableLiveData(result)
     }
 
-    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse? {
         val election = getAnElection(electionId.toInt()).value!!
         return VoterInfoResponse(election)
     }

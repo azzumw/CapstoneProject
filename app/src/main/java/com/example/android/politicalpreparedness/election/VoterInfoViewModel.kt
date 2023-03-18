@@ -73,17 +73,17 @@ class VoterInfoViewModel(
             try {
                 val voterInfoFromApi = repository.callVoterInfoApi(address, electId.toString())
 
-                if (!voterInfoFromApi.state.isNullOrEmpty()) {
-                    _state.value = voterInfoFromApi.state
+                if (!voterInfoFromApi?.state.isNullOrEmpty()) {
+                    _state.value = voterInfoFromApi?.state
 
                     _voterLocationUrl.value =
-                        voterInfoFromApi.state[0].electionAdministrationBody.votingLocationFinderUrl
+                        voterInfoFromApi?.state?.first()?.electionAdministrationBody?.votingLocationFinderUrl
 
                     _ballotInfoUrl.value =
-                        voterInfoFromApi.state[0].electionAdministrationBody.ballotInfoUrl
+                        voterInfoFromApi?.state?.first()?.electionAdministrationBody?.ballotInfoUrl
 
                     _correspondenceAddress.value =
-                        voterInfoFromApi.state[0].electionAdministrationBody.correspondenceAddress
+                        voterInfoFromApi?.state?.first()?.electionAdministrationBody?.correspondenceAddress
 
                 }
 

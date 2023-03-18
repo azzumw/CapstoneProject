@@ -37,7 +37,7 @@ object RemoteDataSource : DataSourceInterface {
         TODO("Not yet implemented")
     }
 
-    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse? {
         return CivicsApi.retrofitService.getVoterInfo(address, electionId = electionId)
     }
 

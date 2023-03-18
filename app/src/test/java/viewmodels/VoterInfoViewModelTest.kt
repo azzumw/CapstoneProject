@@ -30,22 +30,23 @@ class VoterInfoViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    //subject under test
     private lateinit var voterInfoViewModel: VoterInfoViewModel
+
     private lateinit var fakeRepository: FakeRepository
 
     private lateinit var electionsList: List<Election>
 
     @Before
     fun setUp() {
-        // GIVEN - getVoterInformationViewModel is called
-
+        // GIVEN - some election instances, in the repo
         electionsList = createThreeElectionInstances()
         fakeRepository = FakeRepository(electionsList)
-
     }
 
     @After
     fun tearDown() {
+        //clear the repository after test
         fakeRepository.clearRepo()
     }
 
@@ -266,7 +267,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successfulNetworkCall with empty data sets correspondenceAddress livedata to null`() {
+    fun `getVoterInformation successful networkCall with empty data sets correspondenceAddress livedata to null`() {
         //WHEN - state is set to return empty list
         fakeRepository.optionResult = 1
 
@@ -377,7 +378,7 @@ class VoterInfoViewModelTest {
             )
         )
 
-        // WHEN - this eleciton is unfollowed or removed
+        // WHEN - this election is unfollowed or removed
         voterInfoViewModel.followOrUnFollowElection()
 
         //observe the changes to livedata

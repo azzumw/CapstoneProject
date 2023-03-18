@@ -70,7 +70,7 @@ class TheRepository(
     }
 
     //network call for voters
-    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse? {
         wrapEspressoIdlingResource {
             return remoteDataSource.callVoterInfoApi(address, electionId)
         }

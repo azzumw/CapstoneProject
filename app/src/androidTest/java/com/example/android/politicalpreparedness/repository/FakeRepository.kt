@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.network.models.*
+
 class FakeRepository() : RepositoryInterface {
 
     private val _elections = MutableLiveData<List<Election>>()
@@ -14,7 +15,7 @@ class FakeRepository() : RepositoryInterface {
         _elections.value = callElectionsInfoApi().elections
     }
 
-    fun addElections(electionsList : List<Election>){
+    fun addElections(electionsList: List<Election>) {
         _elections.value = electionsList
     }
 
@@ -43,7 +44,8 @@ class FakeRepository() : RepositoryInterface {
     }
 
     override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
-        val se =  _savedElections.value?.filter {
+
+        val se = _savedElections.value?.filter {
             it.savedElection.savedElectionId == electionId
         }?.map { it.savedElection }?.take(1)
 
@@ -54,10 +56,11 @@ class FakeRepository() : RepositoryInterface {
         return liveSavedElection
     }
 
-    override suspend fun callElectionsInfoApi(): ElectionResponse =  ElectionResponse("someKind", elections.value!! )
+    override suspend fun callElectionsInfoApi(): ElectionResponse =
+        ElectionResponse("someKind", elections.value!!)
 
 
-    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse {
+    override suspend fun callVoterInfoApi(address: String, electionId: String): VoterInfoResponse? {
         val election = getAnElection(electionId.toInt()).value
         return VoterInfoResponse(election!!)
     }
