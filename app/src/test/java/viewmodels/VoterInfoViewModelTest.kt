@@ -314,7 +314,7 @@ class VoterInfoViewModelTest {
     }
 
     @Test
-    fun `getVoterInformation successful networkCall `() {
+    fun `voterInfoViewModel  by default given election is not followed `() {
         // VoterInfoViewModel
         voterInfoViewModel = VoterInfoViewModel(
             fakeRepository, electionsList[0].id,
