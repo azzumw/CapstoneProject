@@ -1,6 +1,7 @@
 package viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.filters.SmallTest
 import com.example.android.politicalpreparedness.election.ElectionsViewModel
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
@@ -27,6 +28,7 @@ import java.util.*
 
 
 @ExperimentalCoroutinesApi
+@SmallTest
 class ElectionsViewModelTest {
 
     //remember to test live data
