@@ -328,7 +328,7 @@ class VoterInfoViewModelTest {
 
     @Test
     fun `followOrUnFollowElection unFollowed election is followed`() = runTest {
-        // GIVEN - a fresh ElectionViewModel
+        // GIVEN - a fresh ElectionViewModel - needed to fill Election List
         ElectionsViewModel(fakeRepository)
 
         // ...and VoterInfoViewModel with Election ID 1
