@@ -2,6 +2,8 @@ package repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android.politicalpreparedness.network.data.RemoteDataSource.getAnElection
+import com.example.android.politicalpreparedness.network.data.RemoteDataSource.getElections
 import com.example.android.politicalpreparedness.network.models.*
 import com.example.android.politicalpreparedness.repository.RepositoryInterface
 import util.createStates
@@ -63,9 +65,19 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
     }
 
     override fun getSavedElectionByElectionID(electionId: Int): LiveData<SavedElection> {
-        _liveSavedElection.value  =  _savedElections.value?.filter {
-            it.savedElection.savedElectionId == electionId
-        }?.map { it.savedElection }?.take(1)?.first()
+
+        val se : SavedElection?
+
+        val isNullOrEmpty = _savedElections.value.isNullOrEmpty()
+
+        se = if(!isNullOrEmpty){
+            _savedElections.value?.filter {
+
+                it.savedElection.savedElectionId == electionId
+            }?.map { it.savedElection }?.take(1)?.first()
+        } else null
+
+        _liveSavedElection.value  =  se
 
         return liveSavedElection
     }

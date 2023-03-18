@@ -362,15 +362,22 @@ class VoterInfoViewModelTest {
             electionsList[2].division
         )
 
+        // observe the livedata, and save this election
+        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
         voterInfoViewModel.followOrUnFollowElection()
-        //observe the changes to livedata
+
+        //observe the changes to livedata, check it is saved i.e. Save button text shows 'Unfollow'
         voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
         MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Unfollow"))
 
-//        voterInfoViewModel.followOrUnFollowElection()
+        // WHEN - this eleciton is unfollowed or removed
+        voterInfoViewModel.followOrUnFollowElection()
+
         //observe the changes to livedata
-//        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
-//        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
+        voterInfoViewModel.saveBtnTextState.getOrAwaitValue()
+
+        // THEN - verify this election is removed and unfollowed
+        MatcherAssert.assertThat(voterInfoViewModel.saveBtnTextState.value, `is`("Follow"))
 
     }
 }
