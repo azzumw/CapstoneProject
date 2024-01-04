@@ -107,6 +107,15 @@ class MainActivityTests {
             uiDevice.executeShellCommand(TRANS_ANIMATION_OFF)
             uiDevice.executeShellCommand(WIN_ANIMATION_OFF)
         }
+
+        fun fillInTheAddress(addressLine1:String,addressLine2:String,city:String,state:String,zip:String){
+            Companion.addressLine1.type(addressLine1)
+            Companion.addressLine2.type(addressLine2)
+            Companion.city.type(city)
+            states.click()
+            onView(withText(state)).click()
+            Companion.zip.type(zip)
+        }
     }
 
 
@@ -194,9 +203,8 @@ class MainActivityTests {
         // navigate to Item(election) at index 0 Details screen
         electionsRecyclerView
             .perform(
-                RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
-                    0,
-                    click()
+                RecyclerViewActions.actionOnItem<ViewHolder>(
+                    hasDescendant(withText("VIP Test Election")), click()
                 )
             )
 
@@ -420,7 +428,7 @@ class MainActivityTests {
             context.applicationContext.getString(R.string.no_address_provided_error_text)
 
         // THEN - verify that the Snack-bar is shown with the correct error text
-        onView(withId(com.google.android.material.R.id.snackbar_text))
+        onView(withId(R.id.snackbar_text))
             .check(matches(withText(errorText)))
 
     }
@@ -441,14 +449,5 @@ class MainActivityTests {
         onView(withText("President of the United States")).isDisplayed()
 
         scenario.close()
-    }
-
-    private fun fillInTheAddress(addressLine1:String,addressLine2:String,city:String,state:String,zip:String){
-        Companion.addressLine1.type(addressLine1)
-        Companion.addressLine2.type(addressLine2)
-        Companion.city.type(city)
-        states.click()
-        onView(withText(state)).click()
-        Companion.zip.type(zip)
     }
 }

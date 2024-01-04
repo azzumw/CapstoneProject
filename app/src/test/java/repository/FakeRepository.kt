@@ -114,7 +114,7 @@ class FakeRepository(private val mElectionList: List<Election>) : RepositoryInte
     fun clearRepo() {
         _savedElections.value = emptyList()
         _elections.value = emptyList()
-        tempSavedElections.clear()
+
     }
 
 }

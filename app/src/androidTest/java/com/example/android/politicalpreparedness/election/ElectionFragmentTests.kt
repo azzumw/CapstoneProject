@@ -78,6 +78,7 @@ class ElectionFragmentTests {
 
         // WHEN - Elections fragment launched to display elections
         launchFragmentInContainer<ElectionsFragment>(null, R.style.AppTheme)
+
         // THEN - all three elections are shown on the screen
         onView(withText(TXT_ELECTION_0)).check(matches(isDisplayed()))
         onView(withText(TXT_ELECTION_1)).check(matches(isDisplayed()))
