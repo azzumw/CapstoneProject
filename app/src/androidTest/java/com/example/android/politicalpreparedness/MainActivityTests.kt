@@ -108,7 +108,7 @@ class MainActivityTests {
             uiDevice.executeShellCommand(WIN_ANIMATION_OFF)
         }
 
-        fun fillInTheAddress(addressLine1:String,addressLine2:String,city:String,state:String,zip:String){
+        private fun fillInTheAddress(addressLine1:String,addressLine2:String,city:String,state:String,zip:String){
             Companion.addressLine1.type(addressLine1)
             Companion.addressLine2.type(addressLine2)
             Companion.city.type(city)

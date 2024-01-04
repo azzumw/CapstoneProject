@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId 'com.example.android.politicalpreparedness'
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         buildConfigField 'String', 'MAPS_API_KEY', myApiKey
